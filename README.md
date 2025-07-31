@@ -1,4 +1,4 @@
-# Shadcn-UI Template Usage Instructions
+# Aman UX Studio
 
 ## technology stack
 
