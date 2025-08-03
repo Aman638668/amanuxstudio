@@ -4,7 +4,7 @@
 
 ## 🌐 Live Demo
 
-👉 [View Portfolio](https://aman638668.github.io/amanuxstudio)
+👉 [View Portfolio](https://amanuxstudio.vercel.app/)
 
 ## 👨‍💻 About Me
 
@@ -40,7 +40,20 @@ All `shadcn/ui` components have been downloaded under `@/components/ui`.
 
 To run the project locally:
 
-```bash
-pnpm i          # Install dependencies
-pnpm run dev    # Start preview server
-pnpm run build  # Build for production
+**Install Dependencies**
+
+```shell
+pnpm i
+```
+
+**Start Preview**
+
+```shell
+pnpm run dev
+```
+
+**To build**
+
+```shell
+pnpm run build
+```
