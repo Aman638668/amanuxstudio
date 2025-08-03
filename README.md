@@ -1,61 +1,46 @@
-# Aman UX Studio
+# AmanUX Studio – Personal Portfolio
 
-## technology stack
+**AmanUX Studio** is my personal portfolio website built to showcase my work as a Frontend Developer and UI/UX Designer. It features a modern, responsive design and highlights my skills, experience, and selected projects.
+
+## 🌐 Live Demo
+
+👉 [View Portfolio](https://aman638668.github.io/amanuxstudio)
+
+## 👨‍💻 About Me
+
+Hi! I'm **Aman Sharma**, a passionate Frontend Developer and Designer skilled in:
+
+- HTML, CSS, JavaScript  
+- WordPress & Shopify Development  
+- UI/UX Design (Figma, Photoshop, Canva)  
+- Responsive & SEO-Friendly Websites  
+
+This portfolio reflects my design style, technical strengths, and real client projects.
+
+## ✨ Features
+
+- Fully responsive and mobile-friendly  
+- Clean and elegant UI with smooth transitions  
+- Showcases services, skills, testimonials, and projects  
+- Integrated contact section  
+
+## 🛠️ Tech Stack
 
 This project is built with:
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+- Vite  
+- TypeScript  
+- React  
+- shadcn-ui  
+- Tailwind CSS  
 
-All shadcn/ui components have been downloaded under `@/components/ui`.
+All `shadcn/ui` components have been downloaded under `@/components/ui`.
 
-## File Structure
+## 🚀 Getting Started
 
-- `index.html` - HTML entry point
-- `vite.config.ts` - Vite configuration file
-- `tailwind.config.js` - Tailwind CSS configuration file
-- `package.json` - NPM dependencies and scripts
-- `src/app.tsx` - Root component of the project
-- `src/main.tsx` - Project entry point
-- `src/index.css` - Existing CSS configuration
+To run the project locally:
 
-## Components
-
-- All shadcn/ui components are pre-downloaded and available at `@/components/ui`
-
-## Styling
-
-- Add global styles to `src/index.css` or create new CSS files as needed
-- Use Tailwind classes for styling components
-
-## Development
-
-- Import components from `@/components/ui` in your React components
-- Customize the UI by modifying the Tailwind configuration
-
-## Note
-
-The `@/` path alias points to the `src/` directory
-
-# Commands
-
-**Install Dependencies**
-
-```shell
-pnpm i
-```
-
-**Start Preview**
-
-```shell
-pnpm run dev
-```
-
-**To build**
-
-```shell
-pnpm run build
-```
+```bash
+pnpm i          # Install dependencies
+pnpm run dev    # Start preview server
+pnpm run build  # Build for production
