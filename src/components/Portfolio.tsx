@@ -5,28 +5,31 @@ import { ExternalLink, ArrowRight } from 'lucide-react';
 
 const projects = [
   {
-    title: "TechStartup Pro",
-    category: "Web Development",
-    description: "Complete website redesign and development for a B2B SaaS platform, resulting in 150% increase in conversion rates.",
+    title: "Expert VUW",
+    category: "Finance & Legal",
+    description: "Developed a secure, scalable website for a finance and legal consulting firm. Integrated advanced inquiry forms, service categorization, and SEO-optimized legal content for better visibility.",
     image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=500&auto=format&fit=crop&q=60",
-    tags: ["React", "Node.js", "SEO", "Analytics"],
-    results: ["150% conversion increase", "40% faster load times", "60% more leads"]
+    tags: ["Finance", "Legal Services", "SEO", "Wordpress"],
+    results: ["200% increase in service inquiries", "3x visibility on finance-related keywords", "90% faster loading time"],
+    link: "https://expertvuw.in/"
   },
   {
-    title: "E-commerce Empire",
-    category: "E-commerce",
-    description: "Full-scale e-commerce platform with custom features, payment processing, and inventory management system.",
+    title: "TicketDev Travel",
+    category: "Tour & Travels",
+    description: "Designed and built a clean, responsive travel website focused on user experience, featuring destination listings, simple inquiry forms, and WhatsApp integration for direct customer communication.",
     image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=500&auto=format&fit=crop&q=60",
-    tags: ["E-commerce", "Payment Gateway", "Mobile App", "SEO"],
-    results: ["300% sales growth", "50% mobile conversion", "99.9% uptime"]
+    tags: ["Travel Website", "Booking", "SEO"],
+    results: ["300% sales growth", "50% mobile conversion", "99.9% uptime"],
+    link: "https://ticketdevtravels.com/"
   },
   {
-    title: "Brand Revolution",
-    category: "Branding",
-    description: "Complete brand identity overhaul including logo design, brand guidelines, and digital asset creation.",
+    title: "Friends Group",
+    category: "Corporate",
+    description: "Corporate website for a multi-business conglomerate. Built an elegant multi-page site to represent their varied sectors: construction, manufacturing, and trading. Integrated career page, inquiry forms, and robust CMS.",
     image: "https://images.unsplash.com/photo-1493612276216-ee3925520721?w=500&auto=format&fit=crop&q=60",
-    tags: ["Logo Design", "Brand Identity", "Print Design", "Guidelines"],
-    results: ["200% brand recognition", "85% customer retention", "50% market expansion"]
+    tags: ["Corporate", "Brand Identity", "Multi-business", "Wordpress"],
+    results: ["250% brand engagement growth", "80% career page interaction rate", "Consolidated 3 businesses into 1 digital hub"],
+    link: "https://friendsgroup.co.in/"
   }
 ];
 
@@ -54,10 +57,12 @@ export default function Portfolio() {
                     className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-300"
                   />
                   <div className="absolute inset-0 bg-black bg-opacity-40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                    <Button variant="secondary" size="sm">
-                      <ExternalLink className="h-4 w-4 mr-2" />
-                      View Project
-                    </Button>
+                    <a href={project.link} target="_blank" rel="noopener noreferrer">
+                      <Button variant="secondary" size="sm">
+                        <ExternalLink className="h-4 w-4 mr-2" />
+                        View Project
+                      </Button>
+                    </a>
                   </div>
                 </div>
                 <CardContent className="p-6">
