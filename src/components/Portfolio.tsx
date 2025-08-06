@@ -27,7 +27,7 @@ const projects = [
     category: "Corporate",
     description: "Corporate website for a multi-business conglomerate. Built an elegant multi-page site to represent their varied sectors: construction, manufacturing, and trading. Integrated career page, inquiry forms, and robust CMS.",
     image: "https://images.unsplash.com/photo-1493612276216-ee3925520721?w=500&auto=format&fit=crop&q=60",
-    tags: ["Corporate", "Brand Identity", "Multi-business", "Wordpress"],
+    tags: ["Corporate", "Multi-business", "Wordpress"],
     results: ["250% brand engagement growth", "80% career page interaction rate", "Consolidated 3 businesses into 1 digital hub"],
     link: "https://friendsgroup.co.in/"
   }
