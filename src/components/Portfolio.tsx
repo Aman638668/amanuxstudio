@@ -8,7 +8,7 @@ const projects = [
     title: "Expert VUW",
     category: "Finance & Legal",
     description: "Developed a secure, scalable website for a finance and legal consulting firm. Integrated advanced inquiry forms, service categorization, and SEO-optimized legal content for better visibility.",
-    image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=500&auto=format&fit=crop&q=60",
+    image: "/expertvuw.png",
     tags: ["Finance", "Legal Services", "SEO", "Wordpress"],
     results: ["200% increase in service inquiries", "3x visibility on finance-related keywords", "90% faster loading time"],
     link: "https://expertvuw.in/"
@@ -17,7 +17,7 @@ const projects = [
     title: "TicketDev Travel",
     category: "Tour & Travels",
     description: "Designed and built a clean, responsive travel website focused on user experience, featuring destination listings, simple inquiry forms, and WhatsApp integration for direct customer communication.",
-    image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=500&auto=format&fit=crop&q=60",
+    image: "/ticketdev-travels.png",
     tags: ["Travel Website", "Booking", "SEO"],
     results: ["300% sales growth", "50% mobile conversion", "99.9% uptime"],
     link: "https://ticketdevtravels.com/"
@@ -26,7 +26,7 @@ const projects = [
     title: "Friends Group",
     category: "Corporate",
     description: "Corporate website for a multi-business conglomerate. Built an elegant multi-page site to represent their varied sectors: construction, manufacturing, and trading. Integrated career page, inquiry forms, and robust CMS.",
-    image: "https://images.unsplash.com/photo-1493612276216-ee3925520721?w=500&auto=format&fit=crop&q=60",
+    image: "/friendsgroup.png",
     tags: ["Corporate", "Multi-business", "Wordpress"],
     results: ["250% brand engagement growth", "80% career page interaction rate", "Consolidated 3 businesses into 1 digital hub"],
     link: "https://friendsgroup.co.in/"
