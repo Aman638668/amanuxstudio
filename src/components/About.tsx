@@ -26,7 +26,7 @@ export default function About() {
               <div className="space-y-4">
                 <div className="flex items-center">
                   <CheckCircle className="h-6 w-6 text-green-500 mr-3" />
-                  <span className="text-gray-700">500+ Successful Projects Delivered</span>
+                  <span className="text-gray-700">50+ Successful Projects Delivered</span>
                 </div>
                 <div className="flex items-center">
                   <CheckCircle className="h-6 w-6 text-green-500 mr-3" />
