@@ -47,7 +47,7 @@ export default function Navigation() {
           
           {/* CTA Button */}
           <div className="hidden md:flex">
-            <Button className="bg-blue-600 hover:bg-blue-700 text-white">
+            <Button className="bg-blue-600 hover:bg-blue-700 text-white" onClick={() => scrollToSection('contact')}>
               Get Started
             </Button>
           </div>
