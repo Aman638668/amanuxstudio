@@ -81,7 +81,7 @@ export default function Navigation() {
                   {item.label}
                 </button>
               ))}
-              <Button className="bg-blue-600 hover:bg-blue-700 text-white mt-4">
+              <Button className="bg-blue-600 hover:bg-blue-700 text-white mt-4" onClick={() => scrollToSection('contact')}>
                 Get Started
               </Button>
             </div>
