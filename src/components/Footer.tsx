@@ -1,9 +1,36 @@
+import { useState } from "react";
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
 import { Facebook, Twitter, Instagram, Linkedin, Mail, Phone, MapPin } from 'lucide-react';
 
 export default function Footer() {
+  const [status, setStatus] = useState("");
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setStatus("loading");
+
+    const formData = new FormData(e.target);
+
+    try {
+      const res = await fetch("https://formspree.io/f/xpwllzvw", {
+        method: "POST",
+        body: formData,
+        headers: { Accept: "application/json" },
+      });
+
+      if (res.ok) {
+        setStatus("success");
+        e.target.reset();
+      } else {
+        setStatus("error");
+      }
+    } catch (err) {
+      setStatus("error");
+    }
+  };
+
   return (
     <footer className="bg-slate-900 text-white">
       <div className="container mx-auto px-6 py-16">
@@ -20,15 +47,31 @@ export default function Footer() {
               </p>
               
               {/* Newsletter Signup */}
-                <div className="mb-6">
-                  <h4 className="font-semibold mb-3">Stay Updated</h4>
-                  <form action="https://formspree.io/f/xpwllzvw" method="POST" className="flex gap-2">
-                    <Input type="email" name="email" placeholder="Enter your email" required className="bg-slate-800 border-slate-700 text-white placeholder:text-gray-400"/>
-                    <Button type="submit" className="bg-blue-600 hover:bg-blue-700">
-                      Subscribe
-                    </Button>
-                  </form>
-                </div>
+              <div className="mb-6">
+                <h4 className="font-semibold mb-3">Stay Updated</h4>
+                <form onSubmit={handleSubmit} className="flex gap-2">
+                  <Input 
+                    type="email"
+                    name="email"
+                    placeholder="Enter your email"
+                    required
+                    className="bg-slate-800 border-slate-700 text-white placeholder:text-gray-400"
+                  />
+                  <Button 
+                    type="submit"
+                    className="bg-blue-600 hover:bg-blue-700"
+                    disabled={status === "loading"}
+                  >
+                    {status === "loading" ? "Submitting..." : "Subscribe"}
+                  </Button>
+                </form>
+                {status === "success" && (
+                  <p className="text-green-500 mt-2">Thanks for subscribing!</p>
+                )}
+                {status === "error" && (
+                  <p className="text-red-500 mt-2">Something went wrong. Please try again.</p>
+                )}
+              </div>
               
               {/* Social Links */}
               <div className="flex space-x-4">
