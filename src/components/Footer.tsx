@@ -20,18 +20,15 @@ export default function Footer() {
               </p>
               
               {/* Newsletter Signup */}
-              <div className="mb-6">
-                <h4 className="font-semibold mb-3">Stay Updated</h4>
-                <div className="flex gap-2">
-                  <Input 
-                    placeholder="Enter your email" 
-                    className="bg-slate-800 border-slate-700 text-white placeholder:text-gray-400"
-                  />
-                  <Button className="bg-blue-600 hover:bg-blue-700">
-                    Subscribe
-                  </Button>
+                <div className="mb-6">
+                  <h4 className="font-semibold mb-3">Stay Updated</h4>
+                  <form action="https://formspree.io/f/xpwllzvw" method="POST" className="flex gap-2">
+                    <Input type="email" name="email" placeholder="Enter your email" required className="bg-slate-800 border-slate-700 text-white placeholder:text-gray-400"/>
+                    <Button type="submit" className="bg-blue-600 hover:bg-blue-700">
+                      Subscribe
+                    </Button>
+                  </form>
                 </div>
-              </div>
               
               {/* Social Links */}
               <div className="flex space-x-4">
