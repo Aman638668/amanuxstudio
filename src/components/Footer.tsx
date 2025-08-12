@@ -127,16 +127,22 @@ export default function Footer() {
               <Mail className="h-5 w-5 text-blue-400 mr-3" />
               <div>
                 <p className="text-sm text-gray-400">Email</p>
-                <p className="text-white">amanuxstudio@gmail.com</p>
+                <a href="mailto:amanuxstudio@gmail.com" className="text-white hover:underline">
+                  amanuxstudio@gmail.com
+                </a>
               </div>
             </div>
+            
             <div className="flex items-center">
               <Phone className="h-5 w-5 text-green-400 mr-3" />
               <div>
                 <p className="text-sm text-gray-400">Phone</p>
-                <p className="text-white">+91 9211104514</p>
+                <a href="tel:+919211104514" className="text-white hover:underline">
+                  +91 9211104514
+                </a>
               </div>
             </div>
+
             <div className="flex items-center">
               <MapPin className="h-5 w-5 text-purple-400 mr-3" />
               <div>
