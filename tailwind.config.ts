@@ -59,6 +59,13 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        boxdark: "#24303F",
+        "boxdark-2": "#1A222C",
+        strokedark: "#2E3A47",
+        whiten: "#F1F5F9",
+        "form-strokedark": "#3d4d60",
+        "form-input": "#1d2a39",
+        "meta-4": "#313D4A",
       },
       borderRadius: {
         lg: "var(--radius)",
