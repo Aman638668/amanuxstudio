@@ -1,64 +1,58 @@
 export const config = {
   runtime: "nodejs",
 };
-export default async function handler(request, response) {
-    if (request.method !== 'POST') {
-        return response.status(405).json({ error: 'Method not allowed' });
-    }
 
-    const { name, email, message, title, token } = request.body;
+export default async function handler(req, res) {
+  if (req.method !== "POST") {
+    return res.status(405).json({ error: "Method not allowed" });
+  }
 
-    // SECURE: Use environment variable. 
-    // Do NOT commit the actual URL to GitHub.
+  try {
+    const { name, email, message, title } = req.body || {};
+
     const webhookUrl = process.env.DISCORD_WEBHOOK_URL;
-
     if (!webhookUrl) {
-        return response.status(500).json({ error: 'Server configuration error: Missing Webhook URL' });
+      return res.status(500).json({
+        error: "Server misconfiguration: DISCORD_WEBHOOK_URL missing",
+      });
     }
 
-    // Construct Discord Embed
-    const embed = {
-        title: "New Lead / Contact Request",
-        color: 3447003, // Blue-ish
-        fields: [
-            { name: "Name", value: name || "N/A", inline: true },
-            { name: "Email", value: email || "N/A", inline: true },
-            { name: "Interest / Post", value: title || "General Inquiry" },
-            { name: "Message", value: message || "No message provided" }
-        ],
-        timestamp: new Date().toISOString(),
-        footer: { text: "AmanUX Studio Lead Gen" }
+    // Bullet-proof Discord payload
+    const payload = {
+      content: "📩 **New Contact / Lead Received**",
+      embeds: [
+        {
+          title: "AmanUX Studio – New Submission",
+          color: 3447003,
+          description:
+            `👤 **Name:** ${name || "N/A"}\n` +
+            `📧 **Email:** ${email || "N/A"}\n` +
+            `📌 **Interest:** ${title || "General Inquiry"}\n\n` +
+            `📝 **Message:**\n${message || "No message provided"}`,
+          timestamp: new Date().toISOString(),
+        },
+      ],
     };
 
-    // Verify ReCAPTCHA
-    // const secretKey = process.env.RECAPTCHA_SECRET_KEY;
+    const discordRes = await fetch(webhookUrl, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
 
-    // if (secretKey && token) {
-    //     const verifyUrl = `https://www.google.com/recaptcha/api/siteverify?secret=${secretKey}&response=${token}`;
-    //     const verifyRes = await fetch(verifyUrl, { method: 'POST' });
-    //     const verifyData = await verifyRes.json();
-
-    //     if (!verifyData.success) {
-    //         return response.status(400).json({ error: 'ReCAPTCHA verification failed', details: verifyData['error-codes'] });
-    //     }
-    // }
-
-    try {
-        const discordRes = await fetch(webhookUrl, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ embeds: [embed] }),
-        });
-
-        if (discordRes.ok) {
-            return response.status(200).json({ success: true });
-        } else {
-            const text = await discordRes.text();
-            console.error("Discord Error:", text);
-            return response.status(500).json({ error: 'Failed to send to Discord' });
-        }
-    } catch (error) {
-        console.error("Server Error:", error);
-        return response.status(500).json({ error: 'Internal Server Error' });
+    if (!discordRes.ok) {
+      const text = await discordRes.text();
+      console.error("Discord rejected request:", discordRes.status, text);
+      return res.status(500).json({
+        error: "Discord rejected the request",
+        status: discordRes.status,
+      });
     }
+
+    return res.status(200).json({ success: true });
+
+  } catch (err) {
+    console.error("Server error:", err);
+    return res.status(500).json({ error: "Internal server error" });
+  }
 }
