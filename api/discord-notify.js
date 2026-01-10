@@ -16,13 +16,15 @@ export default async function handler(req, res) {
 
     if (!webhookUrl) {
       return res.status(500).json({
-        error: "Server misconfiguration: DISCORD_WEBHOOK_URL missing",
+        error: "Server misconfiguration",
+        detail: "DISCORD_WEBHOOK_URL missing",
       });
     }
 
     if (!recaptchaSecret) {
       return res.status(500).json({
-        error: "Server misconfiguration: RECAPTCHA_SECRET_KEY missing",
+        error: "Server misconfiguration",
+        detail: "RECAPTCHA_SECRET_KEY missing",
       });
     }
 
@@ -48,10 +50,11 @@ export default async function handler(req, res) {
     const verifyData = await verifyRes.json();
 
     if (!verifyData.success || verifyData.score < 0.5) {
-      console.warn("reCAPTCHA failed:", verifyData);
+      console.warn("reCAPTCHA FAILED:", verifyData);
       return res.status(403).json({
         error: "reCAPTCHA verification failed",
         score: verifyData.score,
+        details: verifyData,
       });
     }
 
@@ -81,17 +84,24 @@ export default async function handler(req, res) {
 
     if (!discordRes.ok) {
       const text = await discordRes.text();
-      console.error("Discord rejected request:", discordRes.status, text);
+      console.error("DISCORD ERROR:", discordRes.status, text);
       return res.status(500).json({
-        error: "Discord rejected the request",
+        error: "Discord rejected request",
         status: discordRes.status,
+        response: text,
       });
     }
 
     return res.status(200).json({ success: true });
 
   } catch (err) {
-    console.error("Server error:", err);
-    return res.status(500).json({ error: "Internal server error" });
+    /* -------------------- FULL DEBUG BLOCK -------------------- */
+    console.error("FULL SERVER ERROR:", err);
+
+    return res.status(500).json({
+      error: "Internal server error",
+      message: err?.message,
+      stack: err?.stack,
+    });
   }
 }
