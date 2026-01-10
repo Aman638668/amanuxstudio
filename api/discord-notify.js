@@ -1,6 +1,3 @@
-export const config = {
-  runtime: "nodejs18.x",
-};
 
 export default async function handler(request, response) {
     if (request.method !== 'POST') {
