@@ -29,17 +29,17 @@ export default async function handler(request, response) {
     };
 
     // Verify ReCAPTCHA
-    const secretKey = process.env.RECAPTCHA_SECRET_KEY;
+    // const secretKey = process.env.RECAPTCHA_SECRET_KEY;
 
-    if (secretKey && token) {
-        const verifyUrl = `https://www.google.com/recaptcha/api/siteverify?secret=${secretKey}&response=${token}`;
-        const verifyRes = await fetch(verifyUrl, { method: 'POST' });
-        const verifyData = await verifyRes.json();
+    // if (secretKey && token) {
+    //     const verifyUrl = `https://www.google.com/recaptcha/api/siteverify?secret=${secretKey}&response=${token}`;
+    //     const verifyRes = await fetch(verifyUrl, { method: 'POST' });
+    //     const verifyData = await verifyRes.json();
 
-        if (!verifyData.success) {
-            return response.status(400).json({ error: 'ReCAPTCHA verification failed', details: verifyData['error-codes'] });
-        }
-    }
+    //     if (!verifyData.success) {
+    //         return response.status(400).json({ error: 'ReCAPTCHA verification failed', details: verifyData['error-codes'] });
+    //     }
+    // }
 
     try {
         const discordRes = await fetch(webhookUrl, {
