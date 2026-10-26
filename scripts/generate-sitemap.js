@@ -1,4 +1,3 @@
-
 import { createClient } from '@supabase/supabase-js';
 import fs from 'fs';
 import path from 'path';
@@ -12,33 +11,47 @@ const SUPABASE_URL = process.env.VITE_SUPABASE_URL;
 const SUPABASE_KEY = process.env.VITE_SUPABASE_ANON_KEY;
 const SITE_URL = 'https://amanuxstudio.com';
 
-if (!SUPABASE_URL || !SUPABASE_KEY) {
-    console.error('Error: VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY are required in .env file');
-    process.exit(1);
-}
-
-const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
-
 const generateSitemap = async () => {
     console.log('Generating sitemap...');
 
     // 1. Static Pages
     const staticPages = [
         '',
-        '/blog',
-        '/services' // If you have services
+        '/about',
+        '/services',
+        '/portfolio',
+        '/testimonials',
+        '/contact',
+        '/blog'
     ];
 
-    // 2. Fetch Blog Posts
-    const { data: posts } = await supabase
-        .from('posts')
-        .select('slug, created_at')
-        .eq('published', true);
+    let posts = [];
+    let categories = [];
 
-    // 3. Fetch Categories
-    const { data: categories } = await supabase
-        .from('categories')
-        .select('slug');
+    if (SUPABASE_URL && SUPABASE_KEY) {
+        try {
+            const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+            // Fetch Blog Posts
+            const { data: postsData } = await supabase
+                .from('posts')
+                .select('slug, created_at')
+                .eq('published', true);
+
+            if (postsData) posts = postsData;
+
+            // Fetch Categories
+            const { data: categoriesData } = await supabase
+                .from('categories')
+                .select('slug');
+
+            if (categoriesData) categories = categoriesData;
+        } catch (err) {
+            console.warn('Warning: Could not fetch dynamic content from Supabase for sitemap:', err.message);
+        }
+    } else {
+        console.warn('Notice: VITE_SUPABASE_URL or VITE_SUPABASE_ANON_KEY not set. Generating sitemap with static pages only.');
+    }
 
     let sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="/sitemap.xsl"?>
@@ -55,29 +68,25 @@ const generateSitemap = async () => {
     });
 
     // Add Blog Posts
-    if (posts) {
-        posts.forEach(post => {
-            sitemap += `
+    posts.forEach(post => {
+        sitemap += `
   <url>
     <loc>${SITE_URL}/blog/${post.slug}</loc>
     <lastmod>${new Date(post.created_at).toISOString()}</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>`;
-        });
-    }
+    });
 
     // Add Categories
-    if (categories) {
-        categories.forEach(category => {
-            sitemap += `
+    categories.forEach(category => {
+        sitemap += `
   <url>
     <loc>${SITE_URL}/category/${category.slug}</loc>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>`;
-        });
-    }
+    });
 
     sitemap += `
 </urlset>`;
@@ -88,11 +97,13 @@ const generateSitemap = async () => {
 
     // Ensure public dir exists
     if (!fs.existsSync(publicDir)) {
-        fs.mkdirSync(publicDir);
+        fs.mkdirSync(publicDir, { recursive: true });
     }
 
     fs.writeFileSync(path.join(publicDir, 'sitemap.xml'), sitemap);
     console.log(`Sitemap generated successfully at ${path.join(publicDir, 'sitemap.xml')}`);
 };
 
-generateSitemap().catch(err => console.error(err));
+generateSitemap().catch(err => {
+    console.error('Sitemap generation error:', err);
+});

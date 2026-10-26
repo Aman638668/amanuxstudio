@@ -1,0 +1,33 @@
+name: Supabase Keep-Alive (Prevent Auto-Pause)
+
+on:
+  schedule:
+    # Runs every 2 days at 04:00 UTC (runs in GitHub Cloud even if your computer is off)
+    - cron: '0 4 */2 * *'
+  workflow_dispatch: # Allows manual trigger from GitHub UI anytime
+
+jobs:
+  ping-supabase:
+    name: Ping Supabase Database
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send keep-alive query to Supabase REST API
+        env:
+          SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+        run: |
+          if [ -z "$SUPABASE_URL" ] || [ -z "$SUPABASE_KEY" ]; then
+            echo "::warning ::VITE_SUPABASE_URL or VITE_SUPABASE_ANON_KEY secrets not set in GitHub repository settings. Please add them in Settings -> Secrets and variables -> Actions."
+            exit 0
+          fi
+
+          echo "Pinging Supabase at $SUPABASE_URL to prevent inactivity pause..."
+          HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" -X GET "$SUPABASE_URL/rest/v1/posts?select=id&limit=1" \
+            -H "apikey: $SUPABASE_KEY" \
+            -H "Authorization: Bearer $SUPABASE_KEY")
+
+          if [ "$HTTP_STATUS" -ge 200 ] && [ "$HTTP_STATUS" -lt 400 ]; then
+            echo "Success! Supabase responded with HTTP $HTTP_STATUS. 7-day inactivity pause reset."
+          else
+            echo "Supabase returned HTTP $HTTP_STATUS. Please check project status."
+          fi

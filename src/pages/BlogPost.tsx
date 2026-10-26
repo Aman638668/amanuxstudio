@@ -13,17 +13,22 @@ import { format } from "date-fns";
 import { Calendar, User, ArrowLeft, Send } from "lucide-react";
 import { toast } from "sonner";
 import ReCAPTCHA from "react-google-recaptcha";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import rehypeRaw from "rehype-raw";
 
-// Helper to strip HTML tags for meta description
+// Helper to strip HTML/Markdown tags for meta description
 const stripHtml = (html: string) => {
-    const tmp = document.createElement("DIV");
-    tmp.innerHTML = html;
-    return tmp.textContent || tmp.innerText || "";
+    return html.replace(/<[^>]*>?/gm, '').replace(/[#*`_~\[\]]/g, '').trim();
 };
 
-// Helper to add lazy loading to images in content
-const optimizeContent = (html: string) => {
-    return html.replace(/<img /g, '<img loading="lazy" ');
+// Helper to clean leading duplicate title from markdown content
+const cleanMarkdownContent = (content: string) => {
+    if (!content) return "";
+    let cleaned = content.trim();
+    // If content starts with a level-1 header `# ...`, remove it so it doesn't duplicate the page title
+    cleaned = cleaned.replace(/^#\s+[^\n]+\n+/, '');
+    return cleaned;
 };
 
 type RecentPost = Pick<Post, "title" | "slug" | "created_at" | "cover_image">;
@@ -39,6 +44,7 @@ const BlogPost = () => {
     const [contactName, setContactName] = useState("");
     const [contactEmail, setContactEmail] = useState("");
     const [contactMessage, setContactMessage] = useState("");
+    const [isSubmittingLead, setIsSubmittingLead] = useState(false);
 
     useEffect(() => {
         fetchPost();
@@ -118,17 +124,12 @@ const BlogPost = () => {
     const onCaptchaChange = (token: string | null) => {
         if (token) {
             setCaptchaVal(token);
-            submitMockForm(token);
+            submitBlogInquiry(token);
         }
     };
 
-    const submitMockForm = async (token: string) => {
-        const submitButton = document.querySelector('#contact-submit') as HTMLButtonElement;
-        if (submitButton) {
-            submitButton.innerHTML = "Sending...";
-            submitButton.disabled = true;
-        }
-
+    const submitBlogInquiry = async (token?: string) => {
+        setIsSubmittingLead(true);
         try {
             const response = await fetch('/api/discord-notify', {
                 method: 'POST',
@@ -143,29 +144,27 @@ const BlogPost = () => {
             });
 
             if (response.ok) {
-                toast.success("Request sent! We'll be in touch.");
+                toast.success("Request sent! We will reply within 24 hours.");
                 setContactName("");
                 setContactEmail("");
                 setContactMessage("");
                 setCaptchaVal(null);
                 recaptchaRef.current?.reset();
             } else {
-                toast.error("Failed to send message. Please try again.");
+                const data = await response.json().catch(() => ({}));
+                toast.error(data.error || "Failed to send message. Please try again.");
             }
         } catch (error) {
             console.error(error);
             toast.error("Something went wrong.");
         } finally {
-            if (submitButton) {
-                submitButton.disabled = false;
-                submitButton.innerHTML = "Send Request";
-            }
+            setIsSubmittingLead(false);
         }
     };
 
     const handleContactSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        recaptchaRef.current?.execute();
+        submitBlogInquiry();
     };
 
     if (loading) return <div className="min-h-screen flex items-center justify-center text-slate-500">Loading Article...</div>;
@@ -254,8 +253,47 @@ const BlogPost = () => {
                             )}
 
                             {/* Content Body */}
-                            <article className="prose prose-lg dark:prose-invert prose-slate max-w-none prose-headings:scroll-mt-24 prose-img:rounded-xl">
-                                <div dangerouslySetInnerHTML={{ __html: optimizeContent(post.content) }} />
+                            <article className="prose prose-lg dark:prose-invert prose-slate max-w-none 
+                                prose-headings:font-bold prose-headings:text-slate-900 dark:prose-headings:text-white
+                                prose-h2:text-2xl sm:prose-h2:text-3xl prose-h2:mt-12 prose-h2:mb-4 prose-h2:border-b prose-h2:border-slate-200 dark:prose-h2:border-slate-800 prose-h2:pb-2.5
+                                prose-h3:text-xl sm:prose-h3:text-2xl prose-h3:mt-8 prose-h3:mb-3
+                                prose-p:text-slate-700 dark:prose-p:text-slate-300 prose-p:leading-relaxed prose-p:text-base sm:prose-p:text-lg
+                                prose-li:text-slate-700 dark:prose-li:text-slate-300
+                                prose-strong:text-slate-900 dark:prose-strong:text-white prose-strong:font-bold
+                                prose-blockquote:border-l-4 prose-blockquote:border-blue-600 prose-blockquote:bg-blue-50/60 dark:prose-blockquote:bg-blue-950/20 prose-blockquote:py-2 prose-blockquote:px-5 prose-blockquote:rounded-r-lg prose-blockquote:not-italic
+                                prose-code:text-blue-600 dark:prose-code:text-blue-400 prose-code:bg-slate-100 dark:prose-code:bg-slate-800 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-sm prose-code:font-mono
+                                prose-pre:bg-slate-900 prose-pre:text-slate-100 prose-pre:rounded-xl prose-pre:p-4 prose-pre:shadow-lg
+                            ">
+                                <ReactMarkdown
+                                    remarkPlugins={[remarkGfm]}
+                                    rehypePlugins={[rehypeRaw]}
+                                    components={{
+                                        a: ({ node, ...props }) => (
+                                            <a 
+                                                {...props} 
+                                                target="_blank" 
+                                                rel="noopener noreferrer" 
+                                                className="text-blue-600 dark:text-blue-400 font-semibold underline underline-offset-4 hover:text-blue-800 transition-colors" 
+                                            />
+                                        ),
+                                        table: ({ node, ...props }) => (
+                                            <div className="overflow-x-auto my-6 border border-slate-200 dark:border-slate-800 rounded-xl shadow-sm">
+                                                <table {...props} className="min-w-full divide-y divide-slate-200 dark:divide-slate-800 text-sm" />
+                                            </div>
+                                        ),
+                                        th: ({ node, ...props }) => (
+                                            <th {...props} className="bg-slate-100 dark:bg-slate-800 px-4 py-3 text-left font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider text-xs" />
+                                        ),
+                                        td: ({ node, ...props }) => (
+                                            <td {...props} className="px-4 py-3 border-t border-slate-100 dark:border-slate-800 text-slate-700 dark:text-slate-300" />
+                                        ),
+                                        img: ({ node, ...props }) => (
+                                            <img {...props} loading="lazy" className="rounded-xl shadow-md my-8 w-full object-cover max-h-[500px]" />
+                                        )
+                                    }}
+                                >
+                                    {cleanMarkdownContent(post.content)}
+                                </ReactMarkdown>
                             </article>
 
                             {/* Tags / Keywords (if any) */}
@@ -329,8 +367,8 @@ const BlogPost = () => {
                                         />
                                     </div>
 
-                                    <Button id="contact-submit" type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-5">
-                                        Send Request <Send className="ml-2 h-4 w-4" />
+                                    <Button id="contact-submit" type="submit" disabled={isSubmittingLead} className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-5">
+                                        {isSubmittingLead ? "Sending..." : (<>Send Request <Send className="ml-2 h-4 w-4" /></>)}
                                     </Button>
                                 </form>
                             </div>

@@ -1,97 +1,103 @@
-import { Shield, Clock, Trophy, HeadphonesIcon, Zap, Users } from 'lucide-react';
+import { XCircle, CheckCircle2, ArrowRight } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
-const benefits = [
+const comparisons = [
   {
-    icon: Shield,
-    title: "Proven Track Record",
-    description: "50+ successful projects with a 98% client satisfaction rate. Our portfolio speaks for itself."
+    problemTitle: "The Disappearing Agency Act",
+    problemDesc: "You're pitched by smooth salespeople, but once the final payment is cleared, support tickets go unanswered for weeks when a checkout breaks or plugins crash.",
+    solutionTitle: "Direct 1-on-1 Developer Accountability",
+    solutionDesc: "You work directly with Aman Sharma—the actual engineer writing your code. Direct WhatsApp/email access with guaranteed 24-hour turnaround, even post-launch."
   },
   {
-    icon: Clock,
-    title: "Fast Delivery",
-    description: "We respect your timeline. Most projects delivered on time or ahead of schedule without compromising quality."
+    problemTitle: "Bloated Templates & 6-Second Load Times",
+    problemDesc: "Agencies slap together 35+ unneeded plugins on a generic theme. Your site drags at 6+ seconds, destroying your ad budget and scaring away 50% of visitors.",
+    solutionTitle: "Obsessive Speed & Conversion Engineering",
+    solutionDesc: "Clean, bespoke code tailored to your exact business model. We optimize Core Web Vitals for sub-second speeds that rank on Google and convert visitors into revenue."
   },
   {
-    icon: Trophy,
-    title: "Award-Winning Design",
-    description: "Our creative team has won multiple industry awards for outstanding web design and user experience."
+    problemTitle: "Junior Interns Billed at Enterprise Rates",
+    problemDesc: "Paying agency overhead for fancy offices while your actual project is outsourced to inexperienced interns learning on your dime.",
+    solutionTitle: "Battle-Tested Production Experience",
+    solutionDesc: "Zero agency fluff, zero hidden markups. You get proven experience from someone who has built and maintained real production platforms like Fairease and Ireshh."
   },
   {
-    icon: HeadphonesIcon,
-    title: "24/7 Support",
-    description: "Dedicated support team available around the clock to help you with any questions or issues."
-  },
-  {
-    icon: Zap,
-    title: "Cutting-Edge Technology",
-    description: "We use the latest technologies and best practices to ensure your project is future-proof and scalable."
-  },
-  {
-    icon: Users,
-    title: "Dedicated Team",
-    description: "You'll work with a dedicated team of experts who understand your business and are committed to your success."
+    problemTitle: "Proprietary Lock-in & Hostage Situations",
+    problemDesc: "Developers who trap you in confusing custom systems, refusing to hand over full admin rights, hosting access, or code if you decide to move.",
+    solutionTitle: "100% True Ownership & Full Freedom",
+    solutionDesc: "You own every line of code, your domain, database, and admin access from day one. Complete documentation and zero hostage situations."
   }
 ];
 
 export default function WhyChooseUs() {
+  const scrollToContact = () => {
+    const el = document.getElementById('contact');
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
+  };
+
   return (
-    <section className="py-20 bg-slate-900 text-white">
+    <section id="why-us" className="py-24 bg-slate-900 text-white relative overflow-hidden">
       <div className="container mx-auto px-6">
         <div className="max-w-6xl mx-auto">
+          {/* Header */}
           <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold mb-6">
-              Why Choose Aman UX Studio?
+            <span className="text-blue-400 font-semibold text-xs sm:text-sm uppercase tracking-widest">
+              Cut Through The Noise
+            </span>
+            <h2 className="text-3xl md:text-5xl font-extrabold mt-2 mb-6 tracking-tight">
+              Why Work With Aman UX Studio?
             </h2>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-              We're not just another digital agency. Here's what sets us apart and makes us the right choice for your business.
+            <p className="text-base sm:text-lg text-slate-300 max-w-3xl mx-auto leading-relaxed">
+              Most website projects fail because of communication breakdowns, bloated code, and agencies that vanish after launch. Here is the blunt reality—and how we do things differently.
             </p>
           </div>
           
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {benefits.map((benefit, index) => (
-              <div key={index} className="group">
-                <div className="bg-slate-800 p-8 rounded-xl hover:bg-slate-700 transition-colors duration-300 h-full">
-                  <div className="bg-blue-600 p-4 rounded-full w-16 h-16 flex items-center justify-center mb-6 group-hover:bg-blue-500 transition-colors">
-                    <benefit.icon className="h-8 w-8 text-white" />
+          {/* Problem vs Us Comparison Grid */}
+          <div className="grid md:grid-cols-2 gap-8 mb-16">
+            {comparisons.map((item, index) => (
+              <div 
+                key={index} 
+                className="rounded-2xl border border-slate-800 bg-slate-800/60 p-6 sm:p-8 flex flex-col justify-between hover:border-slate-700 transition-colors shadow-lg"
+              >
+                <div className="space-y-6">
+                  {/* The Problem */}
+                  <div className="p-4 rounded-xl bg-red-950/30 border border-red-500/20">
+                    <div className="flex items-center gap-2 text-red-400 font-bold text-sm mb-2">
+                      <XCircle className="h-4 w-4 flex-shrink-0" />
+                      <span>The Typical Agency Frustration:</span>
+                    </div>
+                    <h4 className="font-bold text-white text-base mb-1">{item.problemTitle}</h4>
+                    <p className="text-xs sm:text-sm text-slate-400 leading-relaxed">{item.problemDesc}</p>
                   </div>
-                  <h3 className="text-xl font-bold mb-4">
-                    {benefit.title}
-                  </h3>
-                  <p className="text-gray-300 leading-relaxed">
-                    {benefit.description}
-                  </p>
+
+                  {/* The Solution */}
+                  <div className="p-4 rounded-xl bg-emerald-950/30 border border-emerald-500/20">
+                    <div className="flex items-center gap-2 text-emerald-400 font-bold text-sm mb-2">
+                      <CheckCircle2 className="h-4 w-4 flex-shrink-0" />
+                      <span>The Aman UX Studio Fix:</span>
+                    </div>
+                    <h4 className="font-bold text-white text-base mb-1">{item.solutionTitle}</h4>
+                    <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">{item.solutionDesc}</p>
+                  </div>
                 </div>
               </div>
             ))}
           </div>
           
-          <div className="text-center mt-16">
-            <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-8 rounded-2xl">
-              <h3 className="text-2xl font-bold mb-4">
-                Ready to Transform Your Business?
-              </h3>
-              <p className="text-lg mb-6 text-gray-200">
-                Join hundreds of satisfied clients who have already transformed their digital presence with Aman UX Studio.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-white">50+</div>
-                  <div className="text-sm text-gray-200">Projects Completed</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-white">98%</div>
-                  <div className="text-sm text-gray-200">Client Satisfaction</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-white">2+</div>
-                  <div className="text-sm text-gray-200">Years Experience</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-white">24/7</div>
-                  <div className="text-sm text-gray-200">Support Available</div>
-                </div>
-              </div>
-            </div>
+          {/* Trust Banner */}
+          <div className="rounded-2xl bg-gradient-to-r from-blue-700 via-indigo-700 to-blue-800 p-8 sm:p-12 text-center shadow-xl">
+            <h3 className="text-2xl sm:text-3xl font-extrabold text-white mb-3">
+              Ready to Build Without the Headaches?
+            </h3>
+            <p className="text-sm sm:text-base text-blue-100 max-w-2xl mx-auto mb-8">
+              No sales pitches, no hidden fees, and no cookie-cutter templates. Get a clean, fast website designed to grow your business.
+            </p>
+            <Button
+              size="lg"
+              onClick={scrollToContact}
+              className="bg-white text-slate-900 hover:bg-slate-100 font-bold px-8 py-6 rounded-full shadow-lg transition-transform hover:scale-105"
+            >
+              Start Your Project With Us <ArrowRight className="ml-2 h-4 w-4" />
+            </Button>
           </div>
         </div>
       </div>

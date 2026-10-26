@@ -1,4 +1,7 @@
 User-agent: *
 Allow: /
+Disallow: /dashboard
+Disallow: /dashboard/*
+Disallow: /login
 
 Sitemap: https://amanuxstudio.com/sitemap.xml

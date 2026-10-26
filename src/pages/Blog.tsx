@@ -1,5 +1,6 @@
 
 import Navigation from "@/components/Navigation";
+import PageHeader from "@/components/PageHeader";
 import Footer from "@/components/Footer";
 import Seo from "@/components/Seo";
 import { useEffect, useState } from "react";
@@ -58,25 +59,26 @@ const Blog = () => {
     };
 
     return (
-        <div className="min-h-screen">
+        <div className="min-h-screen bg-slate-50 flex flex-col font-sans">
             <Seo
-                title="Our Blog"
-                description="Insights, thoughts, and trends from the Aman UX Studio team."
+                title="Engineering & Web Development Blog"
+                description="Technical articles, architectural case studies, performance optimization guides, and conversion UX teardowns from Aman UX Studio."
+                url="/blog"
             />
             <Navigation />
-            <div className="container mx-auto px-6 py-20">
+            <PageHeader
+                title="Engineering Insights & Tech Articles"
+                description="Actionable web architecture guides, Core Web Vitals optimization playbooks, and production case studies from building platforms like Fairease and Ireshh."
+            />
+            
+            <main className="flex-grow container mx-auto px-6 py-16">
                 <div className="max-w-6xl mx-auto">
-                    <h1 className="text-4xl font-bold mb-8 text-center text-primary" id="blog">Our Blog</h1>
-                    <p className="text-center text-gray-600 mb-12 max-w-2xl mx-auto">
-                        Insights, thoughts, and trends from our team.
-                    </p>
-
                     {loading ? (
-                        <div className="text-center py-20">Loading...</div>
+                        <div className="text-center py-20 text-slate-500 font-medium">Loading Articles...</div>
                     ) : (
                         <>
                             {posts.length === 0 ? (
-                                <div className="text-center py-20 text-gray-500">No posts found.</div>
+                                <div className="text-center py-20 text-slate-500">No posts found.</div>
                             ) : (
                                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
                                     {posts.map((post) => (
@@ -108,7 +110,7 @@ const Blog = () => {
                                                 "w-9 h-9 rounded-lg text-sm font-medium transition-all duration-200",
                                                 page === pageNum
                                                     ? "bg-blue-600 text-white shadow-md shadow-blue-200 scale-105"
-                                                    : "bg-blue-50 text-blue-600 hover:bg-blue-100"
+                                                    : "bg-white text-slate-700 hover:bg-slate-100 border border-slate-200"
                                             )}
                                         >
                                             {pageNum}
@@ -130,7 +132,7 @@ const Blog = () => {
                         </>
                     )}
                 </div>
-            </div>
+            </main>
             <Footer />
         </div>
     );

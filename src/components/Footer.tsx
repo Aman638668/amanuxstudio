@@ -2,203 +2,239 @@ import { useState, useRef } from "react";
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
-import { Facebook, Twitter, Instagram, Linkedin, Mail, Phone, MapPin } from 'lucide-react';
-import ReCAPTCHA from "react-google-recaptcha";
+import { Github, Linkedin, Mail, Phone, MapPin, FileText, Loader2 } from 'lucide-react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { toast } from "sonner";
 
 export default function Footer() {
   const [status, setStatus] = useState("");
-  const recaptchaRef = useRef<ReCAPTCHA>(null);
   const [tempEmail, setTempEmail] = useState("");
+  const navigate = useNavigate();
+  const location = useLocation();
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const form = e.target as HTMLFormElement;
-    const formData = new FormData(form);
-    const email = formData.get("email") as string;
-
-    setTempEmail(email);
-    recaptchaRef.current?.execute();
-  };
-
-  const onCaptchaChange = (token: string | null) => {
-    if (token) {
-      submitNewsletter(tempEmail, token);
+  const handleNavClick = (sectionId: string) => {
+    if (location.pathname !== '/') {
+      navigate('/');
+      setTimeout(() => {
+        const el = document.getElementById(sectionId);
+        if (el) el.scrollIntoView({ behavior: 'smooth' });
+      }, 150);
+    } else {
+      const el = document.getElementById(sectionId);
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
     }
   };
 
-  const submitNewsletter = async (email: string, token: string) => {
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!tempEmail || !tempEmail.includes('@')) {
+      toast.error('Please enter a valid email address.');
+      return;
+    }
+
     setStatus("loading");
     try {
       const res = await fetch("/api/discord-notify", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          email: email,
+          email: tempEmail.trim(),
           title: "Newsletter Subscription",
-          message: "User requested to join newsletter.",
-          token: token
+          message: `Visitor subscribed to newsletter: ${tempEmail.trim()}`
         }),
       });
 
       if (res.ok) {
         setStatus("success");
         setTempEmail("");
-        recaptchaRef.current?.reset();
+        toast.success("Thanks for joining our newsletter!");
       } else {
         setStatus("error");
+        toast.error("Subscription failed. Please try again.");
       }
     } catch (err) {
       setStatus("error");
+      toast.error("Network error. Please try again.");
     }
   };
 
   return (
-    <>
-      <footer className="footer-root dark relative z-50 bg-slate-900 text-white border-t border-slate-800 overflow-hidden" style={{ backgroundImage: 'none', background: '#0f172a' }}>
-        <div className="container mx-auto px-6 py-16">
-          <div className="max-w-6xl mx-auto">
-            {/* Main Footer Content */}
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
-              {/* Company Info */}
-              <div className="lg:col-span-2">
-                <div className="flex items-center mb-6">
-                  <h3 className="text-2xl font-bold">Aman UX Studio</h3>
-                </div>
-                <p className="text-gray-300 mb-6 max-w-md">
-                  We are a full-service digital agency specializing in creating powerful online experiences that drive business success. Transform your digital presence with our expert team.
-                </p>
+    <footer className="footer-root relative z-50 bg-slate-900 text-white border-t border-slate-800 overflow-hidden">
+      <div className="container mx-auto px-6 py-16">
+        <div className="max-w-6xl mx-auto">
+          {/* Main Footer Content */}
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+            {/* Company Info */}
+            <div className="lg:col-span-2">
+              <div className="flex items-center mb-4">
+                <span className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-indigo-300 bg-clip-text text-transparent">
+                  Aman UX Studio
+                </span>
+              </div>
+              <p className="text-gray-300 mb-6 max-w-md text-sm leading-relaxed">
+                Full-service web development and UI/UX design studio by Aman Sharma. Building high-converting websites, dynamic e-commerce stores, and production web applications.
+              </p>
 
-                {/* Newsletter Signup */}
-                <div className="mb-6">
-                  <h4 className="font-semibold mb-3">Stay Updated</h4>
-                  <form onSubmit={handleSubmit} className="flex flex-col gap-3 max-w-xs">
-                    <div className="flex gap-2">
-                      <Input
-                        type="email"
-                        name="email"
-                        placeholder="Enter your email"
-                        required
-                        className="bg-slate-800 border-slate-700 text-white placeholder:text-gray-400"
-                      />
-                      <Button
-                        type="submit"
-                        className="bg-blue-600 hover:bg-blue-700"
-                        disabled={status === "loading"}
-                      >
-                        {status === "loading" ? "..." : "Join"}
-                      </Button>
-                    </div>
-
-                    <ReCAPTCHA
-                      ref={recaptchaRef}
-                      sitekey={import.meta.env.VITE_RECAPTCHA_SITE_KEY || "6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"}
-                      size="invisible"
-                      onChange={onCaptchaChange}
-                      theme="dark"
+              {/* Newsletter Signup */}
+              <div className="mb-6">
+                <h4 className="font-semibold text-sm text-slate-200 mb-2">Subscribe to Tech &amp; UX Insights</h4>
+                <form onSubmit={handleSubmit} className="flex flex-col gap-2 max-w-xs">
+                  <div className="flex gap-2">
+                    <Input
+                      type="email"
+                      value={tempEmail}
+                      onChange={(e) => setTempEmail(e.target.value)}
+                      placeholder="Enter your email"
+                      required
+                      className="bg-slate-800 border-slate-700 text-white placeholder:text-gray-400 h-10 text-sm"
                     />
-                  </form>
-                  {status === "success" && (
-                    <p className="text-green-500 mt-2 text-sm">Thanks for subscribing!</p>
-                  )}
-                  {status === "error" && (
-                    <p className="text-red-500 mt-2 text-sm">Something went wrong.</p>
-                  )}
-                  {status === "captcha_needed" && (
-                    <p className="text-yellow-500 mt-2 text-sm">Please verify you are human.</p>
-                  )}
-                </div>
-
-                {/* Social Links */}
-                <div className="flex space-x-4">
-                  <Button variant="ghost" size="icon" className="hover:bg-slate-800">
-                    <Facebook className="h-5 w-5" />
-                  </Button>
-                  <Button variant="ghost" size="icon" className="hover:bg-slate-800">
-                    <Twitter className="h-5 w-5" />
-                  </Button>
-                  <Button variant="ghost" size="icon" className="hover:bg-slate-800">
-                    <Instagram className="h-5 w-5" />
-                  </Button>
-                  <Button variant="ghost" size="icon" className="hover:bg-slate-800">
-                    <Linkedin className="h-5 w-5" />
-                  </Button>
-                </div>
+                    <Button
+                      type="submit"
+                      className="bg-blue-600 hover:bg-blue-700 h-10 px-4 text-sm font-semibold"
+                      disabled={status === "loading"}
+                    >
+                      {status === "loading" ? <Loader2 className="h-4 w-4 animate-spin" /> : "Join"}
+                    </Button>
+                  </div>
+                </form>
+                {status === "success" && (
+                  <p className="text-emerald-400 mt-2 text-xs">Thanks for subscribing!</p>
+                )}
+                {status === "error" && (
+                  <p className="text-rose-400 mt-2 text-xs">Something went wrong. Please retry.</p>
+                )}
               </div>
 
-              {/* Quick Links */}
-              <div>
-                <h4 className="font-semibold mb-6">Quick Links</h4>
-                <ul className="space-y-3">
-                  <li><a href="#about" className="text-gray-300 hover:text-white transition-colors">About Us</a></li>
-                  <li><a href="#services" className="text-gray-300 hover:text-white transition-colors">Services</a></li>
-                  <li><a href="#portfolio" className="text-gray-300 hover:text-white transition-colors">Portfolio</a></li>
-                  <li><a href="#testimonials" className="text-gray-300 hover:text-white transition-colors">Testimonials</a></li>
-                  <li><a href="#contact" className="text-gray-300 hover:text-white transition-colors">Contact</a></li>
-                  <li><a href="#blog" className="text-gray-300 hover:text-white transition-colors">Blog</a></li>
-                  <li><a href="#careers" className="text-gray-300 hover:text-white transition-colors">Careers</a></li>
-                  <li><a href="/dashboard" className="text-gray-300 hover:text-white transition-colors">Admin Dashboard</a></li>
-                </ul>
-              </div>
-
-              {/* Services */}
-              <div>
-                <h4 className="font-semibold mb-6">Services</h4>
-                <ul className="space-y-3">
-                  <li><a href="#web-design" className="text-gray-300 hover:text-white transition-colors">Web Design</a></li>
-                  <li><a href="#web-development" className="text-gray-300 hover:text-white transition-colors">Web Development</a></li>
-                  <li><a href="#seo" className="text-gray-300 hover:text-white transition-colors">SEO & Marketing</a></li>
-                  <li><a href="#branding" className="text-gray-300 hover:text-white transition-colors">Branding</a></li>
-                  <li><a href="#mobile-apps" className="text-gray-300 hover:text-white transition-colors">Mobile Apps</a></li>
-                  <li><a href="#ecommerce" className="text-gray-300 hover:text-white transition-colors">E-commerce</a></li>
-                  <li><a href="#analytics" className="text-gray-300 hover:text-white transition-colors">Analytics</a></li>
-                </ul>
+              {/* Social Links */}
+              <div className="flex space-x-3">
+                <a
+                  href="https://github.com/Aman638668"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="h-9 w-9 rounded-lg bg-slate-800 hover:bg-slate-700 flex items-center justify-center text-slate-300 hover:text-white transition-colors"
+                  aria-label="GitHub Profile"
+                >
+                  <Github className="h-4 w-4" />
+                </a>
+                <a
+                  href="https://www.linkedin.com/in/aman-sharma-4b772124a/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="h-9 w-9 rounded-lg bg-slate-800 hover:bg-slate-700 flex items-center justify-center text-slate-300 hover:text-white transition-colors"
+                  aria-label="LinkedIn Profile"
+                >
+                  <Linkedin className="h-4 w-4" />
+                </a>
+                <Link
+                  to="/resume"
+                  className="h-9 w-9 rounded-lg bg-slate-800 hover:bg-slate-700 flex items-center justify-center text-slate-300 hover:text-white transition-colors"
+                  aria-label="Interactive Resume"
+                  title="View Resume"
+                >
+                  <FileText className="h-4 w-4" />
+                </Link>
               </div>
             </div>
 
-            <Separator className="bg-slate-800 mb-8" />
-
-            {/* Contact Info */}
-            <div className="grid md:grid-cols-3 gap-8 mb-8">
-              <div className="flex items-center">
-                <Mail className="h-5 w-5 text-blue-400 mr-3" />
-                <div>
-                  <p className="text-sm text-gray-400">Email</p>
-                  <p className="text-white">amanuxstudio@gmail.com</p>
-                </div>
-              </div>
-              <div className="flex items-center">
-                <Phone className="h-5 w-5 text-green-400 mr-3" />
-                <div>
-                  <p className="text-sm text-gray-400">Phone</p>
-                  <p className="text-white">+91 9211104514</p>
-                </div>
-              </div>
-
-              <div className="flex items-center">
-                <MapPin className="h-5 w-5 text-purple-400 mr-3" />
-                <div>
-                  <p className="text-sm text-gray-400">Location</p>
-                  <p className="text-white">Delhi, India</p>
-                </div>
-              </div>
+            {/* Quick Links */}
+            <div>
+              <h4 className="font-semibold text-sm text-slate-200 mb-4 tracking-wider uppercase">Navigation</h4>
+              <ul className="space-y-2.5 text-sm">
+                <li>
+                  <button onClick={() => handleNavClick('about')} className="text-gray-400 hover:text-white transition-colors">
+                    About Us
+                  </button>
+                </li>
+                <li>
+                  <Link to="/services" className="text-gray-400 hover:text-white transition-colors">
+                    Services &amp; Solutions
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/portfolio" className="text-gray-400 hover:text-white transition-colors">
+                    Portfolio &amp; Case Studies
+                  </Link>
+                </li>
+                <li>
+                  <button onClick={() => handleNavClick('testimonials')} className="text-gray-400 hover:text-white transition-colors">
+                    Client Reviews
+                  </button>
+                </li>
+                <li>
+                  <Link to="/blog" className="text-gray-400 hover:text-white transition-colors">
+                    Articles &amp; Blog
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/resume" className="text-blue-400 hover:text-blue-300 transition-colors font-medium">
+                    Resume &amp; Experience
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/login" className="text-gray-500 hover:text-gray-300 transition-colors text-xs">
+                    Admin Portal
+                  </Link>
+                </li>
+              </ul>
             </div>
 
-            <Separator className="bg-slate-800 mb-8" />
+            {/* Services */}
+            <div>
+              <h4 className="font-semibold text-sm text-slate-200 mb-4 tracking-wider uppercase">Solutions</h4>
+              <ul className="space-y-2.5 text-sm text-gray-400">
+                <li><Link to="/services#web-development" className="hover:text-white transition-colors">Web Development</Link></li>
+                <li><Link to="/services#ui-ux-design" className="hover:text-white transition-colors">UI/UX Design</Link></li>
+                <li><Link to="/services#wordpress" className="hover:text-white transition-colors">WordPress &amp; Elementor</Link></li>
+                <li><Link to="/services#ecommerce" className="hover:text-white transition-colors">E-Commerce (Ireshh)</Link></li>
+                <li><Link to="/services#seo-performance" className="hover:text-white transition-colors">SEO &amp; Performance</Link></li>
+              </ul>
+            </div>
+          </div>
 
-            {/* Bottom Footer */}
-            <div className="flex flex-col md:flex-row justify-between items-center">
-              <div className="text-gray-400 text-sm mb-4 md:mb-0">
-                © 2025 Aman UX Studio. All rights reserved. |
-                <a href="#privacy" className="hover:text-white ml-1">Privacy Policy</a> |
-                <a href="#terms" className="hover:text-white ml-1">Terms of Service</a>
+          <Separator className="bg-slate-800 mb-8" />
+
+          {/* Contact Info */}
+          <div className="grid md:grid-cols-3 gap-6 mb-8 text-sm">
+            <div className="flex items-center">
+              <Mail className="h-5 w-5 text-blue-400 mr-3 flex-shrink-0" />
+              <div>
+                <p className="text-xs text-gray-400">Direct Email</p>
+                <a href="mailto:amanuxstudio@gmail.com" className="text-white hover:text-blue-300 transition-colors">
+                  amanuxstudio@gmail.com
+                </a>
               </div>
-              <div className="text-gray-400 text-sm">
-                Crafted with ❤️ by Aman Sharma.
+            </div>
+            <div className="flex items-center">
+              <Phone className="h-5 w-5 text-emerald-400 mr-3 flex-shrink-0" />
+              <div>
+                <p className="text-xs text-gray-400">Phone / WhatsApp</p>
+                <a href="tel:+919211104514" className="text-white hover:text-emerald-300 transition-colors">
+                  +91 92111-04514
+                </a>
+              </div>
+            </div>
+            <div className="flex items-center">
+              <MapPin className="h-5 w-5 text-purple-400 mr-3 flex-shrink-0" />
+              <div>
+                <p className="text-xs text-gray-400">Location</p>
+                <p className="text-white">New Delhi, India</p>
               </div>
             </div>
           </div>
+
+          <Separator className="bg-slate-800 mb-8" />
+
+          {/* Bottom Footer */}
+          <div className="flex flex-col md:flex-row justify-between items-center text-xs text-gray-400">
+            <div>
+              &copy; {new Date().getFullYear()} Aman UX Studio. Built with React, Vite &amp; Supabase.
+            </div>
+            <div className="mt-2 md:mt-0">
+              Designed &amp; Developed by <strong>Aman Sharma</strong>.
+            </div>
+          </div>
         </div>
-      </footer>
-    </>
+      </div>
+    </footer>
   );
 }

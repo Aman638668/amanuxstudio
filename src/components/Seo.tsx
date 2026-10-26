@@ -25,7 +25,8 @@ const Seo = ({
 }: SeoProps) => {
     const siteTitle = "Aman UX Studio";
     const fullTitle = `${title} | ${siteTitle}`;
-    const fullUrl = url ? `https://amanuxstudio.com${url}` : 'https://amanuxstudio.com';
+    const baseUrl = typeof window !== 'undefined' ? window.location.origin : '';
+    const fullUrl = url ? `${baseUrl}${url}` : baseUrl;
 
     // JSON-LD Schema Generation
     let schemaData: any = {
@@ -40,7 +41,7 @@ const Seo = ({
         schemaData = {
             ...schemaData,
             "headline": title.substring(0, 110),
-            "image": image ? [`https://amanuxstudio.com${image}`] : [],
+            "image": image ? [`${baseUrl}${image}`] : [],
             "datePublished": publishedTime,
             "dateModified": modifiedTime || publishedTime,
             "author": {
@@ -52,7 +53,7 @@ const Seo = ({
                 "name": siteTitle,
                 "logo": {
                     "@type": "ImageObject",
-                    "url": "https://amanuxstudio.com/aman-ux-studio.png"
+                    "url": `${baseUrl}/aman-ux-studio.png`
                 }
             },
             "mainEntityOfPage": {
@@ -65,7 +66,7 @@ const Seo = ({
             ...schemaData,
             "potentialAction": {
                 "@type": "SearchAction",
-                "target": "https://amanuxstudio.com/blog?search={search_term_string}",
+                "target": `${baseUrl}/blog?search={search_term_string}`,
                 "query-input": "required name=search_term_string"
             }
         };

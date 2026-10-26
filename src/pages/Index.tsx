@@ -10,12 +10,12 @@ import Contact from '@/components/Contact';
 import Footer from '@/components/Footer';
 import Seo from '@/components/Seo';
 
-export default function ExpertVuwLandingPage() {
+export default function Index() {
   return (
     <div className="min-h-screen bg-white">
       <Seo
-        title="Home"
-        description="Aman UX Studio is a premium digital agency specializing in web development, UI/UX design, and branding solutions."
+        title="Web Development & UX/UI Studio"
+        description="Aman UX Studio is a premium digital agency specializing in modern web development, WordPress solutions, UI/UX design, and SEO optimization."
       />
       <Navigation />
       <Hero />
