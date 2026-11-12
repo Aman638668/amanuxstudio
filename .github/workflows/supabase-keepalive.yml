@@ -2,8 +2,8 @@ name: Supabase Keep-Alive (Prevent Auto-Pause)
 
 on:
   schedule:
-    # Runs every 2 days at 04:00 UTC (runs in GitHub Cloud even if your computer is off)
-    - cron: '0 4 */2 * *'
+    # Runs daily at 04:00 UTC (cloud cron runs even when computer is completely off)
+    - cron: '0 4 * * *'
   workflow_dispatch: # Allows manual trigger from GitHub UI anytime
 
 jobs:
@@ -15,19 +15,28 @@ jobs:
         env:
           SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
           SUPABASE_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_URL }}
         run: |
           if [ -z "$SUPABASE_URL" ] || [ -z "$SUPABASE_KEY" ]; then
-            echo "::warning ::VITE_SUPABASE_URL or VITE_SUPABASE_ANON_KEY secrets not set in GitHub repository settings. Please add them in Settings -> Secrets and variables -> Actions."
-            exit 0
+            echo "::error::VITE_SUPABASE_URL or VITE_SUPABASE_ANON_KEY secrets are missing from GitHub Secrets!"
+            echo "Please configure them at: https://github.com/Aman638668/amanuxstudio/settings/secrets/actions"
+            exit 1
           fi
 
-          echo "Pinging Supabase at $SUPABASE_URL to prevent inactivity pause..."
+          echo "Pinging Supabase REST API at $SUPABASE_URL..."
           HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" -X GET "$SUPABASE_URL/rest/v1/posts?select=id&limit=1" \
             -H "apikey: $SUPABASE_KEY" \
             -H "Authorization: Bearer $SUPABASE_KEY")
 
+          echo "Supabase responded with HTTP code: $HTTP_STATUS"
+
           if [ "$HTTP_STATUS" -ge 200 ] && [ "$HTTP_STATUS" -lt 400 ]; then
-            echo "Success! Supabase responded with HTTP $HTTP_STATUS. 7-day inactivity pause reset."
+            echo "✅ Success! Database query executed. Supabase 7-day inactivity pause reset."
           else
-            echo "Supabase returned HTTP $HTTP_STATUS. Please check project status."
+            echo "❌ Keep-alive failed with HTTP $HTTP_STATUS"
+            if [ -n "$DISCORD_WEBHOOK" ]; then
+              curl -H "Content-Type: application/json" -X POST "$DISCORD_WEBHOOK" \
+                -d "{\"content\": \"⚠️ **Supabase Keep-Alive Warning**: Request returned HTTP $HTTP_STATUS. Please check if your Supabase project is active.\"}"
+            fi
+            exit 1
           fi
