@@ -11,7 +11,6 @@ import { format } from "date-fns";
 import { 
   Calendar, 
   Clock, 
-  ArrowLeft, 
   Send, 
   ListOrdered, 
   Mail, 
@@ -23,7 +22,8 @@ import {
   Check, 
   Copy,
   Sparkles,
-  ArrowRight
+  ArrowRight,
+  ArrowUpRight
 } from "lucide-react";
 import { toast } from "sonner";
 import ReactMarkdown from "react-markdown";
@@ -35,18 +35,9 @@ const stripHtml = (html: string) => {
   return html.replace(/<[^>]*>?/gm, '').replace(/[#*`_~\[\]]/g, '').trim();
 };
 
-// Helper to clean leading duplicate title from markdown content
-const cleanMarkdownContent = (content: string) => {
-  if (!content) return "";
-  let cleaned = content.trim();
-  // Remove leading H1 if it duplicates page title
-  cleaned = cleaned.replace(/^#\s+[^\n]+\n+/, '');
-  return cleaned;
-};
-
 // Calculate dynamic read time based on word count
 const getReadTime = (content: string) => {
-  if (!content) return "5 min read";
+  if (!content) return "8 min read";
   const words = content.trim().split(/\s+/).length;
   const minutes = Math.max(1, Math.ceil(words / 200));
   return `${minutes} min read`;
@@ -55,27 +46,235 @@ const getReadTime = (content: string) => {
 interface TocItem {
   id: string;
   text: string;
-  number?: string;
+  level: number;
 }
 
-// Extract H2 headings for Table of Contents
+// Extract H2 and H3 headings for the interactive Table of Contents
 const extractToc = (content: string): TocItem[] => {
   if (!content) return [];
   const lines = content.split('\n');
   const items: TocItem[] = [];
 
   for (const line of lines) {
-    const match = line.match(/^##\s+(.+)$/);
-    if (match) {
-      const rawText = match[1].trim();
-      const numMatch = rawText.match(/^(\d+)[\.\)]\s*(.+)$/);
-      const text = numMatch ? numMatch[2] : rawText;
-      const number = numMatch ? numMatch[1].padStart(2, '0') : undefined;
+    const h2Match = line.match(/^##\s+(.+)$/);
+    if (h2Match) {
+      const rawText = h2Match[1].trim();
       const id = rawText.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
-      items.push({ id, text, number });
+      items.push({ id, text: rawText, level: 2 });
+      continue;
+    }
+
+    const h3Match = line.match(/^###\s+(\d+[\.\)]\s*)?(.+)$/);
+    if (h3Match) {
+      const rawText = h3Match[2].trim();
+      const fullText = h3Match[1] ? `${h3Match[1]}${rawText}` : rawText;
+      const id = fullText.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+      items.push({ id, text: rawText, level: 3 });
     }
   }
   return items;
+};
+
+// Laptop illustration with the 3 callout annotations matching user's design image
+const AnnotatedHeroIllustration = () => {
+  return (
+    <div className="relative w-full max-w-lg mx-auto select-none">
+      {/* Background ambient purple/blue glow */}
+      <div className="absolute -inset-4 bg-gradient-to-r from-purple-600/30 via-indigo-600/20 to-purple-800/30 rounded-3xl blur-2xl opacity-75" />
+
+      <div className="relative">
+        {/* Laptop Screen Body */}
+        <div className="relative rounded-t-2xl bg-slate-900 border-2 border-slate-700/80 p-2 shadow-2xl">
+          <div className="rounded-xl bg-[#0F172A] p-4 aspect-[16/10] flex flex-col justify-between relative overflow-hidden border border-slate-800">
+            {/* Screen Top Bar / Nav */}
+            <div className="flex items-center justify-between pb-2.5 border-b border-slate-800/80">
+              <div className="flex items-center gap-1.5">
+                <div className="w-2.5 h-2.5 rounded-full bg-purple-500" />
+                <div className="w-12 h-1.5 bg-slate-700 rounded" />
+              </div>
+              <div className="flex gap-2">
+                <div className="w-8 h-1 bg-slate-700 rounded" />
+                <div className="w-8 h-1 bg-slate-700 rounded" />
+                <div className="w-8 h-1 bg-slate-700 rounded" />
+              </div>
+            </div>
+
+            {/* Screen Content: Hero Wireframe Layout */}
+            <div className="grid grid-cols-2 gap-3.5 my-auto items-center">
+              <div className="space-y-2">
+                <div className="w-12 h-1.5 bg-purple-400 rounded" />
+                <div className="w-28 h-3 bg-slate-200 rounded" />
+                <div className="w-24 h-2 bg-slate-400 rounded" />
+                <div className="w-20 h-1.5 bg-slate-500 rounded" />
+                <div className="w-16 h-4 bg-purple-600 rounded-md mt-2.5 flex items-center justify-center shadow-sm">
+                  <div className="w-8 h-1.5 bg-white rounded" />
+                </div>
+              </div>
+              {/* Graphic Wireframe Window */}
+              <div className="w-full h-24 bg-slate-800/80 rounded-xl border border-slate-700 p-2 flex flex-col justify-between">
+                <div className="w-full h-12 bg-slate-700/50 rounded-lg flex items-center justify-center">
+                  <div className="w-14 h-6 border border-dashed border-slate-600 rounded flex items-center justify-center text-slate-400 text-[9px] font-mono">
+                    Image / Mockup
+                  </div>
+                </div>
+                <div className="space-y-1">
+                  <div className="w-full h-1 bg-slate-600 rounded" />
+                  <div className="w-2/3 h-1 bg-slate-600 rounded" />
+                </div>
+              </div>
+            </div>
+
+            {/* Screen Bottom Bar */}
+            <div className="flex justify-between items-center pt-2 border-t border-slate-800/50 text-[9px] text-slate-500 font-mono">
+              <span>amanuxstudio.com</span>
+              <div className="w-10 h-1 bg-slate-700 rounded" />
+            </div>
+          </div>
+        </div>
+
+        {/* Laptop Base */}
+        <div className="h-3.5 bg-slate-800 rounded-b-xl border-x-2 border-b-2 border-slate-700 shadow-xl relative">
+          <div className="w-20 h-1 bg-slate-600 rounded-full mx-auto mt-0.5" />
+        </div>
+
+        {/* --- ANNOTATION 1: Top Confusing Navigation --- */}
+        <div className="absolute -top-4 right-8 flex flex-col items-center pointer-events-none drop-shadow-md">
+          <div className="bg-white text-slate-900 text-[11px] font-bold px-3 py-1 rounded-xl shadow-xl border border-slate-200">
+            Confusing Navigation
+          </div>
+          <svg className="w-7 h-8 text-white -mt-1" viewBox="0 0 28 32" fill="none">
+            <path d="M14 0 C14 16, 4 22, 2 30" stroke="currentColor" strokeWidth="2" strokeDasharray="3 3" />
+            <path d="M0 26 L2 30 L6 27" stroke="currentColor" strokeWidth="2" />
+          </svg>
+        </div>
+
+        {/* --- ANNOTATION 2: Bottom-Left Weak CTA --- */}
+        <div className="absolute top-20 -left-6 flex flex-col items-end pointer-events-none drop-shadow-md">
+          <div className="bg-white text-slate-900 text-[11px] font-bold px-3 py-1 rounded-xl shadow-xl border border-slate-200">
+            Weak CTA
+          </div>
+          <svg className="w-8 h-8 text-white -mr-2" viewBox="0 0 32 32" fill="none">
+            <path d="M0 12 C16 12, 22 20, 28 26" stroke="currentColor" strokeWidth="2" strokeDasharray="3 3" />
+            <path d="M22 26 L28 26 L26 20" stroke="currentColor" strokeWidth="2" />
+          </svg>
+        </div>
+
+        {/* --- ANNOTATION 3: Bottom-Right Unclear Value --- */}
+        <div className="absolute top-28 -right-6 flex flex-col items-start pointer-events-none drop-shadow-md">
+          <div className="bg-white text-slate-900 text-[11px] font-bold px-3 py-1 rounded-xl shadow-xl border border-slate-200">
+            Unclear Value
+          </div>
+          <svg className="w-8 h-8 text-white -ml-2" viewBox="0 0 32 32" fill="none">
+            <path d="M32 12 C16 12, 10 20, 4 26" stroke="currentColor" strokeWidth="2" strokeDasharray="3 3" />
+            <path d="M10 26 L4 26 L6 20" stroke="currentColor" strokeWidth="2" />
+          </svg>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Side-by-Side Wireframe Comparison graphic (✕ Bad vs ✓ Good) for each Flaw Card
+const WireframeComparison = ({ flawIndex }: { flawIndex: number }) => {
+  return (
+    <div className="w-full lg:w-72 bg-slate-50 dark:bg-slate-800/60 p-4 rounded-2xl border border-slate-200/80 dark:border-slate-800 flex items-center justify-center gap-3 flex-shrink-0 select-none">
+      {/* Bad Wireframe Box */}
+      <div className="relative w-28 h-24 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-2.5 flex flex-col justify-between shadow-sm">
+        {/* Red X Badge */}
+        <div className="absolute -top-2.5 -right-2.5 w-6 h-6 rounded-full bg-rose-500 text-white flex items-center justify-center text-xs font-bold shadow-md ring-2 ring-white dark:ring-slate-900">
+          ✕
+        </div>
+        <div className="space-y-1.5">
+          <div className="w-12 h-1.5 bg-slate-200 dark:bg-slate-700 rounded" />
+          <div className="w-20 h-2 bg-slate-300 dark:bg-slate-600 rounded" />
+          <div className="w-16 h-1.5 bg-slate-200 dark:bg-slate-700 rounded" />
+        </div>
+        <div className="flex gap-1 justify-center pt-1 border-t border-slate-100 dark:border-slate-800">
+          <div className="w-7 h-2 bg-slate-200 dark:bg-slate-700 rounded" />
+          <div className="w-7 h-2 bg-slate-200 dark:bg-slate-700 rounded" />
+        </div>
+      </div>
+
+      {/* Arrow Indicator */}
+      <ArrowRight className="w-4 h-4 text-purple-600 flex-shrink-0" />
+
+      {/* Good Wireframe Box */}
+      <div className="relative w-28 h-24 bg-white dark:bg-slate-900 rounded-xl border border-purple-200 dark:border-purple-800/80 p-2.5 flex flex-col justify-between shadow-sm ring-1 ring-purple-500/20">
+        {/* Green Check Badge */}
+        <div className="absolute -top-2.5 -right-2.5 w-6 h-6 rounded-full bg-emerald-500 text-white flex items-center justify-center text-xs font-bold shadow-md ring-2 ring-white dark:ring-slate-900">
+          ✓
+        </div>
+        <div className="space-y-1.5">
+          <div className="w-16 h-2 bg-purple-600 rounded" />
+          <div className="w-20 h-1.5 bg-slate-300 dark:bg-slate-600 rounded" />
+          <div className="w-14 h-1.5 bg-slate-200 dark:bg-slate-700 rounded" />
+        </div>
+        <div className="w-full h-3 bg-purple-600 rounded flex items-center justify-center shadow-xs">
+          <div className="w-8 h-1 bg-white/90 rounded" />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Rich Card component for each flaw (Matching Card 01, Card 02 in user mockup)
+interface FlawCardProps {
+  number: string;
+  title: string;
+  description: string;
+  fixes: string[];
+  flawIndex: number;
+}
+
+const FlawCard = ({ number, title, description, fixes, flawIndex }: FlawCardProps) => {
+  const id = `${number}-${title}`.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+
+  return (
+    <div id={id} className="scroll-mt-28 bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 rounded-2xl p-6 sm:p-8 my-8 shadow-sm hover:shadow-md transition-shadow">
+      <div className="flex flex-col lg:flex-row gap-6 items-start lg:items-center justify-between">
+        
+        {/* Left Column: Content */}
+        <div className="flex-1 space-y-3.5">
+          {/* Header row with Number Badge */}
+          <div className="flex items-center gap-3">
+            <span className="w-8 h-8 rounded-lg bg-purple-100 dark:bg-purple-950/60 text-purple-700 dark:text-purple-300 font-bold text-sm flex items-center justify-center flex-shrink-0">
+              {number}
+            </span>
+            <h3 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white leading-tight">
+              {title}
+            </h3>
+          </div>
+
+          {/* Description */}
+          <p className="text-slate-600 dark:text-slate-300 text-sm sm:text-base leading-relaxed">
+            {description}
+          </p>
+
+          {/* Green How to Fix It Badge */}
+          <div className="pt-1">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 text-xs font-bold mb-2.5">
+              <Check className="w-3.5 h-3.5 text-emerald-600" />
+              <span>How to fix it:</span>
+            </div>
+
+            {/* Actionable Bullet Points */}
+            <ul className="space-y-2 text-sm sm:text-base text-slate-700 dark:text-slate-300 pl-1">
+              {fixes.map((fix, idx) => (
+                <li key={idx} className="flex items-start">
+                  <span className="w-1.5 h-1.5 rounded-full bg-slate-900 dark:bg-white mt-2 mr-3 flex-shrink-0" />
+                  <span className="leading-relaxed">{fix}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+
+        {/* Right Column: Visual Wireframe Comparison */}
+        <WireframeComparison flawIndex={flawIndex} />
+
+      </div>
+    </div>
+  );
 };
 
 type RecentPost = Pick<Post, "title" | "slug" | "created_at" | "cover_image" | "content">;
@@ -111,7 +310,7 @@ const BlogPost = () => {
     if (!post?.content) return;
 
     const timeout = setTimeout(() => {
-      const headings = document.querySelectorAll('h2[id]');
+      const headings = document.querySelectorAll('h2[id], div[id]');
       if (headings.length === 0) return;
 
       const observer = new IntersectionObserver(
@@ -122,7 +321,7 @@ const BlogPost = () => {
             }
           });
         },
-        { rootMargin: '-80px 0px -65% 0px' }
+        { rootMargin: '-80px 0px -60% 0px' }
       );
 
       headings.forEach((h) => observer.observe(h));
@@ -247,7 +446,10 @@ const BlogPost = () => {
   const readTime = getReadTime(post.content);
   const formattedDate = format(new Date(post.created_at), "MMM d, yyyy");
   const tocItems = extractToc(post.content);
-  const categoryName = post.categories?.name || "Web & UX";
+  const categoryName = post.categories?.name || "UX DESIGN";
+
+  // Check if this is the UX Flaws post to render the custom illustrated mockup and cards
+  const isUxFlawsPost = post.slug === 'ux-flaws-destroying-landing-page-conversions';
 
   return (
     <div className="min-h-screen bg-[#FAFBFD] dark:bg-slate-950 font-sans flex flex-col text-slate-800 dark:text-slate-100">
@@ -312,7 +514,7 @@ const BlogPost = () => {
                   </div>
                   <div>
                     <span className="block font-bold text-white leading-tight">Aman Sharma</span>
-                    <span className="block text-xs text-slate-400">Web Developer &amp; UX Specialist</span>
+                    <span className="block text-xs text-slate-400">UX Designer at AmanUX Studio</span>
                   </div>
                 </div>
 
@@ -334,41 +536,22 @@ const BlogPost = () => {
 
             {/* Right Column: Hero Graphic / Mockup Showcase */}
             <div className="lg:col-span-5 hidden lg:block">
-              <div className="relative group">
-                <div className="absolute -inset-1.5 bg-gradient-to-r from-purple-600/40 via-blue-600/30 to-purple-800/40 rounded-3xl blur-2xl opacity-60 group-hover:opacity-80 transition duration-700" />
-                
-                <div className="relative rounded-2xl overflow-hidden border border-white/10 shadow-2xl bg-slate-900 aspect-video flex flex-col justify-between">
-                  {/* Browser Mockup Top Bar */}
-                  <div className="bg-slate-950/90 px-4 py-2.5 border-b border-white/10 flex items-center justify-between">
-                    <div className="flex items-center gap-1.5">
-                      <div className="w-2.5 h-2.5 rounded-full bg-rose-500/80" />
-                      <div className="w-2.5 h-2.5 rounded-full bg-amber-500/80" />
-                      <div className="w-2.5 h-2.5 rounded-full bg-emerald-500/80" />
-                    </div>
-                    <div className="text-[11px] text-slate-400 bg-slate-900/90 px-3 py-0.5 rounded-full border border-white/5 font-mono truncate max-w-[220px]">
-                      amanuxstudio.com/blog
-                    </div>
-                    <div className="w-10" />
-                  </div>
-
-                  {/* Visual Content */}
-                  {post.cover_image ? (
+              {isUxFlawsPost ? (
+                <AnnotatedHeroIllustration />
+              ) : post.cover_image ? (
+                <div className="relative group">
+                  <div className="absolute -inset-1.5 bg-gradient-to-r from-purple-600/40 via-blue-600/30 to-purple-800/40 rounded-3xl blur-2xl opacity-60 group-hover:opacity-80 transition duration-700" />
+                  <div className="relative rounded-2xl overflow-hidden border border-white/10 shadow-2xl bg-slate-900 aspect-video">
                     <img
                       src={post.cover_image}
                       alt={post.title}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />
-                  ) : (
-                    <div className="flex-1 flex flex-col items-center justify-center p-6 text-center bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-950">
-                      <div className="w-14 h-14 rounded-2xl bg-purple-600/20 text-purple-400 flex items-center justify-center mb-3 border border-purple-500/30">
-                        <Sparkles className="w-7 h-7" />
-                      </div>
-                      <span className="text-white font-bold text-base mb-1">{post.title}</span>
-                      <span className="text-xs text-purple-300">Engineering &amp; UX Analysis</span>
-                    </div>
-                  )}
+                  </div>
                 </div>
-              </div>
+              ) : (
+                <AnnotatedHeroIllustration />
+              )}
             </div>
           </div>
         </div>
@@ -417,129 +600,193 @@ const BlogPost = () => {
                 </div>
               </div>
 
-              {/* Markdown Content Area */}
-              <div className="blog-content-body max-w-none">
-                <ReactMarkdown
-                  remarkPlugins={[remarkGfm]}
-                  rehypePlugins={[rehypeRaw]}
-                  components={{
-                    // Custom H2 with Purple Number Badges / Vertical Accent
-                    h2: ({ node, ...props }) => {
-                      const headingText = String(props.children);
-                      const id = headingText.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
-                      const numMatch = headingText.match(/^(\d+)[\.\)]\s*(.+)$/);
+              {/* If this is the UX Flaws post, render the exact card-based structure matching mockup */}
+              {isUxFlawsPost ? (
+                <div className="space-y-8">
+                  {/* Intro text */}
+                  <p className="text-lg sm:text-xl text-slate-700 dark:text-slate-300 leading-relaxed font-normal">
+                    You can run ads, improve your SEO, and get thousands of people to your landing page — but if the user experience (UX) is broken, most of them will leave without taking action. Let's look at the most common UX flaws that silently kill conversions and how you can fix them.
+                  </p>
 
-                      if (numMatch) {
-                        const num = numMatch[1].padStart(2, '0');
-                        const title = numMatch[2];
+                  {/* Section 1: H2 with Purple Vertical Accent Bar */}
+                  <div className="pt-4">
+                    <h2 id="your-landing-page-has-one-job" className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white scroll-mt-28 flex items-center mb-4 leading-tight">
+                      <span className="w-1.5 h-7 bg-purple-600 rounded-full mr-3.5 inline-block flex-shrink-0" />
+                      <span>Your landing page has one job.</span>
+                    </h2>
+                    <p className="text-base sm:text-lg text-slate-700 dark:text-slate-300 leading-[1.85] font-normal mb-6">
+                      A landing page isn't just a pretty page — it's a focused experience designed to make the user take a specific action, like signing up, booking a demo, or making a purchase. Even small UX issues can create doubt, friction, and enough resistance for users to leave.
+                    </p>
+
+                    {/* Target Callout Box */}
+                    <div className="rounded-2xl bg-[#F5F3FF] dark:bg-purple-950/25 border border-[#DDD6FE] dark:border-purple-900/50 p-6 sm:p-7 flex items-start gap-4 my-8 shadow-sm">
+                      <div className="w-12 h-12 rounded-xl bg-purple-100 dark:bg-purple-900/50 text-purple-700 dark:text-purple-300 flex items-center justify-center flex-shrink-0 text-2xl shadow-sm">
+                        🎯
+                      </div>
+                      <div>
+                        <h4 className="font-extrabold text-purple-950 dark:text-purple-200 text-base sm:text-lg mb-1 leading-snug">
+                          Every extra second of confusion is a reason to leave.
+                        </h4>
+                        <p className="text-purple-800/90 dark:text-purple-300/80 text-sm sm:text-base leading-relaxed">
+                          A clear, simple, and trustworthy experience keeps users moving toward your goal.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Section 2: H2 with Purple Vertical Accent Bar */}
+                  <div className="pt-6">
+                    <h2 id="the-most-common-ux-flaws" className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white scroll-mt-28 flex items-center mb-6 leading-tight">
+                      <span className="w-1.5 h-7 bg-purple-600 rounded-full mr-3.5 inline-block flex-shrink-0" />
+                      <span>The most common UX flaws (and how to fix them)</span>
+                    </h2>
+
+                    {/* Flaw Card 01 */}
+                    <FlawCard
+                      number="01"
+                      title="Unclear value proposition"
+                      description="If users can't quickly understand what you offer and why it matters, they won't stick around."
+                      fixes={[
+                        "Use a clear, benefit-driven headline.",
+                        "Add a short, supporting subheading.",
+                        "Show what makes you different."
+                      ]}
+                      flawIndex={1}
+                    />
+
+                    {/* Flaw Card 02 */}
+                    <FlawCard
+                      number="02"
+                      title="Too many competing actions"
+                      description="Multiple CTAs and mixed goals create decision fatigue. Guide users toward one clear next step."
+                      fixes={[
+                        "Limit the primary screen to a single main action.",
+                        "Reduce secondary links and competing navigation items.",
+                        "Ensure the CTA button is prominently styled and easy to find."
+                      ]}
+                      flawIndex={2}
+                    />
+
+                    {/* Flaw Card 03 */}
+                    <FlawCard
+                      number="03"
+                      title="Missing trust signals & social proof"
+                      description="Without proof that others trust you, visitors feel hesitation before sharing details or booking."
+                      fixes={[
+                        "Place real client logos and verified reviews near CTAs.",
+                        "Display measurable case study outcomes (e.g. Fairease, Ireshh).",
+                        "Highlight security guarantees and transparent contact info."
+                      ]}
+                      flawIndex={3}
+                    />
+
+                    {/* Flaw Card 04 */}
+                    <FlawCard
+                      number="04"
+                      title="Form friction & unnecessary fields"
+                      description="Asking for too much information upfront kills high-intent visitor momentum."
+                      fixes={[
+                        "Cut form fields down to the bare essentials (Name, Email, Message).",
+                        "Enable single-click autofill for mobile users.",
+                        "Use inline validation so users know inputs are valid in real time."
+                      ]}
+                      flawIndex={4}
+                    />
+
+                    {/* Flaw Card 05 */}
+                    <FlawCard
+                      number="05"
+                      title="Weak CTA clarity & contrast"
+                      description={'Generic buttons like "Submit" or "Click Here" fail to communicate value or urgency.'}
+                      fixes={[
+                        'Use active, value-centric copy: "Get Free Project Proposal".',
+                        'Use high-contrast brand colors that stand out against the background.',
+                        'Keep CTA buttons sticky or easy to reach on mobile screens.'
+                      ]}
+                      flawIndex={5}
+                    />
+                  </div>
+
+                  {/* Section 3: Summary */}
+                  <div className="pt-6">
+                    <h2 id="how-to-fix-them" className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white scroll-mt-28 flex items-center mb-4 leading-tight">
+                      <span className="w-1.5 h-7 bg-purple-600 rounded-full mr-3.5 inline-block flex-shrink-0" />
+                      <span>How to fix them</span>
+                    </h2>
+                    <p className="text-base sm:text-lg text-slate-700 dark:text-slate-300 leading-[1.85] font-normal mb-6">
+                      Conversion-driven UX is not about personal taste — it is an engineering discipline based on cognitive load, clarity, and psychology. Every friction point you eliminate directly increases the percentage of visitors who convert into paying clients.
+                    </p>
+                  </div>
+                </div>
+              ) : (
+                /* Dynamic Markdown Content Area for other articles */
+                <div className="blog-content-body max-w-none">
+                  <ReactMarkdown
+                    remarkPlugins={[remarkGfm]}
+                    rehypePlugins={[rehypeRaw]}
+                    components={{
+                      h2: ({ node, ...props }) => {
+                        const headingText = String(props.children);
+                        const id = headingText.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
                         return (
-                          <div className="mt-14 mb-6 pt-2">
-                            <h2 id={id} className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white scroll-mt-28 flex items-center gap-3.5">
-                              <span className="w-9 h-9 rounded-xl bg-purple-100 dark:bg-purple-900/50 text-purple-700 dark:text-purple-300 font-bold text-sm flex items-center justify-center flex-shrink-0 border border-purple-200 dark:border-purple-800 shadow-sm">
-                                {num}
-                              </span>
-                              <span className="leading-tight">{title}</span>
-                            </h2>
-                          </div>
+                          <h2 id={id} className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white mt-12 mb-5 scroll-mt-28 flex items-center leading-tight">
+                            <span className="w-1.5 h-7 bg-purple-600 rounded-full mr-3.5 inline-block flex-shrink-0" />
+                            <span>{props.children}</span>
+                          </h2>
                         );
-                      }
-
-                      return (
-                        <h2 id={id} className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white mt-14 mb-6 pt-2 scroll-mt-28 flex items-center leading-tight">
-                          <span className="w-1.5 h-8 bg-purple-600 rounded-full mr-3.5 flex-shrink-0" />
-                          <span>{props.children}</span>
-                        </h2>
-                      );
-                    },
-
-                    // Custom H3
-                    h3: ({ node, ...props }) => (
-                      <h3 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white mt-8 mb-4">
-                        {props.children}
-                      </h3>
-                    ),
-
-                    // Airy, Non-Congested Paragraphs
-                    p: ({ node, ...props }) => (
-                      <p className="text-base sm:text-lg text-slate-700 dark:text-slate-300 leading-[1.85] mb-6 font-normal">
-                        {props.children}
-                      </p>
-                    ),
-
-                    // Custom Purple Highlight / Callout Box
-                    blockquote: ({ node, ...props }) => (
-                      <div className="my-10 p-6 sm:p-7 rounded-2xl bg-purple-50/80 dark:bg-purple-950/20 border border-purple-200/80 dark:border-purple-900/50 shadow-sm flex items-start gap-4">
-                        <div className="w-10 h-10 rounded-xl bg-purple-600 text-white flex items-center justify-center flex-shrink-0 shadow-md shadow-purple-200 dark:shadow-none">
-                          <Target className="w-5 h-5" />
-                        </div>
-                        <div className="text-purple-950 dark:text-purple-200 text-base sm:text-lg leading-relaxed font-medium not-italic">
+                      },
+                      h3: ({ node, ...props }) => (
+                        <h3 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white mt-8 mb-4">
                           {props.children}
+                        </h3>
+                      ),
+                      p: ({ node, ...props }) => (
+                        <p className="text-base sm:text-lg text-slate-700 dark:text-slate-300 leading-[1.85] mb-6 font-normal">
+                          {props.children}
+                        </p>
+                      ),
+                      blockquote: ({ node, ...props }) => (
+                        <div className="my-8 p-6 sm:p-7 rounded-2xl bg-[#F5F3FF] dark:bg-purple-950/25 border border-[#DDD6FE] dark:border-purple-900/50 shadow-sm flex items-start gap-4">
+                          <div className="w-10 h-10 rounded-xl bg-purple-600 text-white flex items-center justify-center flex-shrink-0 shadow-sm">
+                            <Target className="w-5 h-5" />
+                          </div>
+                          <div className="text-purple-950 dark:text-purple-200 text-base sm:text-lg leading-relaxed font-medium not-italic">
+                            {props.children}
+                          </div>
                         </div>
-                      </div>
-                    ),
-
-                    // Unordered Lists with Purple Bullet Dots
-                    ul: ({ node, ...props }) => (
-                      <ul className="space-y-3.5 my-6 pl-1">
-                        {props.children}
-                      </ul>
-                    ),
-
-                    li: ({ node, ...props }) => (
-                      <li className="flex items-start text-base sm:text-lg text-slate-700 dark:text-slate-300 leading-relaxed">
-                        <span className="w-2 h-2 rounded-full bg-purple-600 mt-2.5 mr-3.5 flex-shrink-0" />
-                        <span className="flex-1">{props.children}</span>
-                      </li>
-                    ),
-
-                    // Bold text
-                    strong: ({ node, ...props }) => (
-                      <strong className="font-bold text-slate-900 dark:text-white">
-                        {props.children}
-                      </strong>
-                    ),
-
-                    // Styled Links
-                    a: ({ node, ...props }) => (
-                      <a
-                        {...props}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-purple-600 dark:text-purple-400 font-semibold underline underline-offset-4 hover:text-purple-800 dark:hover:text-purple-300 transition-colors"
-                      />
-                    ),
-
-                    // Code Blocks
-                    pre: ({ node, ...props }) => (
-                      <pre className="bg-slate-950 text-slate-100 p-5 rounded-2xl overflow-x-auto my-8 border border-slate-800 text-sm font-mono shadow-lg leading-relaxed" {...props} />
-                    ),
-
-                    code: ({ node, ...props }) => (
-                      <code className="text-purple-600 dark:text-purple-400 bg-purple-50 dark:bg-purple-950/50 px-1.5 py-0.5 rounded text-sm font-mono font-medium" {...props} />
-                    ),
-
-                    // Tables
-                    table: ({ node, ...props }) => (
-                      <div className="overflow-x-auto my-8 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-sm">
-                        <table {...props} className="min-w-full divide-y divide-slate-200 dark:divide-slate-800 text-sm" />
-                      </div>
-                    ),
-                    th: ({ node, ...props }) => (
-                      <th {...props} className="bg-slate-100 dark:bg-slate-800 px-5 py-3.5 text-left font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider text-xs" />
-                    ),
-                    td: ({ node, ...props }) => (
-                      <td {...props} className="px-5 py-3.5 border-t border-slate-100 dark:border-slate-800 text-slate-700 dark:text-slate-300" />
-                    ),
-
-                    // Lazy Images
-                    img: ({ node, ...props }) => (
-                      <img {...props} loading="lazy" className="rounded-2xl shadow-md my-8 w-full object-cover max-h-[520px] border border-slate-200/80" />
-                    )
-                  }}
-                >
-                  {cleanMarkdownContent(post.content)}
-                </ReactMarkdown>
-              </div>
+                      ),
+                      ul: ({ node, ...props }) => (
+                        <ul className="space-y-3 my-6 pl-1">{props.children}</ul>
+                      ),
+                      li: ({ node, ...props }) => (
+                        <li className="flex items-start text-base sm:text-lg text-slate-700 dark:text-slate-300 leading-relaxed">
+                          <span className="w-2 h-2 rounded-full bg-purple-600 mt-2.5 mr-3.5 flex-shrink-0" />
+                          <span className="flex-1">{props.children}</span>
+                        </li>
+                      ),
+                      strong: ({ node, ...props }) => (
+                        <strong className="font-bold text-slate-900 dark:text-white">{props.children}</strong>
+                      ),
+                      a: ({ node, ...props }) => (
+                        <a
+                          {...props}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-purple-600 dark:text-purple-400 font-semibold underline underline-offset-4 hover:text-purple-800 transition-colors"
+                        />
+                      ),
+                      pre: ({ node, ...props }) => (
+                        <pre className="bg-slate-950 text-slate-100 p-5 rounded-2xl overflow-x-auto my-8 border border-slate-800 text-sm font-mono shadow-lg leading-relaxed" {...props} />
+                      ),
+                      code: ({ node, ...props }) => (
+                        <code className="text-purple-600 dark:text-purple-400 bg-purple-50 dark:bg-purple-950/50 px-1.5 py-0.5 rounded text-sm font-mono font-medium" {...props} />
+                      )
+                    }}
+                  >
+                    {post.content}
+                  </ReactMarkdown>
+                </div>
+              )}
 
               {/* Tags / Keywords */}
               {post.meta_keywords && (
@@ -602,9 +849,9 @@ const BlogPost = () => {
                           onClick={() => scrollToHeading(item.id)}
                           className={`w-full text-left px-3 py-2 rounded-xl transition-all flex items-center gap-2.5 ${
                             isActive
-                              ? "bg-purple-50 dark:bg-purple-950/50 text-purple-700 dark:text-purple-300 font-bold border border-purple-200/60 dark:border-purple-800/60"
+                              ? "bg-purple-100 dark:bg-purple-950/60 text-purple-800 dark:text-purple-200 font-bold border border-purple-200/80 dark:border-purple-800"
                               : "text-slate-600 dark:text-slate-400 hover:text-purple-600 hover:bg-slate-50 dark:hover:bg-slate-800/60 font-medium"
-                          }`}
+                          } ${item.level === 3 ? "pl-6 text-xs sm:text-sm" : ""}`}
                         >
                           <span className={`w-2 h-2 rounded-full flex-shrink-0 ${isActive ? "bg-purple-600" : "bg-slate-300 dark:bg-slate-600"}`} />
                           <span className="truncate">{item.text}</span>
@@ -647,7 +894,7 @@ const BlogPost = () => {
                       {isSubscribing ? (
                         <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
                       ) : (
-                        <Send className="w-4 h-4" />
+                        <ArrowUpRight className="w-4 h-4" />
                       )}
                     </Button>
                   </div>
