@@ -24,26 +24,7 @@ const COVER_IMAGES = [
   "https://images.unsplash.com/photo-1556742049-0a67c5574f73?auto=format&fit=crop&w=1200&q=80"
 ];
 
-// Topic ideas pool for agency-focused fallbacks
-const AGENCY_TOPIC_IDEAS = [
-  "How to optimize mobile landing page UX for 2x checkout conversions",
-  "React 19 Server Actions vs traditional REST APIs: Real-world agency comparison",
-  "WordPress speed optimization: How to pass Google Core Web Vitals under 1.2s",
-  "The psychology of pricing tables: How to design SaaS tier cards that convert",
-  "WooCommerce performance tuning: Scaling beyond 10,000 orders without server slowdown",
-  "Why your landing page is leaking revenue: Heuristic UX checklist for 2026",
-  "Next.js App Router caching strategies: Eliminating slow TTFB and stale client data",
-  "Form conversion rate optimization: 7 psychological tricks to stop form abandonment",
-  "Micro-interactions in UI design: How subtle animations build brand trust",
-  "SEO Schema markup for local businesses & corporate consulting platforms",
-  "How to build high-performance e-commerce product pages that outperform Shopify",
-  "Headless CMS vs Traditional WordPress: Choosing the right stack for fast growth",
-  "Designing accessible web experiences: WCAG compliance without compromising beauty",
-  "The anatomy of a sub-second website: DNS, Edge CDN, and asset compression",
-  "Building customer trust online: 6 essential social proof patterns for new brands"
-];
-
-// Curated technical articles library (used if Gemini API key is missing or fails)
+// Curated technical articles library (used as reliable fallback)
 const FALLBACK_ARTICLES = [
   {
     title: "10 Proven UX Principles That Double E-Commerce Conversion Rates",
@@ -317,6 +298,12 @@ async function fetchTrendingTechTopics() {
     'agent', 'llm', 'framework', 'saas', 'architecture'
   ];
 
+  const excludedKeywords = [
+    'doctor', 'longevity', 'health', 'diet', 'movie', 'trailer', 'box office', 'actor',
+    'singer', 'album', 'song', 'nfl', 'nba', 'football', 'baseball', 'cricket', 'murder',
+    'police', 'crime', 'election', 'senate', 'politics', 'arrest', 'storm', 'weather'
+  ];
+
   // 1. Google News Technology RSS
   try {
     const res = await fetch('https://news.google.com/rss/headlines/section/topic/TECHNOLOGY?hl=en-US&gl=US&ceid=US:en', { signal: AbortSignal.timeout(6000) });
@@ -333,7 +320,10 @@ async function fetchTrendingTechTopics() {
           .replace(/&amp;/g, '&')
           .replace(/&lt;.*?&gt;/g, '')
           .trim();
-        if (cleanTitle && cleanTitle.length > 15) {
+        const lower = cleanTitle.toLowerCase();
+        const isTech = techKeywords.some(k => lower.includes(k));
+        const isExcluded = excludedKeywords.some(k => lower.includes(k));
+        if (isTech && !isExcluded && cleanTitle.length > 15) {
           topics.push({
             title: cleanTitle,
             source: 'Google News Technology',
@@ -376,7 +366,9 @@ async function fetchTrendingTechTopics() {
         const query = it.match(/<title>(.*?)<\/title>/)?.[1] || '';
         const newsTitle = it.match(/<ht:news_item_title>(.*?)<\/ht:news_item_title>/)?.[1] || '';
         const combined = `${query} ${newsTitle}`.toLowerCase();
-        if (techKeywords.some(k => combined.includes(k))) {
+        const isTech = techKeywords.some(k => combined.includes(k));
+        const isExcluded = excludedKeywords.some(k => combined.includes(k));
+        if (isTech && !isExcluded) {
           const raw = newsTitle || query;
           const clean = raw
             .replace(/&quot;/g, '"')
@@ -412,37 +404,37 @@ Write a comprehensive, professional, 1,200+ word technical blog post about this 
 
 The post must bridge this trending tech topic with practical engineering, UI/UX architecture, performance optimizations, and business value.
 
-Format the output strictly as a JSON object with this exact structure:
-{
-  "title": "Engaging, SEO-Optimized Article Title (max 70 chars)",
-  "slug": "url-friendly-slug-with-hyphens",
-  "category": "${topicItem.category || 'Development'}",
-  "excerpt": "A compelling 2-sentence summary hook explaining the problem, the tech trend, and the strategic solution.",
-  "keywords": "5 comma-separated high-volume SEO keywords",
-  "content": "Full markdown content with:
-  - Strong opening paragraph introducing the trend and why it matters to engineers and product owners
-  - Section 1 starting with: '## [Section Title]'
-  - A blockquote formatted as: '> ### [Key takeaway phrase]\\\\n> [Actionable explanation]'
-  - Section 2 starting with: '## [Section Title]'
-  - 3 to 5 structured points formatted with '### 01. [Title]', followed by detailed explanation and '**How to implement it:**' bullet points
-  - Practical code snippets, checklists, or architectural patterns
-  - Section 3: Strategic takeaways for modern web applications
-  - Closing summary mentioning Aman UX Studio with a link to contact: [reach out to Aman UX Studio](https://amanuxstudio.com/#contact)"
-}
+Format your output strictly using this delimiter structure:
+---METADATA---
+title: Engaging, SEO-Optimized Article Title (max 70 chars)
+slug: url-friendly-slug-with-hyphens
+category: ${topicItem.category || 'Development'}
+excerpt: A compelling 2-sentence summary hook explaining the problem, the tech trend, and the strategic solution.
+keywords: 5 comma-separated high-volume SEO keywords
+---CONTENT---
+Full markdown content:
+- Strong opening paragraph introducing the trend and why it matters to engineers and product owners
+- Section 1 starting with: '## [Section Title]'
+- A blockquote formatted as: '> ### [Key takeaway phrase]\\n> [Actionable explanation]'
+- Section 2 starting with: '## [Section Title]'
+- 3 to 5 structured points formatted with '### 01. [Title]', followed by detailed explanation and '**How to implement it:**' bullet points
+- Practical code snippets, checklists, or architectural patterns
+- Section 3: Strategic takeaways for modern web applications
+- Closing summary mentioning Aman UX Studio with a link to contact: [reach out to Aman UX Studio](https://amanuxstudio.com/#contact)
 
-Important formatting rules:
-- Return ONLY valid raw JSON without any markdown code fences around the JSON.
-- Never mention fictional client names other than Fairease Outsourcing, Ireshh Clothing, or Expertvuw.
+Important rules:
+- Start directly with '---METADATA---'. Do not output conversational filler.
+- Do not invent fictional client names other than Fairease Outsourcing, Ireshh Clothing, or Expertvuw.
 - Ensure the tone is authoritative, practical, and highly actionable.`;
 
   try {
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=${GEMINI_API_KEY}`;
     const res = await fetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         contents: [{ parts: [{ text: prompt }] }],
-        generationConfig: { temperature: 0.7, maxOutputTokens: 3500 }
+        generationConfig: { temperature: 0.7, maxOutputTokens: 8192 }
       })
     });
 
@@ -453,24 +445,40 @@ Important formatting rules:
 
     const json = await res.json();
     const rawText = json.candidates?.[0]?.content?.parts?.[0]?.text;
-    if (!rawText) return null;
+    if (!rawText || !rawText.includes('---CONTENT---')) {
+      console.warn("⚠️ Output did not include ---CONTENT--- delimiter");
+      return null;
+    }
 
-    const cleanJson = rawText.replace(/^```json\s*/i, '').replace(/^```\s*/, '').replace(/\s*```$/, '').trim();
-    const parsed = JSON.parse(cleanJson);
+    const [metaSection, ...contentParts] = rawText.split('---CONTENT---');
+    const content = contentParts.join('---CONTENT---').trim();
+
+    const titleMatch = metaSection.match(/title:\s*(.*)/i);
+    const slugMatch = metaSection.match(/slug:\s*(.*)/i);
+    const catMatch = metaSection.match(/category:\s*(.*)/i);
+    const excerptMatch = metaSection.match(/excerpt:\s*(.*)/i);
+    const keywordsMatch = metaSection.match(/keywords:\s*(.*)/i);
+
+    const title = titleMatch ? titleMatch[1].trim().replace(/^["']|["']$/g, '') : topicItem.title;
+    const rawSlug = slugMatch ? slugMatch[1].trim() : title.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+    const slug = `${rawSlug.replace(/[^a-z0-9-]/gi, '-').toLowerCase()}-${Date.now().toString().slice(-4)}`;
+    const category = catMatch ? catMatch[1].trim() : topicItem.category || "Development";
+    const excerpt = excerptMatch ? excerptMatch[1].trim() : `Discover how ${title} impacts modern software architecture and digital platforms.`;
+    const keywords = keywordsMatch ? keywordsMatch[1].trim() : "Web Development, UI UX, Cloud Architecture, Frontend, Performance";
 
     const randomCover = COVER_IMAGES[Math.floor(Math.random() * COVER_IMAGES.length)];
 
     return {
-      title: parsed.title,
-      slug: `${parsed.slug.replace(/[^a-z0-9-]/gi, '-').toLowerCase()}-${Date.now().toString().slice(-4)}`,
-      category: parsed.category || topicItem.category || "Development",
-      excerpt: parsed.excerpt,
-      keywords: parsed.keywords,
+      title,
+      slug,
+      category,
+      excerpt,
+      keywords,
       coverImage: randomCover,
-      content: parsed.content
+      content
     };
   } catch (err) {
-    console.warn("⚠️ Could not generate post via Gemini API (falling back to curated library):", err.message);
+    console.warn("⚠️ Could not generate post via Gemini API:", err.message);
     return null;
   }
 }
@@ -494,7 +502,7 @@ async function generateAndPublishBlog() {
   const existingTitles = (existingPosts || []).map(p => p.title.toLowerCase().trim());
 
   // 2. Discover live trending tech topics from Google Trends, Google News Tech & Dev.to
-  console.log("🔍 Scanning Google Trends, Google News Tech, and Dev.to for trending topics...");
+  console.log("🔍 Scanning Google Trends, Google News Tech, and Dev.to for trending tech topics...");
   const liveTrends = await fetchTrendingTechTopics();
   console.log(`📡 Discovered ${liveTrends.length} live trending tech candidates.`);
 
@@ -507,16 +515,10 @@ async function generateAndPublishBlog() {
   let postToInsert = null;
 
   // 3. Attempt dynamic AI generation if GEMINI_API_KEY is present
-  if (GEMINI_API_KEY) {
-    const chosenTopic = availableTrends.length > 0
-      ? availableTrends[Math.floor(Math.random() * availableTrends.length)]
-      : {
-          title: AGENCY_TOPIC_IDEAS[Math.floor(Math.random() * AGENCY_TOPIC_IDEAS.length)],
-          source: "Aman UX Studio Topic Vault",
-          category: "Development"
-        };
+  if (GEMINI_API_KEY && availableTrends.length > 0) {
+    const chosenTopic = availableTrends[Math.floor(Math.random() * availableTrends.length)];
+    console.log(`🔥 Selected Trending Tech Topic: "${chosenTopic.title}" (${chosenTopic.source})`);
 
-    console.log(`🔥 Selected Topic: "${chosenTopic.title}" (${chosenTopic.source})`);
     const aiPost = await generatePostWithGemini(chosenTopic);
     if (aiPost && !existingSlugs.has(aiPost.slug)) {
       postToInsert = aiPost;
