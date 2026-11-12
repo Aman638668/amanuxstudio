@@ -77,6 +77,12 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://amanuxstudio.vercel.app/blog/mcp-architecture-2</loc>
+    <lastmod>2026-11-12T17:48:59.569Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://amanuxstudio.vercel.app/category/development</loc>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
