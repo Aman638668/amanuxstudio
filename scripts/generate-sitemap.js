@@ -22,7 +22,9 @@ const generateSitemap = async () => {
         '/portfolio',
         '/testimonials',
         '/contact',
-        '/blog'
+        '/blog',
+        '/privacy',
+        '/terms'
     ];
 
     let posts = [];

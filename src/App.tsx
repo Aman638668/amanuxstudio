@@ -15,6 +15,8 @@ const Portfolio = lazy(() => import('./pages/Portfolio'));
 const Testimonials = lazy(() => import('./pages/Testimonials'));
 const Contact = lazy(() => import('./pages/Contact'));
 const Resume = lazy(() => import('./pages/Resume'));
+const Privacy = lazy(() => import('./pages/Privacy'));
+const Terms = lazy(() => import('./pages/Terms'));
 const Blog = lazy(() => import('./pages/Blog'));
 const BlogPost = lazy(() => import('./pages/BlogPost'));
 const CategoryPage = lazy(() => import('./pages/CategoryPage'));
@@ -50,6 +52,10 @@ const AppContent = () => {
         <Route path="/testimonials" element={<Testimonials />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/resume" element={<Resume />} />
+        <Route path="/privacy" element={<Privacy />} />
+        <Route path="/privacy-policy" element={<Privacy />} />
+        <Route path="/terms" element={<Terms />} />
+        <Route path="/terms-of-service" element={<Terms />} />
 
         {/* Blog Pages */}
         <Route path="/blog" element={<Blog />} />

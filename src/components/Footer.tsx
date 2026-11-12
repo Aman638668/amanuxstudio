@@ -171,6 +171,16 @@ export default function Footer() {
                   </Link>
                 </li>
                 <li>
+                  <Link to="/privacy" className="text-gray-400 hover:text-white transition-colors">
+                    Privacy Policy
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/terms" className="text-gray-400 hover:text-white transition-colors">
+                    Terms of Service
+                  </Link>
+                </li>
+                <li>
                   <Link to="/login" className="text-gray-500 hover:text-gray-300 transition-colors text-xs">
                     Admin Portal
                   </Link>
@@ -185,7 +195,7 @@ export default function Footer() {
                 <li><Link to="/services#web-development" className="hover:text-white transition-colors">Web Development</Link></li>
                 <li><Link to="/services#ui-ux-design" className="hover:text-white transition-colors">UI/UX Design</Link></li>
                 <li><Link to="/services#wordpress" className="hover:text-white transition-colors">WordPress &amp; Elementor</Link></li>
-                <li><Link to="/services#ecommerce" className="hover:text-white transition-colors">E-Commerce (Ireshh)</Link></li>
+                <li><Link to="/services#ecommerce" className="hover:text-white transition-colors">E-Commerce Solutions</Link></li>
                 <li><Link to="/services#seo-performance" className="hover:text-white transition-colors">SEO &amp; Performance</Link></li>
               </ul>
             </div>
@@ -225,11 +235,16 @@ export default function Footer() {
           <Separator className="bg-slate-800 mb-8" />
 
           {/* Bottom Footer */}
-          <div className="flex flex-col md:flex-row justify-between items-center text-xs text-gray-400">
+          <div className="flex flex-col md:flex-row justify-between items-center text-xs text-gray-400 gap-3">
             <div>
               &copy; {new Date().getFullYear()} Aman UX Studio. Built with React, Vite &amp; Supabase.
             </div>
-            <div className="mt-2 md:mt-0">
+            <div className="flex items-center gap-4 text-xs text-gray-400">
+              <Link to="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link>
+              <span className="text-gray-600">•</span>
+              <Link to="/terms" className="hover:text-white transition-colors">Terms of Service</Link>
+            </div>
+            <div>
               Designed &amp; Developed by <strong>Aman Sharma</strong>.
             </div>
           </div>

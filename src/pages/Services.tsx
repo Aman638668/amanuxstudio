@@ -59,7 +59,7 @@ const servicesList = [
     icon: ShoppingCart,
     title: "E-Commerce Solutions (WooCommerce & Shopify)",
     tagline: "High-converting online storefronts configured to maximize average order value.",
-    description: "From product variations to frictionless mobile checkout, we build and manage complete e-commerce stores from 0 to 1 (such as Ireshh Clothing). We ensure your store handles traffic spikes, calculates shipping accurately, and accepts cards and UPI effortlessly.",
+    description: "From product variations to frictionless mobile checkout, we build and manage complete e-commerce stores from 0 to 1. We ensure your store handles traffic spikes, calculates shipping accurately, and accepts cards and UPI effortlessly.",
     deliverables: [
       "End-to-end store creation & product catalog setup",
       "Payment gateway integration (Stripe, Razorpay, UPI, Cards)",
@@ -282,7 +282,7 @@ export default function ServicesPage() {
             Have a Project in Mind? Let's Talk.
           </h3>
           <p className="text-sm sm:text-base text-blue-100 max-w-2xl mx-auto mb-8 leading-relaxed">
-            Whether you need a full corporate rebuild like Fairease, an e-commerce platform like Ireshh, or a custom web app, we provide free consultation and transparent proposals within 24 hours.
+            Whether you need a full corporate rebuild like Fairease, a custom e-commerce storefront, or a high-performance web app, we provide free consultation and transparent proposals within 24 hours.
           </p>
           <div className="flex flex-wrap gap-4 justify-center">
             <Link to="/contact">

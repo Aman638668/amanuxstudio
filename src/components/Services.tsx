@@ -22,7 +22,7 @@ const services = [
     id: "ecommerce",
     icon: ShoppingCart,
     title: "E-Commerce Solutions (WooCommerce & Shopify)",
-    description: "End-to-end online storefronts built from 0 to 1 (like Ireshh Clothing) with UPI/Card payments and automated shipping.",
+    description: "End-to-end online storefronts built from 0 to 1 with UPI/Card payments, automated shipping, and high conversion rates.",
     features: ["0 to 1 Store Architecture", "Payment Gateways (UPI/Cards)", "Automated Shipping & Orders", "Frictionless Mobile Checkout"]
   },
   {
