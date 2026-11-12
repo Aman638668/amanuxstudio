@@ -449,7 +449,7 @@ const BlogPost = () => {
   const categoryName = post.categories?.name || "UX DESIGN";
 
   // Check if this is the UX Flaws post to render the custom illustrated mockup and cards
-  const isUxFlawsPost = post.slug === 'ux-flaws-destroying-landing-page-conversions';
+  const isUxFlawsPost = post.slug === 'ux-flaws-destroying-landing-page-conversions' || post.slug === 'ux-flaws' || post.slug?.startsWith('ux-flaws');
 
   return (
     <div className="min-h-screen bg-[#FAFBFD] dark:bg-slate-950 font-sans flex flex-col text-slate-800 dark:text-slate-100">

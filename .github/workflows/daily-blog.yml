@@ -2,14 +2,19 @@ name: Daily Blog Auto-Publisher & Keep-Alive
 
 on:
   schedule:
-    # Runs 5 times a day automatically in GitHub Cloud (every 4 hours during active hours)
-    # 02:00 UTC (07:30 AM IST) - Morning Article
-    # 06:00 UTC (11:30 AM IST) - Midday Article
-    # 10:00 UTC (03:30 PM IST) - Afternoon Article
-    # 14:00 UTC (07:30 PM IST) - Evening Article
-    # 18:00 UTC (11:30 PM IST) - Night Article
+    # Publishes 5 articles every single day automatically in GitHub Actions Cloud:
+    # 1. 02:00 UTC (07:30 AM IST) - Morning Post
+    # 2. 06:00 UTC (11:30 AM IST) - Midday Post
+    # 3. 10:00 UTC (03:30 PM IST) - Afternoon Post
+    # 4. 14:00 UTC (07:30 PM IST) - Evening Post
+    # 5. 18:00 UTC (11:30 PM IST) - Night Post
     - cron: '0 2,6,10,14,18 * * *'
-  workflow_dispatch: # Allows manual one-click trigger from GitHub Actions tab anytime
+  workflow_dispatch:
+    inputs:
+      count:
+        description: 'Number of blogs to publish in this run (e.g. 1 or 5)'
+        required: false
+        default: '1'
 
 jobs:
   publish-daily-blog:
@@ -41,7 +46,7 @@ jobs:
           VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-        run: node scripts/daily-blog-generator.js
+        run: node scripts/daily-blog-generator.js ${{ github.event.inputs.count || '1' }}
 
       - name: Regenerate Sitemap
         env:

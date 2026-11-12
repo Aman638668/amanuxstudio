@@ -24,11 +24,118 @@ const COVER_IMAGES = [
   "https://images.unsplash.com/photo-1556742049-0a67c5574f73?auto=format&fit=crop&w=1200&q=80"
 ];
 
-// Curated technical articles library (used as reliable fallback)
+// Common stop words to strip when creating short, clean URLs
+const STOP_WORDS = new Set([
+  'a', 'an', 'the', 'and', 'or', 'but', 'in', 'on', 'at', 'to', 'for', 'of', 'with', 'by',
+  'from', 'up', 'about', 'into', 'over', 'after', 'how', 'what', 'why', 'when', 'where',
+  'who', 'which', 'that', 'this', 'these', 'those', 'is', 'are', 'was', 'were', 'be',
+  'been', 'being', 'have', 'has', 'had', 'do', 'does', 'did', 'will', 'would', 'shall',
+  'should', 'can', 'could', 'may', 'might', 'must', 'lets', 'quietly', 'destroying', 'lessons',
+  'playbook', 'guide', 'building', 'scalable', 'tips', 'tricks', 'step', 'steps', 'year', '2026',
+  '2025', 'its', 'your', 'our', 'my', 'their', 'his', 'her', 'we', 'you', 'they', 'i', 'me',
+  'us', 'just', 'more', 'most', 'very', 'too', 'also', 'out', 'off', 'than', 'then', 'so'
+]);
+
+/**
+ * Creates short, clean, human-readable slugs (2-3 words max, under 25 chars)
+ * Example: 'ux-flaws', 'tabletop-ai', 'ecommerce-ux', 'core-web-vitals'
+ */
+function createShortSlug(rawSlug, title, existingSlugs = new Set()) {
+  let source = (rawSlug || title || '').toLowerCase().trim();
+  source = source.replace(/[`"']/g, '').replace(/&/g, 'and');
+
+  const words = source
+    .split(/[^a-z0-9]+/)
+    .filter(w => w.length > 1 && !STOP_WORDS.has(w));
+
+  // Take the first 2-3 significant keywords
+  const chosen = words.slice(0, 3);
+  let candidate = chosen.join('-');
+
+  if (!candidate || candidate.length < 2) {
+    candidate = 'tech-insight';
+  }
+
+  // Cap at 25 characters
+  if (candidate.length > 25) {
+    const parts = candidate.split('-');
+    if (parts.length > 1 && parts.slice(0, -1).join('-').length >= 3) {
+      candidate = parts.slice(0, -1).join('-');
+    } else {
+      candidate = candidate.slice(0, 25).replace(/-+$/, '');
+    }
+  }
+
+  // Ensure uniqueness without adding random hashes unless there is a real collision
+  let finalSlug = candidate;
+  let counter = 2;
+  while (existingSlugs.has(finalSlug)) {
+    finalSlug = `${candidate}-${counter}`;
+    counter++;
+  }
+  return finalSlug;
+}
+
+// Curated technical articles library (with clean short slugs)
 const FALLBACK_ARTICLES = [
   {
+    title: "UX Flaws That Are Quietly Destroying Your Landing Page Conversions",
+    slug: "ux-flaws",
+    category: "Design",
+    excerpt: "Great traffic means nothing when your experience gets in the way. Here are the UX mistakes costing you customers—and how to fix them.",
+    keywords: "UX Design, Landing Page Optimization, Conversion Rate, CRO, Web Design",
+    coverImage: COVER_IMAGES[4],
+    content: `You can run ads, improve your SEO, and get thousands of people to your landing page — but if the user experience (UX) is broken, most of them will leave without taking action. Let's look at the most common UX flaws that silently kill conversions and how you can fix them.
+
+## Your landing page has one job.
+
+A landing page isn't just a pretty page — it's a focused experience designed to make the user take a specific action, like signing up, booking a demo, or making a purchase. Even small UX issues can create doubt, friction, and enough resistance for users to leave.
+
+> ### Every extra second of confusion is a reason to leave.
+> A clear, simple, and trustworthy experience keeps users moving toward your goal.
+
+## The most common UX flaws (and how to fix them)
+
+### 01. Unclear value proposition
+If users can't quickly understand what you offer and why it matters, they won't stick around.
+
+**How to fix it:**
+- Use a clear, benefit-driven headline.
+- Add a short, supporting subheading.
+- Show what makes you different.
+
+### 02. Too many competing actions
+Multiple CTAs and mixed goals create decision fatigue. Guide users toward one clear next step.
+
+**How to fix it:**
+- Stick to one primary call-to-action per section.
+- Minimize distractions and unnecessary navigation links.
+- Make the main action button visually prominent.
+
+### 03. Missing trust signals
+Visitors won't convert if they don't trust you. Lack of social proof creates hesitation.
+
+**How to fix it:**
+- Add client testimonials, case studies, and logos.
+- Display security badges, money-back guarantees, or certifications.
+- Include real customer metrics and outcomes.
+
+### 04. Form friction
+Asking for too much information too early causes massive form abandonment.
+
+**How to fix it:**
+- Reduce form fields to only the essentials (e.g., email or phone).
+- Use inline validation and clear error states.
+- Support autofill and mobile-friendly input types.
+
+---
+
+## Conclusion
+High conversion rates are the result of intentional, friction-free design. Ready to transform your landing page conversions? [Reach out to Aman UX Studio](https://amanuxstudio.vercel.app/#contact) for a free UX teardown.`
+  },
+  {
     title: "10 Proven UX Principles That Double E-Commerce Conversion Rates",
-    slugPrefix: "ux-principles-ecommerce-conversion",
+    slug: "ecommerce-ux",
     category: "Design",
     excerpt: "Discover the critical UX tweaks—from frictionless checkout to psychological trust signals—that turn casual store visitors into repeat buyers.",
     keywords: "UX Design, E-commerce CRO, Web Development, User Experience, Conversion Rate",
@@ -75,7 +182,7 @@ Conversion rate optimization is an engineering discipline based on customer psyc
   },
   {
     title: "Why Modern Web Apps are Migrating to TypeScript and Tailwind CSS",
-    slugPrefix: "why-web-apps-migrate-typescript-tailwind",
+    slug: "typescript-tailwind",
     category: "Development",
     excerpt: "Explore how the combination of static typing with utility-first CSS has become the industry standard for fast, maintainable web applications.",
     keywords: "TypeScript, Tailwind CSS, Frontend Development, React, Web Architecture",
@@ -114,7 +221,7 @@ Combining TypeScript with Tailwind CSS allows modern agencies to deliver robust,
   },
   {
     title: "Cracking Core Web Vitals in 2026: The Sub-Second Page Speed Guide",
-    slugPrefix: "cracking-core-web-vitals-sub-second-guide",
+    slug: "core-web-vitals",
     category: "Development",
     excerpt: "Learn how to optimize Largest Contentful Paint (LCP), Interaction to Next Paint (INP), and Cumulative Layout Shift (CLS) for top Google rankings.",
     keywords: "Core Web Vitals, Performance Optimization, INP, LCP, SEO, PageSpeed",
@@ -160,8 +267,86 @@ CLS measures unexpected visual shifts during page load. When buttons or text jum
 Achieving 95+ PageSpeed scores requires an intentional engineering architecture from day one. Want a comprehensive Core Web Vitals audit? [Contact Aman UX Studio](https://amanuxstudio.vercel.app/#contact).`
   },
   {
+    title: "Next.js App Router Architecture: High-Performance Data Fetching & Caching",
+    slug: "nextjs-caching",
+    category: "Development",
+    excerpt: "Master React Server Components, Route Handlers, and cache tags in Next.js to eliminate stale client states and reduce TTFB to under 150ms.",
+    keywords: "Next.js, React Server Components, Web Architecture, Performance, Caching",
+    coverImage: COVER_IMAGES[3],
+    content: `The evolution of the Next.js App Router fundamentally changed how modern web apps handle data fetching, server-side caching, and component architecture.
+
+## Server Components are the new baseline for full-stack frontend.
+
+By rendering components directly on the server edge, developers can reduce JavaScript payloads shipped to client browsers by up to 60%, resulting in instantaneous navigation.
+
+> ### Less JavaScript sent to the client means faster execution on mobile devices.
+> Modern full-stack architecture balances server-side data computation with lightweight interactive islands on the client.
+
+## Core Architectural Patterns for High-Speed Web Apps
+
+### 01. Granular Server & Client Boundary Separation
+Keep data-heavy queries in Server Components and only pass interactive triggers (buttons, dropdowns) to Client Components using the \`'use client'\` directive.
+
+**How to implement it:**
+- Co-locate database queries directly in the Page or layout component.
+- Keep Client Components lean by passing data down as serialized props.
+- Leverage React Suspense boundaries to stream slower queries without blocking page load.
+
+### 02. Tag-Based On-Demand Revalidation
+Instead of relying on crude time-based cache expiration, leverage Next.js \`revalidateTag\` to instantly refresh cache entries whenever database writes occur.
+
+**How to implement it:**
+- Tag fetch requests with semantic keys like \`fetch(url, { next: { tags: ['products'] } })\`.
+- Trigger revalidation inside Server Actions or webhook handlers.
+- Keep client TTFB consistently below 120ms across global CDN edges.
+
+---
+
+## Conclusion
+Architecting modern Next.js platforms requires deep knowledge of edge caching and streaming. [Partner with Aman UX Studio](https://amanuxstudio.vercel.app/#contact) to build your next web platform.`
+  },
+  {
+    title: "The Psychology of SaaS Pricing Design: Maximizing ARPU and Plan Conversions",
+    slug: "saas-pricing",
+    category: "Design",
+    excerpt: "Learn how anchor pricing, decoy tiers, and progressive feature comparison matrices influence purchasing psychology and increase SaaS revenue.",
+    keywords: "SaaS Pricing, UI Design, Conversion Rate Optimization, UX Heuristics, Product Design",
+    coverImage: COVER_IMAGES[4],
+    content: `Pricing tables are the most critical decision-making interface on any SaaS website. A poorly formatted pricing card induces analysis paralysis and kills sign-ups.
+
+## The goal of a pricing table is cognitive ease, not exhaustive documentation.
+
+When customers evaluate pricing options, their brains seek quick comparisons, clear recommendations, and risk mitigation.
+
+> ### Decisive clarity drives conversion.
+> High-converting pricing designs guide users toward the optimal plan without overwhelming them with unnecessary technical jargon.
+
+## 3 Core Psychological Heuristics for Pricing Tables
+
+### 01. The Center-Stage Recommended Anchor
+Highlight your target growth plan by making it visually distinct: elevate the card with a purple accent border, a 'Most Popular' badge, and subtle vertical scaling.
+
+**How to implement it:**
+- Set the default view to Annual billing with a clear 'Save 20%' incentive tag.
+- Pre-select the recommended plan button with highest visual contrast.
+- Ensure the primary action button is above the mobile fold.
+
+### 02. Chunked Feature Matrices
+Rather than presenting a monolithic list of 30 bullet points, group features into 3 logical categories: Core Platform, Security & Compliance, and Dedicated Support.
+
+**How to implement it:**
+- Use tooltips for complex enterprise features to avoid card clutter.
+- Provide clear visual checkmarks instead of ambiguous text.
+- Include a 14-day risk-free money-back guarantee badge immediately below the CTA.
+
+---
+
+## Conclusion
+At **Aman UX Studio**, we design and engineer conversion-focused digital products that scale. [Contact us today](https://amanuxstudio.vercel.app/#contact) to elevate your digital presence.`
+  },
+  {
     title: "The Heuristic UX Checklist: 7 Reasons Visitors Bounce from Corporate Sites",
-    slugPrefix: "heuristic-ux-checklist-corporate-sites",
+    slug: "heuristic-ux",
     category: "Design",
     excerpt: "Learn why corporate visitors bounce within 5 seconds and how to structure service matrices and lead funnels for maximum trust and engagement.",
     keywords: "Heuristic Evaluation, Corporate UX, Web Design, Lead Generation, B2B",
@@ -205,84 +390,6 @@ Showcase real client platforms (like our work on **Fairease Outsourcing**, **Ire
 
 ## Conclusion
 A well-engineered corporate platform acts as your hardest-working 24/7 business development manager.`
-  },
-  {
-    title: "Next.js App Router Architecture: High-Performance Data Fetching & Caching",
-    slugPrefix: "nextjs-app-router-data-fetching-caching",
-    category: "Development",
-    excerpt: "Master React Server Components, Route Handlers, and cache tags in Next.js to eliminate stale client states and reduce TTFB to under 150ms.",
-    keywords: "Next.js, React Server Components, Web Architecture, Performance, Caching",
-    coverImage: COVER_IMAGES[3],
-    content: `The evolution of the Next.js App Router fundamentally changed how modern web apps handle data fetching, server-side caching, and component architecture.
-
-## Server Components are the new baseline for full-stack frontend.
-
-By rendering components directly on the server edge, developers can reduce JavaScript payloads shipped to client browsers by up to 60%, resulting in instantaneous navigation.
-
-> ### Less JavaScript sent to the client means faster execution on mobile devices.
-> Modern full-stack architecture balances server-side data computation with lightweight interactive islands on the client.
-
-## Core Architectural Patterns for High-Speed Web Apps
-
-### 01. Granular Server & Client Boundary Separation
-Keep data-heavy queries in Server Components and only pass interactive triggers (buttons, dropdowns) to Client Components using the \`'use client'\` directive.
-
-**How to implement it:**
-- Co-locate database queries directly in the Page or layout component.
-- Keep Client Components lean by passing data down as serialized props.
-- Leverage React Suspense boundaries to stream slower queries without blocking page load.
-
-### 02. Tag-Based On-Demand Revalidation
-Instead of relying on crude time-based cache expiration, leverage Next.js \`revalidateTag\` to instantly refresh cache entries whenever database writes occur.
-
-**How to implement it:**
-- Tag fetch requests with semantic keys like \`fetch(url, { next: { tags: ['products'] } })\`.
-- Trigger revalidation inside Server Actions or webhook handlers.
-- Keep client TTFB consistently below 120ms across global CDN edges.
-
----
-
-## Conclusion
-Architecting modern Next.js platforms requires deep knowledge of edge caching and streaming. [Partner with Aman UX Studio](https://amanuxstudio.vercel.app/#contact) to build your next web platform.`
-  },
-  {
-    title: "The Psychology of SaaS Pricing Design: Maximizing ARPU and Plan Conversions",
-    slugPrefix: "psychology-saas-pricing-design-conversions",
-    category: "Design",
-    excerpt: "Learn how anchor pricing, decoy tiers, and progressive feature comparison matrices influence purchasing psychology and increase SaaS revenue.",
-    keywords: "SaaS Pricing, UI Design, Conversion Rate Optimization, UX Heuristics, Product Design",
-    coverImage: COVER_IMAGES[4],
-    content: `Pricing tables are the most critical decision-making interface on any SaaS website. A poorly formatted pricing card induces analysis paralysis and kills sign-ups.
-
-## The goal of a pricing table is cognitive ease, not exhaustive documentation.
-
-When customers evaluate pricing options, their brains seek quick comparisons, clear recommendations, and risk mitigation.
-
-> ### Decisive clarity drives conversion.
-> High-converting pricing designs guide users toward the optimal plan without overwhelming them with unnecessary technical jargon.
-
-## 3 Core Psychological Heuristics for Pricing Tables
-
-### 01. The Center-Stage Recommended Anchor
-Highlight your target growth plan by making it visually distinct: elevate the card with a purple accent border, a 'Most Popular' badge, and subtle vertical scaling.
-
-**How to implement it:**
-- Set the default view to Annual billing with a clear 'Save 20%' incentive tag.
-- Pre-select the recommended plan button with highest visual contrast.
-- Ensure the primary action button is above the mobile fold.
-
-### 02. Chunked Feature Matrices
-Rather than presenting a monolithic list of 30 bullet points, group features into 3 logical categories: Core Platform, Security & Compliance, and Dedicated Support.
-
-**How to implement it:**
-- Use tooltips for complex enterprise features to avoid card clutter.
-- Provide clear visual checkmarks instead of ambiguous text.
-- Include a 14-day risk-free money-back guarantee badge immediately below the CTA.
-
----
-
-## Conclusion
-At **Aman UX Studio**, we design and engineer conversion-focused digital products that scale. [Contact us today](https://amanuxstudio.vercel.app/#contact) to elevate your digital presence.`
   }
 ];
 
@@ -290,18 +397,19 @@ At **Aman UX Studio**, we design and engineer conversion-focused digital product
 async function fetchTrendingTechTopics() {
   const topics = [];
   const techKeywords = [
-    'ai', 'model', 'software', 'app', 'web', 'react', 'next.js', 'vue', 'angular',
-    'typescript', 'javascript', 'python', 'cloud', 'aws', 'google', 'apple', 'microsoft',
-    'meta', 'nvidia', 'intel', 'amd', 'chip', 'cyber', 'security', 'data', 'database',
-    'code', 'developer', 'linux', 'server', 'browser', 'chrome', 'api', 'ux', 'ui', 'design',
-    'performance', 'speed', 'devops', 'git', 'fullstack', 'frontend', 'backend', 'open source',
-    'agent', 'llm', 'framework', 'saas', 'architecture'
+    'ai', 'model', 'software', 'web development', 'react', 'next.js', 'vue', 'angular',
+    'typescript', 'javascript', 'python', 'cloud', 'aws', 'meta', 'nvidia', 'cybersecurity',
+    'database', 'developer', 'linux', 'browser', 'chrome', 'api', 'ux', 'ui design',
+    'web vitals', 'performance', 'frontend', 'backend', 'open source', 'llm',
+    'framework', 'saas', 'architecture'
   ];
 
   const excludedKeywords = [
     'doctor', 'longevity', 'health', 'diet', 'movie', 'trailer', 'box office', 'actor',
     'singer', 'album', 'song', 'nfl', 'nba', 'football', 'baseball', 'cricket', 'murder',
-    'police', 'crime', 'election', 'senate', 'politics', 'arrest', 'storm', 'weather'
+    'police', 'crime', 'election', 'senate', 'politics', 'arrest', 'storm', 'weather',
+    'life hack', 'boomer', 'celebrity', 'hollywood', 'recipe', 'fashion', 'dating', 'relationship',
+    'parenting', 'notes app', 'hack'
   ];
 
   // 1. Google News Technology RSS
@@ -314,7 +422,7 @@ async function fetchTrendingTechTopics() {
         const rawTitle = it.match(/<title>(.*?)<\/title>/)?.[1];
         if (!rawTitle) continue;
         const cleanTitle = rawTitle
-          .replace(/\s*-\s*[^-\n]+$/, '') // Strip publication suffix
+          .replace(/\s*-\s*[^-\n]+$/, '')
           .replace(/&quot;/g, '"')
           .replace(/&#39;/g, "'")
           .replace(/&amp;/g, '&')
@@ -393,7 +501,7 @@ async function fetchTrendingTechTopics() {
 }
 
 // Generate an AI-crafted article using Google Gemini API
-async function generatePostWithGemini(topicItem) {
+async function generatePostWithGemini(topicItem, existingSlugs) {
   if (!GEMINI_API_KEY) return null;
 
   console.log(`🤖 Invoking Gemini AI for trending topic: "${topicItem.title}" (${topicItem.source})...`);
@@ -407,7 +515,7 @@ The post must bridge this trending tech topic with practical engineering, UI/UX 
 Format your output strictly using this delimiter structure:
 ---METADATA---
 title: Engaging, SEO-Optimized Article Title (max 70 chars)
-slug: url-friendly-slug-with-hyphens
+slug: 2-3 words maximum, lower-case, hyphens only, no stop words, e.g. 'tabletop-ai', 'ux-flaws', 'react-19', 'saas-pricing', max 25 characters
 category: ${topicItem.category || 'Development'}
 excerpt: A compelling 2-sentence summary hook explaining the problem, the tech trend, and the strategic solution.
 keywords: 5 comma-separated high-volume SEO keywords
@@ -424,120 +532,112 @@ Full markdown content:
 
 Important rules:
 - Start directly with '---METADATA---'. Do not output conversational filler.
+- STRICT SLUG REQUIREMENT: The slug must be short (2 to 3 words max, e.g. 'tabletop-ai', 'web-cache', 'react-router'). Do not output long sentences in slug!
 - Do not invent fictional client names other than Fairease Outsourcing, Ireshh Clothing, or Expertvuw.
 - Ensure the tone is authoritative, practical, and highly actionable.`;
 
-  try {
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=${GEMINI_API_KEY}`;
-    const res = await fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        contents: [{ parts: [{ text: prompt }] }],
-        generationConfig: { temperature: 0.7, maxOutputTokens: 8192 }
-      })
-    });
+  const modelsToTry = [
+    'gemini-3.5-flash',
+    'gemini-3.8-flash'
+  ];
 
-    if (!res.ok) {
-      console.warn(`Gemini API returned status ${res.status}`);
-      return null;
+  for (const model of modelsToTry) {
+    try {
+      console.log(`🤖 Requesting article from ${model}...`);
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${GEMINI_API_KEY}`;
+      const res = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: prompt }] }],
+          generationConfig: { temperature: 0.7, maxOutputTokens: 8192 }
+        }),
+        signal: AbortSignal.timeout(75000)
+      });
+
+      if (!res.ok) {
+        console.warn(`Model ${model} returned status ${res.status}. Trying next fallback...`);
+        continue;
+      }
+
+      const json = await res.json();
+      const rawText = json.candidates?.[0]?.content?.parts?.[0]?.text;
+      if (!rawText || !rawText.includes('---CONTENT---')) {
+        console.warn(`Model ${model} output did not include ---CONTENT--- delimiter`);
+        continue;
+      }
+
+      const [metaSection, ...contentParts] = rawText.split('---CONTENT---');
+      const content = contentParts.join('---CONTENT---').trim();
+
+      const titleMatch = metaSection.match(/title:\s*(.*)/i);
+      const slugMatch = metaSection.match(/slug:\s*(.*)/i);
+      const catMatch = metaSection.match(/category:\s*(.*)/i);
+      const excerptMatch = metaSection.match(/excerpt:\s*(.*)/i);
+      const keywordsMatch = metaSection.match(/keywords:\s*(.*)/i);
+
+      const title = titleMatch ? titleMatch[1].trim().replace(/^["']|["']$/g, '') : topicItem.title;
+      const rawSlug = slugMatch ? slugMatch[1].trim().replace(/^["']|["']$/g, '') : '';
+      const slug = createShortSlug(rawSlug, title, existingSlugs);
+      const category = catMatch ? catMatch[1].trim() : topicItem.category || "Development";
+      const excerpt = excerptMatch ? excerptMatch[1].trim() : `Discover how ${title} impacts modern software architecture and digital platforms.`;
+      const keywords = keywordsMatch ? keywordsMatch[1].trim() : "Web Development, UI UX, Cloud Architecture, Frontend, Performance";
+
+      const randomCover = COVER_IMAGES[Math.floor(Math.random() * COVER_IMAGES.length)];
+
+      return {
+        title,
+        slug,
+        category,
+        excerpt,
+        keywords,
+        coverImage: randomCover,
+        content
+      };
+    } catch (err) {
+      console.warn(`Model ${model} failed:`, err.message);
     }
-
-    const json = await res.json();
-    const rawText = json.candidates?.[0]?.content?.parts?.[0]?.text;
-    if (!rawText || !rawText.includes('---CONTENT---')) {
-      console.warn("⚠️ Output did not include ---CONTENT--- delimiter");
-      return null;
-    }
-
-    const [metaSection, ...contentParts] = rawText.split('---CONTENT---');
-    const content = contentParts.join('---CONTENT---').trim();
-
-    const titleMatch = metaSection.match(/title:\s*(.*)/i);
-    const slugMatch = metaSection.match(/slug:\s*(.*)/i);
-    const catMatch = metaSection.match(/category:\s*(.*)/i);
-    const excerptMatch = metaSection.match(/excerpt:\s*(.*)/i);
-    const keywordsMatch = metaSection.match(/keywords:\s*(.*)/i);
-
-    const title = titleMatch ? titleMatch[1].trim().replace(/^["']|["']$/g, '') : topicItem.title;
-    const rawSlug = slugMatch ? slugMatch[1].trim() : title.toLowerCase().replace(/[^a-z0-9]+/g, '-');
-    const slug = `${rawSlug.replace(/[^a-z0-9-]/gi, '-').toLowerCase()}-${Date.now().toString().slice(-4)}`;
-    const category = catMatch ? catMatch[1].trim() : topicItem.category || "Development";
-    const excerpt = excerptMatch ? excerptMatch[1].trim() : `Discover how ${title} impacts modern software architecture and digital platforms.`;
-    const keywords = keywordsMatch ? keywordsMatch[1].trim() : "Web Development, UI UX, Cloud Architecture, Frontend, Performance";
-
-    const randomCover = COVER_IMAGES[Math.floor(Math.random() * COVER_IMAGES.length)];
-
-    return {
-      title,
-      slug,
-      category,
-      excerpt,
-      keywords,
-      coverImage: randomCover,
-      content
-    };
-  } catch (err) {
-    console.warn("⚠️ Could not generate post via Gemini API:", err.message);
-    return null;
   }
+
+  return null;
 }
 
-async function generateAndPublishBlog() {
-  console.log("🚀 Starting Autonomous Daily Blog Engine...");
-
-  if (!SUPABASE_URL || !SUPABASE_KEY) {
-    console.error("❌ SUPABASE_URL or SUPABASE_KEY missing. Cannot publish.");
-    process.exit(1);
-  }
-
-  const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
-
-  // 1. Fetch existing slugs and titles from Supabase to prevent duplicate topics
-  const { data: existingPosts } = await supabase
-    .from("posts")
-    .select("slug, title");
-
-  const existingSlugs = new Set((existingPosts || []).map(p => p.slug));
-  const existingTitles = (existingPosts || []).map(p => p.title.toLowerCase().trim());
-
-  // 2. Discover live trending tech topics from Google Trends, Google News Tech & Dev.to
-  console.log("🔍 Scanning Google Trends, Google News Tech, and Dev.to for trending tech topics...");
-  const liveTrends = await fetchTrendingTechTopics();
-  console.log(`📡 Discovered ${liveTrends.length} live trending tech candidates.`);
-
-  // Filter out any candidates that have already been published
-  const availableTrends = liveTrends.filter(t => {
+/**
+ * Generate and publish a single blog post
+ */
+async function publishSingleBlog(supabase, existingSlugs, existingTitles, liveTrends) {
+  // Filter out any trends that have already been published
+  const availableTrends = (liveTrends || []).filter(t => {
     const tLower = t.title.toLowerCase().trim();
     return !existingTitles.some(et => et.includes(tLower) || tLower.includes(et));
   });
 
   let postToInsert = null;
 
-  // 3. Attempt dynamic AI generation if GEMINI_API_KEY is present
+  // 1. Attempt dynamic AI generation if GEMINI_API_KEY is present
   if (GEMINI_API_KEY && availableTrends.length > 0) {
     const chosenTopic = availableTrends[Math.floor(Math.random() * availableTrends.length)];
     console.log(`🔥 Selected Trending Tech Topic: "${chosenTopic.title}" (${chosenTopic.source})`);
 
-    const aiPost = await generatePostWithGemini(chosenTopic);
+    const aiPost = await generatePostWithGemini(chosenTopic, existingSlugs);
     if (aiPost && !existingSlugs.has(aiPost.slug)) {
       postToInsert = aiPost;
     }
   }
 
-  // 4. Fallback to curated technical articles if AI is inactive or unavailable
+  // 2. Fallback to curated technical articles if AI is inactive or unavailable
   if (!postToInsert) {
-    console.log("📚 Selecting from high-converting curated technical library...");
+    console.log("📚 Selecting from curated technical library...");
     const available = FALLBACK_ARTICLES.filter(art => {
-      return !existingPosts?.some(p => p.title.toLowerCase().trim() === art.title.toLowerCase().trim());
+      const artTitleLower = art.title.toLowerCase().trim();
+      return !existingTitles.some(et => et === artTitleLower) && !existingSlugs.has(art.slug);
     });
 
     const template = available.length > 0
       ? available[Math.floor(Math.random() * available.length)]
       : FALLBACK_ARTICLES[Math.floor(Math.random() * FALLBACK_ARTICLES.length)];
 
-    const timestamp = Date.now().toString().slice(-4);
-    const slug = `${template.slugPrefix}-${timestamp}`;
+    const slug = createShortSlug(template.slug, template.title, existingSlugs);
 
     postToInsert = {
       title: template.title,
@@ -550,25 +650,24 @@ async function generateAndPublishBlog() {
     };
   }
 
-  // 5. Match or assign category in Supabase
+  // 3. Match or assign category in Supabase
   let categoryId = null;
   const { data: categoryData } = await supabase
     .from("categories")
     .select("id")
     .ilike("name", postToInsert.category)
     .limit(1)
-    .single();
+    .maybeSingle();
 
   if (categoryData) {
     categoryId = categoryData.id;
   } else {
-    // Default to 'Development' category if specific category is not found
     const { data: defaultCat } = await supabase
       .from("categories")
       .select("id")
       .ilike("name", "Development")
       .limit(1)
-      .single();
+      .maybeSingle();
     if (defaultCat) categoryId = defaultCat.id;
   }
 
@@ -586,7 +685,7 @@ async function generateAndPublishBlog() {
     created_at: new Date().toISOString()
   };
 
-  console.log(`📝 Publishing post: "${newPost.title}" (${newPost.slug})...`);
+  console.log(`📝 Publishing: "${newPost.title}" -> https://amanuxstudio.vercel.app/blog/${newPost.slug}`);
 
   const { data: insertedPost, error: insertError } = await supabase
     .from("posts")
@@ -596,19 +695,23 @@ async function generateAndPublishBlog() {
 
   if (insertError) {
     console.error("❌ Failed to insert blog post into Supabase:", insertError);
-    process.exit(1);
+    throw insertError;
   }
 
-  console.log("✅ Post successfully published into Supabase!");
+  console.log(`✅ Successfully published! Slug: /blog/${newPost.slug}`);
 
-  // 6. Dispatch Discord webhook alert
+  // Update in-memory collections so subsequent posts in same batch know this exists
+  existingSlugs.add(newPost.slug);
+  existingTitles.push(newPost.title.toLowerCase().trim());
+
+  // 4. Dispatch Discord webhook alert
   if (DISCORD_WEBHOOK) {
     try {
       await fetch(DISCORD_WEBHOOK, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          content: `📢 **New Daily Blog Published on Aman UX Studio!**`,
+          content: `📢 **New Blog Published on Aman UX Studio!**`,
           embeds: [
             {
               title: newPost.title,
@@ -616,7 +719,7 @@ async function generateAndPublishBlog() {
               description: newPost.excerpt,
               color: 0x8B5CF6,
               fields: [
-                { name: "🔗 URL", value: `https://amanuxstudio.vercel.app/blog/${newPost.slug}` },
+                { name: "🔗 Short URL", value: `https://amanuxstudio.vercel.app/blog/${newPost.slug}` },
                 { name: "📂 Category", value: postToInsert.category, inline: true },
                 { name: "🏷️ Keywords", value: postToInsert.keywords, inline: true }
               ],
@@ -631,13 +734,61 @@ async function generateAndPublishBlog() {
     }
   }
 
-  return newPost.slug;
+  return newPost;
 }
 
-generateAndPublishBlog()
-  .then((slug) => {
-    console.log(`🎉 Daily Blog Automation Completed! Live at /blog/${slug}`);
-  })
+/**
+ * Main execution handler
+ */
+async function main() {
+  console.log("🚀 Starting Autonomous Daily Blog Engine...");
+
+  if (!SUPABASE_URL || !SUPABASE_KEY) {
+    console.error("❌ SUPABASE_URL or SUPABASE_KEY missing. Cannot publish.");
+    process.exit(1);
+  }
+
+  // Parse count from command line: e.g. node daily-blog-generator.js 5 or --count=5
+  const countArg = process.argv.find(a => a.startsWith('--count='))?.split('=')[1] || process.argv[2];
+  const targetCount = Math.max(1, parseInt(countArg, 10) || 1);
+
+  console.log(`📊 Target posts to publish in this run: ${targetCount}`);
+
+  const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+  // Fetch existing slugs & titles from Supabase
+  const { data: existingPosts } = await supabase
+    .from("posts")
+    .select("slug, title");
+
+  const existingSlugs = new Set((existingPosts || []).map(p => p.slug));
+  const existingTitles = (existingPosts || []).map(p => p.title.toLowerCase().trim());
+
+  console.log(`🔍 Scanning live trending feeds (Google Trends, Google News Tech, Dev.to)...`);
+  const liveTrends = await fetchTrendingTechTopics();
+  console.log(`📡 Discovered ${liveTrends.length} live trending tech candidates.`);
+
+  const published = [];
+  for (let i = 0; i < targetCount; i++) {
+    console.log(`\n--- [Processing Post ${i + 1} of ${targetCount}] ---`);
+    try {
+      const post = await publishSingleBlog(supabase, existingSlugs, existingTitles, liveTrends);
+      published.push(post);
+    } catch (err) {
+      console.error(`Failed to publish post ${i + 1}:`, err.message);
+    }
+  }
+
+  console.log(`\n🎉 Run complete! Total published in this session: ${published.length}`);
+  published.forEach((p, idx) => {
+    console.log(`  ${idx + 1}. ${p.title} -> https://amanuxstudio.vercel.app/blog/${p.slug}`);
+  });
+
+  return published;
+}
+
+main()
+  .then(() => process.exit(0))
   .catch((err) => {
     console.error("Fatal automation error:", err);
     process.exit(1);

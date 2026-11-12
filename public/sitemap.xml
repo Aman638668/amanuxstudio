@@ -37,62 +37,32 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://amanuxstudio.vercel.app/blog/how-we-built-and-scaled-ireshh-ecommerce-store</loc>
-    <lastmod>2026-10-26T11:59:13.113Z</lastmod>
+    <loc>https://amanuxstudio.vercel.app/blog/agent-sessions</loc>
+    <lastmod>2026-11-12T09:33:18.257Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://amanuxstudio.vercel.app/blog/modern-wordpress-architecture-fairease-case-study</loc>
-    <lastmod>2026-10-26T11:59:13.203Z</lastmod>
+    <loc>https://amanuxstudio.vercel.app/blog/tabletop-ai</loc>
+    <lastmod>2026-11-12T09:32:38.851Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://amanuxstudio.vercel.app/blog/cracking-core-web-vitals-pagespeed-optimization</loc>
-    <lastmod>2026-10-26T11:59:13.317Z</lastmod>
+    <loc>https://amanuxstudio.vercel.app/blog/heuristic-ux</loc>
+    <lastmod>2026-11-12T09:34:37.670Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://amanuxstudio.vercel.app/blog/react-nextjs-supabase-headless-cms-guide</loc>
-    <lastmod>2026-10-26T11:59:13.413Z</lastmod>
+    <loc>https://amanuxstudio.vercel.app/blog/mcp-architecture</loc>
+    <lastmod>2026-11-12T09:35:16.829Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://amanuxstudio.vercel.app/blog/ux-flaws-destroying-landing-page-conversions</loc>
-    <lastmod>2026-10-26T11:59:13.509Z</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://amanuxstudio.vercel.app/blog/why-web-apps-migrate-typescript-tailwind-5824</loc>
-    <lastmod>2026-11-12T07:57:15.912Z</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://amanuxstudio.vercel.app/blog/cracking-core-web-vitals-sub-second-guide-6542</loc>
-    <lastmod>2026-11-12T08:04:26.696Z</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://amanuxstudio.vercel.app/blog/psychology-saas-pricing-design-conversions-1019</loc>
-    <lastmod>2026-11-12T08:20:11.110Z</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://amanuxstudio.vercel.app/blog/ultra-luxury-proptech-architecture-ux-lessons-5537</loc>
-    <lastmod>2026-11-12T08:40:45.720Z</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://amanuxstudio.vercel.app/blog/google-tabletop-ai-custom-collaboration-apps-architecture-9675</loc>
-    <lastmod>2026-11-12T09:02:10.545Z</lastmod>
+    <loc>https://amanuxstudio.vercel.app/blog/saas-pricing</loc>
+    <lastmod>2026-11-12T09:36:40.302Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
