@@ -2,12 +2,13 @@ name: Daily Blog Auto-Publisher & Keep-Alive
 
 on:
   schedule:
-    # Runs 4 times a day (every 6 hours) automatically in GitHub Cloud
+    # Runs 5 times a day automatically in GitHub Cloud (every 4 hours during active hours)
     # 02:00 UTC (07:30 AM IST) - Morning Article
-    # 08:00 UTC (01:30 PM IST) - Afternoon Article
+    # 06:00 UTC (11:30 AM IST) - Midday Article
+    # 10:00 UTC (03:30 PM IST) - Afternoon Article
     # 14:00 UTC (07:30 PM IST) - Evening Article
-    # 20:00 UTC (01:30 AM IST) - Night Article
-    - cron: '0 2,8,14,20 * * *'
+    # 18:00 UTC (11:30 PM IST) - Night Article
+    - cron: '0 2,6,10,14,18 * * *'
   workflow_dispatch: # Allows manual one-click trigger from GitHub Actions tab anytime
 
 jobs:
