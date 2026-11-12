@@ -11,7 +11,6 @@ import { format } from "date-fns";
 import { 
   Calendar, 
   Clock, 
-  Send, 
   ListOrdered, 
   Mail, 
   Target, 
@@ -23,21 +22,26 @@ import {
   Copy,
   Sparkles,
   ArrowRight,
-  ArrowUpRight
+  ArrowUpRight,
+  ShieldCheck,
+  Zap,
+  Globe,
+  Layers,
+  Code2
 } from "lucide-react";
 import { toast } from "sonner";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 
-// Helper to strip HTML/Markdown tags for meta description
+// Helper to strip HTML/Markdown tags for meta descriptions
 const stripHtml = (html: string) => {
   return html.replace(/<[^>]*>?/gm, '').replace(/[#*`_~\[\]]/g, '').trim();
 };
 
 // Calculate dynamic read time based on word count
 const getReadTime = (content: string) => {
-  if (!content) return "8 min read";
+  if (!content) return "6 min read";
   const words = content.trim().split(/\s+/).length;
   const minutes = Math.max(1, Math.ceil(words / 200));
   return `${minutes} min read`;
@@ -66,10 +70,11 @@ const extractToc = (content: string): TocItem[] => {
 
     const h3Match = line.match(/^###\s+(\d+[\.\)]\s*)?(.+)$/);
     if (h3Match) {
-      const rawText = h3Match[2].trim();
-      const fullText = h3Match[1] ? `${h3Match[1]}${rawText}` : rawText;
-      const id = fullText.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
-      items.push({ id, text: rawText, level: 3 });
+      const numPrefix = h3Match[1] ? h3Match[1].trim() : '';
+      const rawTitle = h3Match[2].trim();
+      const text = numPrefix ? `${numPrefix} ${rawTitle}` : rawTitle;
+      const id = text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+      items.push({ id, text, level: 3 });
     }
   }
   return items;
@@ -114,7 +119,7 @@ const AnnotatedHeroIllustration = () => {
               <div className="w-full h-24 bg-slate-800/80 rounded-xl border border-slate-700 p-2 flex flex-col justify-between">
                 <div className="w-full h-12 bg-slate-700/50 rounded-lg flex items-center justify-center">
                   <div className="w-14 h-6 border border-dashed border-slate-600 rounded flex items-center justify-center text-slate-400 text-[9px] font-mono">
-                    Image / Mockup
+                    Mockup Preview
                   </div>
                 </div>
                 <div className="space-y-1">
@@ -126,7 +131,7 @@ const AnnotatedHeroIllustration = () => {
 
             {/* Screen Bottom Bar */}
             <div className="flex justify-between items-center pt-2 border-t border-slate-800/50 text-[9px] text-slate-500 font-mono">
-              <span>amanuxstudio.com</span>
+              <span>amanuxstudio.vercel.app</span>
               <div className="w-10 h-1 bg-slate-700 rounded" />
             </div>
           </div>
@@ -174,13 +179,64 @@ const AnnotatedHeroIllustration = () => {
   );
 };
 
-// Side-by-Side Wireframe Comparison graphic (✕ Bad vs ✓ Good) for each Flaw Card
-const WireframeComparison = ({ flawIndex }: { flawIndex: number }) => {
+// Sleek Browser Window Device Frame for Tech & Code Articles
+const TechBrowserMockup = ({ coverImage, title }: { coverImage?: string; title: string }) => {
+  return (
+    <div className="relative w-full max-w-lg mx-auto group">
+      {/* Glow */}
+      <div className="absolute -inset-2 bg-gradient-to-r from-purple-600/30 via-indigo-600/20 to-blue-600/30 rounded-3xl blur-2xl opacity-75 group-hover:opacity-95 transition-opacity duration-700" />
+
+      <div className="relative rounded-2xl bg-slate-900/95 border border-slate-700/80 shadow-2xl overflow-hidden backdrop-blur-xl">
+        {/* macOS Traffic Lights Header */}
+        <div className="flex items-center justify-between px-4 py-3 bg-slate-950/80 border-b border-slate-800">
+          <div className="flex items-center gap-2">
+            <div className="w-3 h-3 rounded-full bg-rose-500/90" />
+            <div className="w-3 h-3 rounded-full bg-amber-500/90" />
+            <div className="w-3 h-3 rounded-full bg-emerald-500/90" />
+          </div>
+          <div className="px-3 py-0.5 rounded-md bg-slate-800/80 text-[11px] font-mono text-slate-400 border border-slate-700/50 truncate max-w-[200px]">
+            amanuxstudio.vercel.app
+          </div>
+          <div className="w-4" />
+        </div>
+
+        {/* Mockup Preview Area */}
+        <div className="relative aspect-[16/10] overflow-hidden bg-slate-950">
+          {coverImage ? (
+            <img
+              src={coverImage}
+              alt={title}
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+            />
+          ) : (
+            <div className="w-full h-full p-6 flex flex-col justify-center items-center text-center">
+              <Code2 className="w-12 h-12 text-purple-400 mb-3" />
+              <p className="text-white font-bold text-sm">Full-Stack Architecture</p>
+              <p className="text-slate-400 text-xs mt-1">High-Performance Production Stack</p>
+            </div>
+          )}
+
+          {/* Floating Pill Badges */}
+          <div className="absolute bottom-3 left-3 bg-slate-900/90 backdrop-blur-md border border-slate-700/70 text-slate-200 text-[11px] font-semibold px-2.5 py-1 rounded-lg flex items-center gap-1.5 shadow-lg">
+            <Zap className="w-3.5 h-3.5 text-amber-400" />
+            <span>Sub-150ms TTFB</span>
+          </div>
+          <div className="absolute top-3 right-3 bg-purple-950/90 backdrop-blur-md border border-purple-700/70 text-purple-200 text-[11px] font-semibold px-2.5 py-1 rounded-lg flex items-center gap-1.5 shadow-lg">
+            <ShieldCheck className="w-3.5 h-3.5 text-purple-300" />
+            <span>Production Ready</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Side-by-Side Wireframe Comparison graphic (✕ Bad vs ✓ Good) for UX Flaw Cards
+const WireframeComparison = () => {
   return (
     <div className="w-full lg:w-72 bg-slate-50 dark:bg-slate-800/60 p-4 rounded-2xl border border-slate-200/80 dark:border-slate-800 flex items-center justify-center gap-3 flex-shrink-0 select-none">
       {/* Bad Wireframe Box */}
-      <div className="relative w-28 h-24 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-2.5 flex flex-col justify-between shadow-sm">
-        {/* Red X Badge */}
+      <div className="relative w-28 h-24 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 p-2.5 flex flex-col justify-between shadow-xs">
         <div className="absolute -top-2.5 -right-2.5 w-6 h-6 rounded-full bg-rose-500 text-white flex items-center justify-center text-xs font-bold shadow-md ring-2 ring-white dark:ring-slate-900">
           ✕
         </div>
@@ -199,8 +255,7 @@ const WireframeComparison = ({ flawIndex }: { flawIndex: number }) => {
       <ArrowRight className="w-4 h-4 text-purple-600 flex-shrink-0" />
 
       {/* Good Wireframe Box */}
-      <div className="relative w-28 h-24 bg-white dark:bg-slate-900 rounded-xl border border-purple-200 dark:border-purple-800/80 p-2.5 flex flex-col justify-between shadow-sm ring-1 ring-purple-500/20">
-        {/* Green Check Badge */}
+      <div className="relative w-28 h-24 bg-white dark:bg-slate-900 rounded-xl border border-purple-200 dark:border-purple-800/80 p-2.5 flex flex-col justify-between shadow-xs ring-1 ring-purple-500/20">
         <div className="absolute -top-2.5 -right-2.5 w-6 h-6 rounded-full bg-emerald-500 text-white flex items-center justify-center text-xs font-bold shadow-md ring-2 ring-white dark:ring-slate-900">
           ✓
         </div>
@@ -217,27 +272,70 @@ const WireframeComparison = ({ flawIndex }: { flawIndex: number }) => {
   );
 };
 
-// Rich Card component for each flaw (Matching Card 01, Card 02 in user mockup)
-interface FlawCardProps {
+// Architectural Blueprint Card for Development & Technical Articles
+const TechBlueprintCard = ({ number }: { number: string }) => {
+  return (
+    <div className="w-full lg:w-72 bg-gradient-to-br from-slate-900 to-indigo-950 p-4 rounded-2xl border border-slate-800 text-slate-200 flex flex-col justify-between flex-shrink-0 shadow-sm font-mono text-xs select-none">
+      <div className="flex items-center justify-between pb-2 border-b border-slate-800">
+        <span className="text-[10px] text-purple-400 font-bold uppercase tracking-wider">Pattern {number}</span>
+        <span className="inline-flex items-center gap-1 text-[10px] text-emerald-400">
+          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+          Optimized
+        </span>
+      </div>
+
+      <div className="py-3 space-y-2">
+        <div className="flex justify-between text-[11px]">
+          <span className="text-slate-400">Edge Cache:</span>
+          <span className="text-purple-300 font-semibold">HIT (99.4%)</span>
+        </div>
+        <div className="flex justify-between text-[11px]">
+          <span className="text-slate-400">Response TTFB:</span>
+          <span className="text-emerald-400 font-semibold">&lt; 120ms</span>
+        </div>
+        <div className="flex justify-between text-[11px]">
+          <span className="text-slate-400">Type Contract:</span>
+          <span className="text-blue-300 font-semibold">Strict Zod</span>
+        </div>
+      </div>
+
+      <div className="pt-2 border-t border-slate-800 text-[10px] text-slate-400 flex items-center justify-between">
+        <span>Verified Architecture</span>
+        <Check className="w-3.5 h-3.5 text-emerald-400" />
+      </div>
+    </div>
+  );
+};
+
+// Rich Structured Card for Each Key Point / Flaw
+interface StructuredCardProps {
   number: string;
   title: string;
   description: string;
+  actionTitle: string;
   fixes: string[];
-  flawIndex: number;
+  isDesignArticle: boolean;
 }
 
-const FlawCard = ({ number, title, description, fixes, flawIndex }: FlawCardProps) => {
+const StructuredPointCard = ({
+  number,
+  title,
+  description,
+  actionTitle,
+  fixes,
+  isDesignArticle
+}: StructuredCardProps) => {
   const id = `${number}-${title}`.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
 
   return (
-    <div id={id} className="scroll-mt-28 bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 rounded-2xl p-6 sm:p-8 my-8 shadow-sm hover:shadow-md transition-shadow">
+    <div id={id} className="scroll-mt-28 bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 rounded-3xl p-6 sm:p-8 my-8 shadow-sm hover:shadow-md transition-shadow">
       <div className="flex flex-col lg:flex-row gap-6 items-start lg:items-center justify-between">
         
         {/* Left Column: Content */}
         <div className="flex-1 space-y-3.5">
           {/* Header row with Number Badge */}
           <div className="flex items-center gap-3">
-            <span className="w-8 h-8 rounded-lg bg-purple-100 dark:bg-purple-950/60 text-purple-700 dark:text-purple-300 font-bold text-sm flex items-center justify-center flex-shrink-0">
+            <span className="w-8 h-8 rounded-xl bg-purple-100 dark:bg-purple-950/70 text-purple-700 dark:text-purple-300 font-bold text-sm flex items-center justify-center flex-shrink-0 shadow-xs">
               {number}
             </span>
             <h3 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white leading-tight">
@@ -246,36 +344,138 @@ const FlawCard = ({ number, title, description, fixes, flawIndex }: FlawCardProp
           </div>
 
           {/* Description */}
-          <p className="text-slate-600 dark:text-slate-300 text-sm sm:text-base leading-relaxed">
-            {description}
-          </p>
+          {description && (
+            <p className="text-slate-600 dark:text-slate-300 text-base sm:text-lg leading-relaxed font-normal">
+              {description}
+            </p>
+          )}
 
-          {/* Green How to Fix It Badge */}
-          <div className="pt-1">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 text-xs font-bold mb-2.5">
-              <Check className="w-3.5 h-3.5 text-emerald-600" />
-              <span>How to fix it:</span>
+          {/* Green Action / Checklist Badge */}
+          {fixes.length > 0 && (
+            <div className="pt-2">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 text-xs font-bold mb-3">
+                <Check className="w-3.5 h-3.5 text-emerald-600 flex-shrink-0" />
+                <span>{actionTitle || "How to implement it:"}</span>
+              </div>
+
+              {/* Actionable Bullet Points with clean dots */}
+              <ul className="space-y-2.5 text-base sm:text-lg text-slate-700 dark:text-slate-300 pl-1">
+                {fixes.map((fix, idx) => (
+                  <li key={idx} className="flex items-start">
+                    <span className="w-1.5 h-1.5 rounded-full bg-purple-600 dark:bg-purple-400 mt-2.5 mr-3 flex-shrink-0" />
+                    <span className="leading-relaxed">{fix}</span>
+                  </li>
+                ))}
+              </ul>
             </div>
-
-            {/* Actionable Bullet Points */}
-            <ul className="space-y-2 text-sm sm:text-base text-slate-700 dark:text-slate-300 pl-1">
-              {fixes.map((fix, idx) => (
-                <li key={idx} className="flex items-start">
-                  <span className="w-1.5 h-1.5 rounded-full bg-slate-900 dark:bg-white mt-2 mr-3 flex-shrink-0" />
-                  <span className="leading-relaxed">{fix}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
+          )}
         </div>
 
-        {/* Right Column: Visual Wireframe Comparison */}
-        <WireframeComparison flawIndex={flawIndex} />
+        {/* Right Column: Visual Wireframe or Technical Blueprint */}
+        {isDesignArticle ? (
+          <WireframeComparison />
+        ) : (
+          <TechBlueprintCard number={number} />
+        )}
 
       </div>
     </div>
   );
 };
+
+// Data structure parsed from article markdown
+interface ParsedSection {
+  title: string;
+  id: string;
+  intro: string;
+  quote: { title: string; text: string } | null;
+  cards: {
+    number: string;
+    title: string;
+    description: string;
+    actionTitle: string;
+    fixes: string[];
+  }[];
+  trailingText: string;
+}
+
+function parseMarkdownArticle(content: string) {
+  if (!content) return { intro: '', sections: [] as ParsedSection[] };
+
+  // Split into major sections divided by '## '
+  const rawSections = content.split(/\n(?=##\s+)/);
+  const intro = rawSections[0].replace(/^##\s+.*$/m, '').trim();
+  const sections: ParsedSection[] = [];
+
+  for (let i = 0; i < rawSections.length; i++) {
+    const raw = rawSections[i].trim();
+    if (!raw.startsWith('## ')) continue;
+
+    const lines = raw.split('\n');
+    const title = lines[0].replace(/^##\s+/, '').trim();
+    const id = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+    const body = lines.slice(1).join('\n').trim();
+
+    // Check for blockquote callout: '> ### [Key takeaway]\n> [Explanation]'
+    let quote: { title: string; text: string } | null = null;
+    const quoteMatch = body.match(/>\s*###?\s*([^\n]+)\n>\s*([^\n]+(\n>[^\n]+)*)/);
+    if (quoteMatch) {
+      quote = {
+        title: quoteMatch[1].trim(),
+        text: quoteMatch[2].replace(/^>\s*/gm, '').trim()
+      };
+    }
+
+    // Check for H3 cards: '### 01. ...' or '### ...'
+    const rawCards = body.split(/\n(?=###\s+)/);
+    let sectionIntro = rawCards[0].replace(/>\s*###?[\s\S]*?(?=\n\n|$)/, '').trim();
+
+    const cards: ParsedSection['cards'] = [];
+    let trailingText = '';
+
+    for (let c = 1; c < rawCards.length; c++) {
+      const cardRaw = rawCards[c].trim();
+      const cardLines = cardRaw.split('\n');
+      const h3TitleLine = cardLines[0].replace(/^###\s+/, '').trim();
+
+      const numMatch = h3TitleLine.match(/^(\d{1,2})[\.\)]\s*(.+)/);
+      const number = numMatch ? numMatch[1].padStart(2, '0') : String(c).padStart(2, '0');
+      const cardTitle = numMatch ? numMatch[2].trim() : h3TitleLine;
+      const cardBody = cardLines.slice(1).join('\n').trim();
+
+      // Look for 'How to implement it:' or 'How to fix it:'
+      const fixHeaderMatch = cardBody.match(/\*\*(How to [^:*]+):\*\*/i);
+      const actionTitle = fixHeaderMatch ? fixHeaderMatch[1] : 'How to implement it:';
+
+      const bullets: string[] = [];
+      const bulletMatches = cardBody.match(/^[-*]\s+(.+)$/gm);
+      if (bulletMatches) {
+        bulletMatches.forEach(b => bullets.push(b.replace(/^[-*]\s+/, '').trim()));
+      }
+
+      const desc = cardBody.split(/\*\*How to/i)[0].replace(/^[-*]\s+.+$/gm, '').trim();
+
+      cards.push({
+        number,
+        title: cardTitle,
+        description: desc,
+        actionTitle,
+        fixes: bullets
+      });
+    }
+
+    sections.push({
+      title,
+      id,
+      intro: sectionIntro,
+      quote,
+      cards,
+      trailingText
+    });
+  }
+
+  return { intro, sections };
+}
 
 type RecentPost = Pick<Post, "title" | "slug" | "created_at" | "cover_image" | "content">;
 
@@ -448,8 +648,11 @@ const BlogPost = () => {
   const tocItems = extractToc(post.content);
   const categoryName = post.categories?.name || "UX DESIGN";
 
-  // Check if this is the UX Flaws post to render the custom illustrated mockup and cards
-  const isUxFlawsPost = post.slug === 'ux-flaws-destroying-landing-page-conversions' || post.slug === 'ux-flaws' || post.slug?.startsWith('ux-flaws');
+  const isDesignArticle = categoryName.toLowerCase().includes("design") || post.slug.includes("ux");
+  const isUxFlawsPost = post.slug === 'ux-flaws-destroying-landing-page-conversions' || post.slug === 'ux-flaws' || post.slug.startsWith('ux-flaws');
+
+  // Parse structured article sections
+  const { intro, sections } = parseMarkdownArticle(post.content);
 
   return (
     <div className="min-h-screen bg-[#FAFBFD] dark:bg-slate-950 font-sans flex flex-col text-slate-800 dark:text-slate-100">
@@ -467,9 +670,9 @@ const BlogPost = () => {
       <Navigation />
 
       {/* =========================================================================
-          HERO SECTION: Dark Modern Header Matching User Mockup
+          HERO SECTION: Sleek Modern Header Matching User Mockup
          ========================================================================= */}
-      <header className="relative bg-[#0B0F19] text-white pt-28 pb-16 lg:py-24 border-b border-slate-800/80 overflow-hidden">
+      <header className="relative bg-[#0A0E17] text-white pt-28 pb-16 lg:py-24 border-b border-slate-800/80 overflow-hidden">
         {/* Ambient Glow Orbs */}
         <div className="absolute top-0 right-1/4 w-[500px] h-[500px] bg-purple-600/15 rounded-full blur-[120px] pointer-events-none" />
         <div className="absolute -bottom-10 left-10 w-[400px] h-[400px] bg-blue-600/10 rounded-full blur-[100px] pointer-events-none" />
@@ -538,19 +741,8 @@ const BlogPost = () => {
             <div className="lg:col-span-5 hidden lg:block">
               {isUxFlawsPost ? (
                 <AnnotatedHeroIllustration />
-              ) : post.cover_image ? (
-                <div className="relative group">
-                  <div className="absolute -inset-1.5 bg-gradient-to-r from-purple-600/40 via-blue-600/30 to-purple-800/40 rounded-3xl blur-2xl opacity-60 group-hover:opacity-80 transition duration-700" />
-                  <div className="relative rounded-2xl overflow-hidden border border-white/10 shadow-2xl bg-slate-900 aspect-video">
-                    <img
-                      src={post.cover_image}
-                      alt={post.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    />
-                  </div>
-                </div>
               ) : (
-                <AnnotatedHeroIllustration />
+                <TechBrowserMockup coverImage={post.cover_image} title={post.title} />
               )}
             </div>
           </div>
@@ -567,7 +759,7 @@ const BlogPost = () => {
             {/* -------------------------------------------------------------
                 LEFT COLUMN (Content Body)
                ------------------------------------------------------------- */}
-            <article className="lg:col-span-8 space-y-8">
+            <article className="lg:col-span-8 space-y-10">
               {/* Social Sharing Bar */}
               <div className="flex items-center justify-between pb-6 border-b border-slate-200/80 dark:border-slate-800">
                 <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-slate-400">
@@ -577,21 +769,21 @@ const BlogPost = () => {
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() => handleShare('twitter')}
-                    className="w-9 h-9 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 hover:text-purple-600 hover:border-purple-300 flex items-center justify-center transition-all shadow-sm"
+                    className="w-9 h-9 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 hover:text-purple-600 hover:border-purple-300 flex items-center justify-center transition-all shadow-xs"
                     title="Share on X / Twitter"
                   >
                     <Twitter className="w-4 h-4" />
                   </button>
                   <button
                     onClick={() => handleShare('linkedin')}
-                    className="w-9 h-9 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 hover:text-purple-600 hover:border-purple-300 flex items-center justify-center transition-all shadow-sm"
+                    className="w-9 h-9 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 hover:text-purple-600 hover:border-purple-300 flex items-center justify-center transition-all shadow-xs"
                     title="Share on LinkedIn"
                   >
                     <Linkedin className="w-4 h-4" />
                   </button>
                   <button
                     onClick={() => handleShare('copy')}
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 hover:text-purple-600 hover:border-purple-300 transition-all text-xs font-medium shadow-sm"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 hover:text-purple-600 hover:border-purple-300 transition-all text-xs font-medium shadow-xs"
                     title="Copy link"
                   >
                     {copiedLink ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
@@ -600,127 +792,80 @@ const BlogPost = () => {
                 </div>
               </div>
 
-              {/* If this is the UX Flaws post, render the exact card-based structure matching mockup */}
-              {isUxFlawsPost ? (
-                <div className="space-y-8">
-                  {/* Intro text */}
-                  <p className="text-lg sm:text-xl text-slate-700 dark:text-slate-300 leading-relaxed font-normal">
-                    You can run ads, improve your SEO, and get thousands of people to your landing page — but if the user experience (UX) is broken, most of them will leave without taking action. Let's look at the most common UX flaws that silently kill conversions and how you can fix them.
-                  </p>
-
-                  {/* Section 1: H2 with Purple Vertical Accent Bar */}
-                  <div className="pt-4">
-                    <h2 id="your-landing-page-has-one-job" className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white scroll-mt-28 flex items-center mb-4 leading-tight">
-                      <span className="w-1.5 h-7 bg-purple-600 rounded-full mr-3.5 inline-block flex-shrink-0" />
-                      <span>Your landing page has one job.</span>
-                    </h2>
-                    <p className="text-base sm:text-lg text-slate-700 dark:text-slate-300 leading-[1.85] font-normal mb-6">
-                      A landing page isn't just a pretty page — it's a focused experience designed to make the user take a specific action, like signing up, booking a demo, or making a purchase. Even small UX issues can create doubt, friction, and enough resistance for users to leave.
-                    </p>
-
-                    {/* Target Callout Box */}
-                    <div className="rounded-2xl bg-[#F5F3FF] dark:bg-purple-950/25 border border-[#DDD6FE] dark:border-purple-900/50 p-6 sm:p-7 flex items-start gap-4 my-8 shadow-sm">
-                      <div className="w-12 h-12 rounded-xl bg-purple-100 dark:bg-purple-900/50 text-purple-700 dark:text-purple-300 flex items-center justify-center flex-shrink-0 text-2xl shadow-sm">
-                        🎯
-                      </div>
-                      <div>
-                        <h4 className="font-extrabold text-purple-950 dark:text-purple-200 text-base sm:text-lg mb-1 leading-snug">
-                          Every extra second of confusion is a reason to leave.
-                        </h4>
-                        <p className="text-purple-800/90 dark:text-purple-300/80 text-sm sm:text-base leading-relaxed">
-                          A clear, simple, and trustworthy experience keeps users moving toward your goal.
-                        </p>
-                      </div>
+              {/* -------------------------------------------------------------
+                  STRUCTURED ARTICLE RENDERING (Spacious, Card-Based Layout)
+                 ------------------------------------------------------------- */}
+              {sections.length > 0 ? (
+                <div className="space-y-12">
+                  {/* Lead Introduction Paragraph */}
+                  {intro && (
+                    <div className="text-lg sm:text-xl text-slate-700 dark:text-slate-300 leading-relaxed font-normal">
+                      <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>
+                        {intro}
+                      </ReactMarkdown>
                     </div>
-                  </div>
+                  )}
 
-                  {/* Section 2: H2 with Purple Vertical Accent Bar */}
-                  <div className="pt-6">
-                    <h2 id="the-most-common-ux-flaws" className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white scroll-mt-28 flex items-center mb-6 leading-tight">
-                      <span className="w-1.5 h-7 bg-purple-600 rounded-full mr-3.5 inline-block flex-shrink-0" />
-                      <span>The most common UX flaws (and how to fix them)</span>
-                    </h2>
+                  {/* Render Each Major Section */}
+                  {sections.map((section, sIdx) => (
+                    <div key={sIdx} className="space-y-6 pt-4">
+                      {/* Section H2 with Purple Vertical Accent Bar */}
+                      <h2
+                        id={section.id}
+                        className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white scroll-mt-28 flex items-center leading-tight tracking-tight pt-2"
+                      >
+                        <span className="w-2 h-8 bg-purple-600 rounded-full mr-3.5 inline-block flex-shrink-0" />
+                        <span>{section.title}</span>
+                      </h2>
 
-                    {/* Flaw Card 01 */}
-                    <FlawCard
-                      number="01"
-                      title="Unclear value proposition"
-                      description="If users can't quickly understand what you offer and why it matters, they won't stick around."
-                      fixes={[
-                        "Use a clear, benefit-driven headline.",
-                        "Add a short, supporting subheading.",
-                        "Show what makes you different."
-                      ]}
-                      flawIndex={1}
-                    />
+                      {/* Section Intro Text */}
+                      {section.intro && (
+                        <div className="text-base sm:text-lg text-slate-700 dark:text-slate-300 leading-[1.85] font-normal">
+                          <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>
+                            {section.intro}
+                          </ReactMarkdown>
+                        </div>
+                      )}
 
-                    {/* Flaw Card 02 */}
-                    <FlawCard
-                      number="02"
-                      title="Too many competing actions"
-                      description="Multiple CTAs and mixed goals create decision fatigue. Guide users toward one clear next step."
-                      fixes={[
-                        "Limit the primary screen to a single main action.",
-                        "Reduce secondary links and competing navigation items.",
-                        "Ensure the CTA button is prominently styled and easy to find."
-                      ]}
-                      flawIndex={2}
-                    />
+                      {/* Target Callout Box (Blockquote) */}
+                      {section.quote && (
+                        <div className="rounded-3xl bg-[#F5F3FF] dark:bg-purple-950/25 border border-[#DDD6FE] dark:border-purple-900/50 p-6 sm:p-7 flex items-start gap-4 my-8 shadow-sm">
+                          <div className="w-12 h-12 rounded-2xl bg-purple-100 dark:bg-purple-900/50 text-purple-700 dark:text-purple-300 flex items-center justify-center flex-shrink-0 text-2xl shadow-xs">
+                            🎯
+                          </div>
+                          <div>
+                            <h4 className="font-extrabold text-purple-950 dark:text-purple-200 text-base sm:text-lg mb-1 leading-snug">
+                              {section.quote.title}
+                            </h4>
+                            <p className="text-purple-800/90 dark:text-purple-300/80 text-sm sm:text-base leading-relaxed">
+                              {section.quote.text}
+                            </p>
+                          </div>
+                        </div>
+                      )}
 
-                    {/* Flaw Card 03 */}
-                    <FlawCard
-                      number="03"
-                      title="Missing trust signals & social proof"
-                      description="Without proof that others trust you, visitors feel hesitation before sharing details or booking."
-                      fixes={[
-                        "Place real client logos and verified reviews near CTAs.",
-                        "Display measurable case study outcomes (e.g. Fairease, Ireshh).",
-                        "Highlight security guarantees and transparent contact info."
-                      ]}
-                      flawIndex={3}
-                    />
-
-                    {/* Flaw Card 04 */}
-                    <FlawCard
-                      number="04"
-                      title="Form friction & unnecessary fields"
-                      description="Asking for too much information upfront kills high-intent visitor momentum."
-                      fixes={[
-                        "Cut form fields down to the bare essentials (Name, Email, Message).",
-                        "Enable single-click autofill for mobile users.",
-                        "Use inline validation so users know inputs are valid in real time."
-                      ]}
-                      flawIndex={4}
-                    />
-
-                    {/* Flaw Card 05 */}
-                    <FlawCard
-                      number="05"
-                      title="Weak CTA clarity & contrast"
-                      description={'Generic buttons like "Submit" or "Click Here" fail to communicate value or urgency.'}
-                      fixes={[
-                        'Use active, value-centric copy: "Get Free Project Proposal".',
-                        'Use high-contrast brand colors that stand out against the background.',
-                        'Keep CTA buttons sticky or easy to reach on mobile screens.'
-                      ]}
-                      flawIndex={5}
-                    />
-                  </div>
-
-                  {/* Section 3: Summary */}
-                  <div className="pt-6">
-                    <h2 id="how-to-fix-them" className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white scroll-mt-28 flex items-center mb-4 leading-tight">
-                      <span className="w-1.5 h-7 bg-purple-600 rounded-full mr-3.5 inline-block flex-shrink-0" />
-                      <span>How to fix them</span>
-                    </h2>
-                    <p className="text-base sm:text-lg text-slate-700 dark:text-slate-300 leading-[1.85] font-normal mb-6">
-                      Conversion-driven UX is not about personal taste — it is an engineering discipline based on cognitive load, clarity, and psychology. Every friction point you eliminate directly increases the percentage of visitors who convert into paying clients.
-                    </p>
-                  </div>
+                      {/* Structured Points / Flaw Cards */}
+                      {section.cards.length > 0 && (
+                        <div className="space-y-6 my-8">
+                          {section.cards.map((card, cIdx) => (
+                            <StructuredPointCard
+                              key={cIdx}
+                              number={card.number}
+                              title={card.title}
+                              description={card.description}
+                              actionTitle={card.actionTitle}
+                              fixes={card.fixes}
+                              isDesignArticle={isDesignArticle}
+                            />
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  ))}
                 </div>
               ) : (
-                /* Dynamic Markdown Content Area for other articles */
-                <div className="blog-content-body max-w-none">
+                /* Fallback to enhanced ReactMarkdown for legacy content */
+                <div className="blog-content-body max-w-none space-y-6">
                   <ReactMarkdown
                     remarkPlugins={[remarkGfm]}
                     rehypePlugins={[rehypeRaw]}
@@ -729,10 +874,12 @@ const BlogPost = () => {
                         const headingText = String(props.children);
                         const id = headingText.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
                         return (
-                          <h2 id={id} className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white mt-12 mb-5 scroll-mt-28 flex items-center leading-tight">
-                            <span className="w-1.5 h-7 bg-purple-600 rounded-full mr-3.5 inline-block flex-shrink-0" />
-                            <span>{props.children}</span>
-                          </h2>
+                          <div className="pt-10 mb-6">
+                            <h2 id={id} className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white scroll-mt-28 flex items-center leading-tight tracking-tight">
+                              <span className="w-2 h-8 bg-purple-600 rounded-full mr-3.5 inline-block flex-shrink-0" />
+                              <span>{props.children}</span>
+                            </h2>
+                          </div>
                         );
                       },
                       h3: ({ node, ...props }) => (
@@ -746,9 +893,9 @@ const BlogPost = () => {
                         </p>
                       ),
                       blockquote: ({ node, ...props }) => (
-                        <div className="my-8 p-6 sm:p-7 rounded-2xl bg-[#F5F3FF] dark:bg-purple-950/25 border border-[#DDD6FE] dark:border-purple-900/50 shadow-sm flex items-start gap-4">
-                          <div className="w-10 h-10 rounded-xl bg-purple-600 text-white flex items-center justify-center flex-shrink-0 shadow-sm">
-                            <Target className="w-5 h-5" />
+                        <div className="rounded-3xl bg-[#F5F3FF] dark:bg-purple-950/25 border border-[#DDD6FE] dark:border-purple-900/50 p-6 sm:p-7 flex items-start gap-4 my-8 shadow-sm">
+                          <div className="w-12 h-12 rounded-2xl bg-purple-100 dark:bg-purple-900/50 text-purple-700 dark:text-purple-300 flex items-center justify-center flex-shrink-0 text-2xl shadow-xs">
+                            🎯
                           </div>
                           <div className="text-purple-950 dark:text-purple-200 text-base sm:text-lg leading-relaxed font-medium not-italic">
                             {props.children}
@@ -803,7 +950,7 @@ const BlogPost = () => {
               )}
 
               {/* Bottom Project Inquiry CTA Box */}
-              <div className="mt-12 p-8 sm:p-10 rounded-3xl bg-gradient-to-br from-purple-900 via-indigo-950 to-slate-950 text-white shadow-xl relative overflow-hidden">
+              <div className="mt-14 p-8 sm:p-10 rounded-3xl bg-gradient-to-br from-purple-900 via-indigo-950 to-slate-950 text-white shadow-xl relative overflow-hidden">
                 <div className="absolute top-0 right-0 w-80 h-80 bg-purple-500/10 rounded-full blur-3xl pointer-events-none" />
                 
                 <div className="relative z-10 max-w-2xl">
@@ -832,7 +979,7 @@ const BlogPost = () => {
 
               {/* 1. TABLE OF CONTENTS */}
               {tocItems.length > 0 && (
-                <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 p-6 shadow-sm">
+                <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/80 dark:border-slate-800 p-6 shadow-sm">
                   <div className="flex items-center gap-2 mb-4 pb-3 border-b border-slate-100 dark:border-slate-800">
                     <ListOrdered className="w-5 h-5 text-purple-600" />
                     <h3 className="font-bold text-slate-900 dark:text-white text-base">
@@ -849,11 +996,11 @@ const BlogPost = () => {
                           onClick={() => scrollToHeading(item.id)}
                           className={`w-full text-left px-3 py-2 rounded-xl transition-all flex items-center gap-2.5 ${
                             isActive
-                              ? "bg-purple-100 dark:bg-purple-950/60 text-purple-800 dark:text-purple-200 font-bold border border-purple-200/80 dark:border-purple-800"
+                              ? "bg-purple-100 dark:bg-purple-950/70 text-purple-900 dark:text-purple-200 font-bold border border-purple-200/80 dark:border-purple-800/80 shadow-xs"
                               : "text-slate-600 dark:text-slate-400 hover:text-purple-600 hover:bg-slate-50 dark:hover:bg-slate-800/60 font-medium"
                           } ${item.level === 3 ? "pl-6 text-xs sm:text-sm" : ""}`}
                         >
-                          <span className={`w-2 h-2 rounded-full flex-shrink-0 ${isActive ? "bg-purple-600" : "bg-slate-300 dark:bg-slate-600"}`} />
+                          <span className={`w-2 h-2 rounded-full flex-shrink-0 ${isActive ? "bg-purple-600 ring-2 ring-purple-300" : "bg-slate-300 dark:bg-slate-600"}`} />
                           <span className="truncate">{item.text}</span>
                         </button>
                       );
@@ -863,7 +1010,7 @@ const BlogPost = () => {
               )}
 
               {/* 2. NEWSLETTER / LEAD CAPTURE: "Get UX insights in your inbox" */}
-              <div className="rounded-2xl bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 text-white p-6 sm:p-7 shadow-xl border border-slate-800 relative overflow-hidden">
+              <div className="rounded-3xl bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 text-white p-6 sm:p-7 shadow-xl border border-slate-800 relative overflow-hidden">
                 <div className="w-10 h-10 rounded-xl bg-purple-500/20 text-purple-300 flex items-center justify-center mb-4 border border-purple-500/30">
                   <Mail className="w-5 h-5" />
                 </div>
@@ -903,7 +1050,7 @@ const BlogPost = () => {
 
               {/* 3. RELATED ARTICLES */}
               {recentPosts.length > 0 && (
-                <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 p-6 shadow-sm">
+                <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/80 dark:border-slate-800 p-6 shadow-sm">
                   <div className="flex items-center mb-4 pb-3 border-b border-slate-100 dark:border-slate-800">
                     <span className="w-1.5 h-5 bg-purple-600 rounded-full mr-2.5 flex-shrink-0" />
                     <h3 className="font-bold text-slate-900 dark:text-white text-base">
@@ -919,7 +1066,7 @@ const BlogPost = () => {
                         className="group flex gap-3.5 p-2 -mx-2 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-colors"
                       >
                         {recent.cover_image ? (
-                          <div className="w-16 h-16 flex-shrink-0 rounded-xl overflow-hidden bg-slate-100 border border-slate-200/60">
+                          <div className="w-16 h-16 flex-shrink-0 rounded-2xl overflow-hidden bg-slate-100 border border-slate-200/60">
                             <img
                               src={recent.cover_image}
                               alt={recent.title}
@@ -927,7 +1074,7 @@ const BlogPost = () => {
                             />
                           </div>
                         ) : (
-                          <div className="w-16 h-16 flex-shrink-0 rounded-xl bg-purple-50 dark:bg-purple-950/40 text-purple-600 flex items-center justify-center font-bold text-xs border border-purple-100 dark:border-purple-900">
+                          <div className="w-16 h-16 flex-shrink-0 rounded-2xl bg-purple-50 dark:bg-purple-950/40 text-purple-600 flex items-center justify-center font-bold text-xs border border-purple-100 dark:border-purple-900">
                             UX
                           </div>
                         )}
