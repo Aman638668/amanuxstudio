@@ -9,7 +9,7 @@ dotenv.config();
 
 const SUPABASE_URL = process.env.VITE_SUPABASE_URL;
 const SUPABASE_KEY = process.env.VITE_SUPABASE_ANON_KEY;
-const SITE_URL = 'https://amanuxstudio.com';
+const SITE_URL = 'https://amanuxstudio.vercel.app';
 
 const generateSitemap = async () => {
     console.log('Generating sitemap...');

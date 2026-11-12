@@ -4,4 +4,4 @@ Disallow: /dashboard
 Disallow: /dashboard/*
 Disallow: /login
 
-Sitemap: https://amanuxstudio.com/sitemap.xml
+Sitemap: https://amanuxstudio.vercel.app/sitemap.xml

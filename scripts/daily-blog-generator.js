@@ -71,7 +71,7 @@ Hidden costs at the payment step remain the #1 reason for cart abandonment world
 ---
 
 ## Conclusion
-Conversion rate optimization is an engineering discipline based on customer psychology and reduced cognitive load. If you are looking to scale your e-commerce platform, [reach out to Aman UX Studio](https://amanuxstudio.com/#contact) to start building today.`
+Conversion rate optimization is an engineering discipline based on customer psychology and reduced cognitive load. If you are looking to scale your e-commerce platform, [reach out to Aman UX Studio](https://amanuxstudio.vercel.app/#contact) to start building today.`
   },
   {
     title: "Why Modern Web Apps are Migrating to TypeScript and Tailwind CSS",
@@ -157,7 +157,7 @@ CLS measures unexpected visual shifts during page load. When buttons or text jum
 ---
 
 ## Summary
-Achieving 95+ PageSpeed scores requires an intentional engineering architecture from day one. Want a comprehensive Core Web Vitals audit? [Contact Aman UX Studio](https://amanuxstudio.com/#contact).`
+Achieving 95+ PageSpeed scores requires an intentional engineering architecture from day one. Want a comprehensive Core Web Vitals audit? [Contact Aman UX Studio](https://amanuxstudio.vercel.app/#contact).`
   },
   {
     title: "The Heuristic UX Checklist: 7 Reasons Visitors Bounce from Corporate Sites",
@@ -243,7 +243,7 @@ Instead of relying on crude time-based cache expiration, leverage Next.js \`reva
 ---
 
 ## Conclusion
-Architecting modern Next.js platforms requires deep knowledge of edge caching and streaming. [Partner with Aman UX Studio](https://amanuxstudio.com/#contact) to build your next web platform.`
+Architecting modern Next.js platforms requires deep knowledge of edge caching and streaming. [Partner with Aman UX Studio](https://amanuxstudio.vercel.app/#contact) to build your next web platform.`
   },
   {
     title: "The Psychology of SaaS Pricing Design: Maximizing ARPU and Plan Conversions",
@@ -282,7 +282,7 @@ Rather than presenting a monolithic list of 30 bullet points, group features int
 ---
 
 ## Conclusion
-At **Aman UX Studio**, we design and engineer conversion-focused digital products that scale. [Contact us today](https://amanuxstudio.com/#contact) to elevate your digital presence.`
+At **Aman UX Studio**, we design and engineer conversion-focused digital products that scale. [Contact us today](https://amanuxstudio.vercel.app/#contact) to elevate your digital presence.`
   }
 ];
 
@@ -398,7 +398,7 @@ async function generatePostWithGemini(topicItem) {
 
   console.log(`🤖 Invoking Gemini AI for trending topic: "${topicItem.title}" (${topicItem.source})...`);
 
-  const prompt = `You are a Senior Full-Stack Web Developer & Lead UI/UX Architect at Aman UX Studio (https://amanuxstudio.com).
+  const prompt = `You are a Senior Full-Stack Web Developer & Lead UI/UX Architect at Aman UX Studio (https://amanuxstudio.vercel.app).
 Write a comprehensive, professional, 1,200+ word technical blog post about this trending technology development:
 "${topicItem.title}" (Discovered via: ${topicItem.source}).
 
@@ -420,7 +420,7 @@ Full markdown content:
 - 3 to 5 structured points formatted with '### 01. [Title]', followed by detailed explanation and '**How to implement it:**' bullet points
 - Practical code snippets, checklists, or architectural patterns
 - Section 3: Strategic takeaways for modern web applications
-- Closing summary mentioning Aman UX Studio with a link to contact: [reach out to Aman UX Studio](https://amanuxstudio.com/#contact)
+- Closing summary mentioning Aman UX Studio with a link to contact: [reach out to Aman UX Studio](https://amanuxstudio.vercel.app/#contact)
 
 Important rules:
 - Start directly with '---METADATA---'. Do not output conversational filler.
@@ -612,11 +612,11 @@ async function generateAndPublishBlog() {
           embeds: [
             {
               title: newPost.title,
-              url: `https://amanuxstudio.com/blog/${newPost.slug}`,
+              url: `https://amanuxstudio.vercel.app/blog/${newPost.slug}`,
               description: newPost.excerpt,
               color: 0x8B5CF6,
               fields: [
-                { name: "🔗 URL", value: `https://amanuxstudio.com/blog/${newPost.slug}` },
+                { name: "🔗 URL", value: `https://amanuxstudio.vercel.app/blog/${newPost.slug}` },
                 { name: "📂 Category", value: postToInsert.category, inline: true },
                 { name: "🏷️ Keywords", value: postToInsert.keywords, inline: true }
               ],
