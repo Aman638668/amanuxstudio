@@ -2,16 +2,20 @@ name: Daily Blog Auto-Publisher & Keep-Alive
 
 on:
   schedule:
-    # Runs everyday at 05:00 AM UTC (runs in GitHub Cloud even if your laptop is offline)
-    - cron: '0 5 * * *'
-  workflow_dispatch: # Allows manual one-click trigger from GitHub Actions tab
+    # Runs 4 times a day (every 6 hours) automatically in GitHub Cloud
+    # 02:00 UTC (07:30 AM IST) - Morning Article
+    # 08:00 UTC (01:30 PM IST) - Afternoon Article
+    # 14:00 UTC (07:30 PM IST) - Evening Article
+    # 20:00 UTC (01:30 AM IST) - Night Article
+    - cron: '0 2,8,14,20 * * *'
+  workflow_dispatch: # Allows manual one-click trigger from GitHub Actions tab anytime
 
 jobs:
   publish-daily-blog:
     name: Generate Post, Update Supabase & Push Sitemap
     runs-on: ubuntu-latest
     permissions:
-      contents: write # Allows committing the updated sitemap
+      contents: write # Allows committing the updated sitemap to GitHub
 
     steps:
       - name: Checkout Repository
@@ -35,6 +39,7 @@ jobs:
           VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
           VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: node scripts/daily-blog-generator.js
 
       - name: Regenerate Sitemap

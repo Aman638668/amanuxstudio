@@ -67,6 +67,12 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://amanuxstudio.com/blog/why-web-apps-migrate-typescript-tailwind-5824</loc>
+    <lastmod>2026-11-12T07:57:15.912Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://amanuxstudio.com/category/development</loc>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
