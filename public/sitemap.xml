@@ -113,6 +113,12 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://amanuxstudio.vercel.app/blog/ecommerce-ux</loc>
+    <lastmod>2026-11-14T16:14:03.045Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://amanuxstudio.vercel.app/category/development</loc>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
