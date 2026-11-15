@@ -137,6 +137,12 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://amanuxstudio.vercel.app/blog/ai-asset-pipeline</loc>
+    <lastmod>2026-11-15T22:12:58.464Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://amanuxstudio.vercel.app/category/development</loc>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
