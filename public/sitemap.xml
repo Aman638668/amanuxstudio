@@ -167,6 +167,12 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://amanuxstudio.vercel.app/blog/nextjs-caching</loc>
+    <lastmod>2026-11-18T09:24:30.575Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://amanuxstudio.vercel.app/category/development</loc>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
