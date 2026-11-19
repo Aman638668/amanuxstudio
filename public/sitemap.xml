@@ -179,6 +179,12 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://amanuxstudio.vercel.app/blog/ux-flaws-2</loc>
+    <lastmod>2026-11-19T09:37:58.045Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://amanuxstudio.vercel.app/category/development</loc>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
