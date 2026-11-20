@@ -70,7 +70,6 @@ export default function Navigation() {
             onClick={() => handleNavClick('home')}
             onMouseEnter={() => studioAudio.playHover()}
             className="flex items-center gap-2.5 text-left group"
-            data-cursor="Home"
           >
             <div className="w-7 h-7 rounded-lg bg-gradient-to-tr from-blue-600 to-sky-400 flex items-center justify-center text-white font-bold text-xs shadow-md shadow-blue-600/30 group-hover:scale-105 transition-transform">
               A
@@ -105,7 +104,6 @@ export default function Navigation() {
               onClick={() => handleNavClick('contact')}
               onMouseEnter={() => studioAudio.playHover()}
               className="btn-studio-primary btn-studio-sm uppercase tracking-wider group"
-              data-cursor="Book Call"
             >
               <span>Get in Touch</span>
               <ArrowUpRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />

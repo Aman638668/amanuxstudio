@@ -196,8 +196,7 @@ export function CraftMode({ onClose, onExploreWork }: CraftModeProps) {
             studioAudio.playClick(500);
             onClose();
           }}
-          className="btn-studio-secondary !h-9 !px-4 !text-xs tracking-wider uppercase font-semibold"
-          data-cursor="Close"
+          className="btn-studio-secondary btn-studio-sm tracking-wider uppercase font-semibold"
         >
           <span>Exit to Website</span>
           <X className="w-4 h-4 ml-1" />
@@ -251,7 +250,6 @@ export function CraftMode({ onClose, onExploreWork }: CraftModeProps) {
                     onExploreWork();
                   }}
                   className="btn-studio-primary group"
-                  data-cursor="Launch"
                 >
                   <span>View Client Work</span>
                   <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
@@ -260,7 +258,6 @@ export function CraftMode({ onClose, onExploreWork }: CraftModeProps) {
                 <button
                   onClick={nextChapter}
                   className="btn-studio-primary group"
-                  data-cursor="Next"
                 >
                   <span>Next</span>
                   <ChevronRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />

@@ -11,7 +11,6 @@ import RecentBlogs from '@/components/RecentBlogs';
 import Contact from '@/components/Contact';
 import Footer from '@/components/Footer';
 import Seo from '@/components/Seo';
-import { CustomCursor } from '@/components/studio/CustomCursor';
 import { StudioDock } from '@/components/studio/StudioDock';
 import { CraftMode } from '@/components/studio/CraftMode';
 
@@ -34,9 +33,6 @@ export default function Index() {
 
       {/* Tactile Ambient Film Grain Overlay */}
       <div className="ambient-grain" aria-hidden="true" />
-
-      {/* Spring Magnetic Cursor (Desktop) */}
-      <CustomCursor />
 
       {/* Global Studio Navigation */}
       <Navigation />

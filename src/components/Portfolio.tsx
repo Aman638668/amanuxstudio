@@ -183,7 +183,6 @@ export default function Portfolio() {
                     rel="noopener noreferrer"
                     onMouseEnter={() => studioAudio.playHover()}
                     className="btn-studio-primary btn-studio-sm group/link"
-                    data-cursor="Visit"
                   >
                     <span>Visit Live Website</span>
                     <ArrowUpRight className="w-3.5 h-3.5 transition-transform group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5" />
@@ -198,7 +197,6 @@ export default function Portfolio() {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="block relative rounded-2xl overflow-hidden border border-white/10 bg-[#141418] group/img shadow-2xl transition-all duration-500 hover:border-blue-500/50"
-                  data-cursor="Live Site"
                 >
                   {/* Browser top-bar mockup */}
                   <div className="flex items-center justify-between px-4 py-2.5 bg-black/40 border-b border-white/5 backdrop-blur-sm">

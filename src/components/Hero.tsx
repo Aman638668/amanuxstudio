@@ -88,13 +88,12 @@ export default function Hero({ onOpenCraft }: HeroProps) {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.6, ease: [0.19, 1, 0.22, 1] }}
-            className="flex flex-wrap items-center gap-4 mb-16"
+            className="flex flex-wrap items-center gap-3 sm:gap-4 mb-16"
           >
             <button
               onClick={() => scrollToSection('contact')}
               onMouseEnter={() => studioAudio.playHover()}
               className="btn-studio-primary group"
-              data-cursor="Let's Talk"
             >
               <span>Start a Project</span>
               <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
@@ -104,25 +103,20 @@ export default function Hero({ onOpenCraft }: HeroProps) {
               onClick={() => scrollToSection('portfolio')}
               onMouseEnter={() => studioAudio.playHover()}
               className="btn-studio-secondary"
-              data-cursor="Explore"
             >
               <span>View Our Work</span>
             </button>
 
-            <div className="flex items-center gap-2 pl-2">
-              <span className="text-white/20 hidden sm:inline">|</span>
-              <a
-                href="/Aman_Sharma_Resume.pdf"
-                target="_blank"
-                rel="noopener noreferrer"
-                onMouseEnter={() => studioAudio.playHover()}
-                className="inline-flex items-center gap-1.5 text-xs font-mono uppercase tracking-wider text-white/60 hover:text-white transition-colors py-2 px-3 rounded-full hover:bg-white/5 border border-transparent hover:border-white/10"
-                data-cursor="PDF"
-              >
-                <FileDown className="w-3.5 h-3.5 text-white/50" />
-                <span>Resume PDF</span>
-              </a>
-            </div>
+            <a
+              href="/Aman_Sharma_Resume.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              onMouseEnter={() => studioAudio.playHover()}
+              className="btn-studio-secondary text-white/75 hover:text-white"
+            >
+              <FileDown className="w-4 h-4 text-white/60" />
+              <span>Resume PDF</span>
+            </a>
           </motion.div>
 
           {/* Studio Metrics Strip */}

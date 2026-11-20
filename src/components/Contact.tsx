@@ -177,7 +177,6 @@ export default function Contact() {
                   type="submit"
                   disabled={isSubmitting}
                   className="btn-studio-primary !w-full !h-12 !text-sm group"
-                  data-cursor="Submit"
                 >
                   {isSubmitting ? (
                     <>
