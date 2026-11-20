@@ -1,74 +1,166 @@
+import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, Play, FileDown } from 'lucide-react';
+import { ArrowRight, Sparkles, FileDown, Layers, ShieldCheck, Zap } from 'lucide-react';
+import { studioAudio } from '@/lib/studio-audio';
 
-export default function Hero() {
+interface HeroProps {
+  onOpenCraft?: () => void;
+}
+
+export default function Hero({ onOpenCraft }: HeroProps) {
   const scrollToSection = (sectionId: string) => {
+    studioAudio.playClick(850, 0.03);
     const element = document.getElementById(sectionId);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
     }
   };
 
+  const titleWords = ["Engineering", "Digital", "Craft", "That", "Accelerates", "Revenue."];
+
   return (
-    <section id="home" className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 text-white relative overflow-hidden pt-28 md:pt-0">
-      {/* Background Pattern */}
-      <div className="absolute inset-0 opacity-30">
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-900/20 to-slate-900/20"></div>
-        <div className="absolute inset-0" style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%239C92AC' fill-opacity='0.1'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")` }}></div>
-      </div>
+    <section
+      id="home"
+      className="min-h-screen flex flex-col justify-center bg-[#09090c] text-[#eeece8] relative overflow-hidden pt-28 pb-16 md:py-24"
+    >
+      {/* Subtle radial ambient mist */}
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[500px] bg-gradient-to-tr from-[#5b5fe0]/15 via-blue-600/10 to-transparent blur-[120px] rounded-full pointer-events-none" />
+      <div className="absolute bottom-10 right-10 w-[400px] h-[400px] bg-emerald-500/5 blur-[140px] rounded-full pointer-events-none" />
 
-      <div className="container mx-auto px-6 relative z-10 py-16">
-        <div className="max-w-4xl mx-auto text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-500/10 border border-blue-400/20 text-blue-300 text-sm font-medium mb-6">
-            <span>✨ Web Development &amp; Full-Stack Digital Agency</span>
-          </div>
+      <div className="container mx-auto px-6 relative z-10">
+        <div className="max-w-5xl mx-auto">
+          
+          {/* Live Availability Badge */}
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, ease: [0.19, 1, 0.22, 1] }}
+            className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full border border-white/10 bg-white/[0.04] backdrop-blur-md mb-8"
+          >
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#3ddc84] opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-[#3ddc84]"></span>
+            </span>
+            <span className="text-xs font-mono tracking-wider uppercase text-white/80">
+              Available for Q1/Q2 Projects · Boutique Digital Studio
+            </span>
+          </motion.div>
 
-          <h1 className="text-4xl sm:text-6xl md:text-7xl font-extrabold mb-6 bg-gradient-to-r from-white via-blue-100 to-blue-200 bg-clip-text text-transparent tracking-tight">
-            Transform Your Digital Presence
+          {/* Kinetic Editorial Heading */}
+          <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-tight text-[#eeece8] leading-[1.04] mb-8">
+            <span className="flex flex-wrap gap-x-3 sm:gap-x-5 gap-y-1">
+              {titleWords.map((word, i) => (
+                <span key={i} className="inline-block overflow-hidden py-1">
+                  <motion.span
+                    initial={{ y: '110%', rotate: 3 }}
+                    animate={{ y: 0, rotate: 0 }}
+                    transition={{
+                      duration: 0.9,
+                      ease: [0.19, 1, 0.22, 1],
+                      delay: 0.1 + i * 0.07,
+                    }}
+                    className={`inline-block origin-bottom-left ${
+                      word === "Craft"
+                        ? "text-transparent bg-clip-text bg-gradient-to-r from-blue-300 via-indigo-200 to-white"
+                        : word === "Revenue."
+                        ? "text-transparent bg-clip-text bg-gradient-to-r from-[#7c80f6] to-[#5b5fe0]"
+                        : ""
+                    }`}
+                  >
+                    {word}
+                  </motion.span>
+                </span>
+              ))}
+            </span>
           </h1>
 
-          <p className="text-lg md:text-xl text-gray-300 mb-8 max-w-3xl mx-auto leading-relaxed">
-            Aman UX Studio creates high-converting websites, dynamic full-stack platforms, and intuitive UX/UI designs that accelerate growth for startups and growing enterprises.
-          </p>
+          {/* Studio Subheading / Value Proposition */}
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.5, ease: [0.19, 1, 0.22, 1] }}
+            className="text-lg sm:text-xl md:text-2xl text-white/60 mb-10 max-w-3xl leading-relaxed font-light"
+          >
+            Aman UX Studio designs and engineers bespoke web applications, headless e-commerce platforms, and high-converting portals for ambitious companies worldwide.
+          </motion.p>
 
-          <div className="flex flex-wrap gap-4 justify-center items-center">
-            <Button
-              size="lg"
-              className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-6 text-base font-semibold rounded-full transition-all duration-300 transform hover:scale-105 shadow-lg shadow-blue-600/30"
+          {/* Action Row */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.6, ease: [0.19, 1, 0.22, 1] }}
+            className="flex flex-wrap items-center gap-4 mb-16"
+          >
+            <button
               onClick={() => scrollToSection('contact')}
+              onMouseEnter={() => studioAudio.playHover()}
+              className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-[#5b5fe0] hover:bg-[#6c70f0] text-white font-medium text-base transition-all shadow-xl shadow-[#5b5fe0]/25 hover:scale-105 active:scale-95"
+              data-cursor="Let's Talk"
             >
-              Get Started Today
-              <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
+              <span>Start a Project</span>
+              <ArrowRight className="w-4 h-4" />
+            </button>
 
-            <Button
-              variant="outline"
-              size="lg"
-              className="border-2 border-white/80 text-white hover:bg-white hover:text-slate-900 px-8 py-6 text-base font-semibold rounded-full transition-all duration-300 bg-transparent"
+            <button
               onClick={() => scrollToSection('portfolio')}
+              onMouseEnter={() => studioAudio.playHover()}
+              className="inline-flex items-center gap-2 px-8 py-4 rounded-full border border-white/15 bg-white/[0.04] hover:bg-white/10 text-white font-medium text-base transition-all hover:scale-105 active:scale-95"
+              data-cursor="Explore"
             >
-              <Play className="mr-2 h-4 w-4" />
-              View Our Work
-            </Button>
+              <span>Explore Selected Work</span>
+            </button>
+
+            {onOpenCraft && (
+              <button
+                onClick={() => {
+                  studioAudio.playClick(950);
+                  onOpenCraft();
+                }}
+                onMouseEnter={() => studioAudio.playHover()}
+                className="inline-flex items-center gap-2 px-6 py-4 rounded-full border border-[#5b5fe0]/30 bg-[#5b5fe0]/10 hover:bg-[#5b5fe0]/20 text-[#a9abff] text-base font-medium transition-all group"
+                data-cursor="Story"
+              >
+                <Sparkles className="w-4 h-4 text-amber-300 group-hover:rotate-12 transition-transform" />
+                <span>Experience Craft Mode</span>
+              </button>
+            )}
 
             <a
               href="/Aman_Sharma_Resume.pdf"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center px-6 py-3.5 text-base font-semibold text-blue-200 hover:text-white border border-blue-400/30 rounded-full hover:bg-blue-600/20 transition-all"
+              className="inline-flex items-center gap-2 px-5 py-4 rounded-full text-white/50 hover:text-white text-sm transition-colors"
             >
-              <FileDown className="mr-2 h-5 w-5 text-blue-400" />
-              Download Resume
+              <FileDown className="w-4 h-4" />
+              <span>Resume PDF</span>
             </a>
-          </div>
+          </motion.div>
 
-          <div className="mt-14 text-sm text-gray-400 flex items-center justify-center gap-6 flex-wrap">
-            <span>⚡ Production-Ready Delivery</span>
-            <span>•</span>
-            <span>🎯 98% Client Satisfaction</span>
-            <span>•</span>
-            <span>🛠️ React, Next.js &amp; WordPress</span>
-          </div>
+          {/* Studio Metrics Strip */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1, delay: 0.8 }}
+            className="grid grid-cols-2 sm:grid-cols-4 gap-6 pt-8 border-t border-white/10"
+          >
+            <div>
+              <div className="text-2xl sm:text-3xl font-bold font-mono text-[#eeece8]">50+</div>
+              <div className="text-xs text-white/50 tracking-wider uppercase font-mono mt-1">Platforms Launched</div>
+            </div>
+            <div>
+              <div className="text-2xl sm:text-3xl font-bold font-mono text-[#3ddc84]">&lt; 0.8s</div>
+              <div className="text-xs text-white/50 tracking-wider uppercase font-mono mt-1">Avg Load Time</div>
+            </div>
+            <div>
+              <div className="text-2xl sm:text-3xl font-bold font-mono text-[#eeece8]">100%</div>
+              <div className="text-xs text-white/50 tracking-wider uppercase font-mono mt-1">On-Time Delivery</div>
+            </div>
+            <div>
+              <div className="text-2xl sm:text-3xl font-bold font-mono text-[#a9abff]">98%</div>
+              <div className="text-xs text-white/50 tracking-wider uppercase font-mono mt-1">Client Satisfaction</div>
+            </div>
+          </motion.div>
+
         </div>
       </div>
     </section>

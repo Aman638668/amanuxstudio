@@ -1,5 +1,3 @@
-import { Card, CardContent } from '@/components/ui/card';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Star } from 'lucide-react';
 
 const testimonials = [
@@ -31,55 +29,49 @@ const testimonials = [
 
 export default function Testimonials() {
   return (
-    <section id="testimonials" className="py-20 bg-gray-50">
-      <div className="container mx-auto px-6">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-              What Our Clients Say
-            </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Don't just take our word for it. Here's what business leaders have to say about working with Aman UX Studio.
-            </p>
+    <section id="testimonials" className="py-24 bg-[#0c0c10] text-[#eeece8] relative border-t border-white/5">
+      <div className="container mx-auto px-6 max-w-6xl">
+        <div className="text-center mb-16">
+          <div className="flex items-center justify-center gap-2 text-xs font-mono uppercase tracking-widest text-[#5b5fe0] mb-3">
+            <span>[ 05 / CLIENT ACCREDITATION ]</span>
           </div>
-          
-          <div className="grid md:grid-cols-3 gap-8">
-            {testimonials.map((testimonial, index) => (
-              <Card key={index} className="border-0 shadow-lg hover:shadow-xl transition-shadow duration-300">
-                <CardContent className="p-8">
-                  <div className="flex mb-4">
-                    {[...Array(testimonial.rating)].map((_, i) => (
-                      <Star key={i} className="h-5 w-5 text-yellow-400 fill-current" />
-                    ))}
-                  </div>
-                  
-                  <blockquote className="text-gray-700 mb-6 italic leading-relaxed">
-                    "{testimonial.content}"
-                  </blockquote>
-                  
-                  <div className="flex items-center">
-                    <Avatar className="h-12 w-12 mr-4">
-                      <AvatarImage src="" />
-                      <AvatarFallback className="bg-blue-600 text-white font-semibold">
-                        {testimonial.avatar}
-                      </AvatarFallback>
-                    </Avatar>
-                    <div>
-                      <div className="font-semibold text-gray-900">
-                        {testimonial.name}
-                      </div>
-                      <div className="text-sm text-gray-600">
-                        {testimonial.position}
-                      </div>
-                      <div className="text-sm text-blue-600 font-medium">
-                        {testimonial.company}
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+          <h2 className="text-3xl sm:text-5xl font-bold text-[#eeece8] tracking-tight mb-4">
+            Endorsements from the Frontline.
+          </h2>
+          <p className="text-base sm:text-lg text-white/60 max-w-2xl mx-auto font-light">
+            Direct feedback from founders and marketing executives who rely on Aman UX Studio for their digital platforms.
+          </p>
+        </div>
+        
+        <div className="grid md:grid-cols-3 gap-6">
+          {testimonials.map((t, index) => (
+            <div
+              key={index}
+              className="rounded-2xl border border-white/10 bg-white/[0.02] p-8 flex flex-col justify-between hover:bg-white/[0.04] transition-all"
+            >
+              <div>
+                <div className="flex items-center gap-1 mb-6">
+                  {[...Array(t.rating)].map((_, i) => (
+                    <Star key={i} className="h-4 w-4 text-amber-400 fill-current" />
+                  ))}
+                </div>
+                
+                <blockquote className="text-sm text-white/75 mb-6 leading-relaxed font-light italic">
+                  "{t.content}"
+                </blockquote>
+              </div>
+              
+              <div className="flex items-center gap-3 pt-4 border-t border-white/5">
+                <div className="w-10 h-10 rounded-full bg-[#5b5fe0]/20 border border-[#5b5fe0]/40 flex items-center justify-center text-xs font-bold text-white">
+                  {t.avatar}
+                </div>
+                <div>
+                  <div className="text-sm font-semibold text-[#eeece8]">{t.name}</div>
+                  <div className="text-xs text-white/50">{t.position}</div>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </section>

@@ -1,142 +1,240 @@
-import { Card, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { ExternalLink, ArrowRight } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ExternalLink, ArrowUpRight, CheckCircle2, Sparkles } from 'lucide-react';
+import { studioAudio } from '@/lib/studio-audio';
 
 export const projects = [
   {
+    num: "01",
     title: "Fairease Outsourcing",
+    client: "Fairease Outsourcing Pvt. Ltd.",
     category: "Corporate & BPO",
-    description: "Designed and engineered the full production corporate platform for Fairease Outsourcing Pvt. Ltd. Structured interactive service showcases, quote/inquiry capture funnels, and optimized speed and on-page SEO.",
+    tagline: "High-Performance BPO Enterprise Platform",
+    description: "Designed and engineered the full production corporate platform for Fairease Outsourcing. Engineered custom interactive service matrices, high-converting quotation funnels, dynamic inquiry capture, and aggressive on-page SEO speed optimization.",
     image: "/fairease.png",
-    tags: ["WordPress", "Elementor", "Corporate", "SEO", "Lead Funnel"],
-    results: ["150% boost in online inquiries", "Sub-second load times", "100% mobile-responsive"],
+    tags: ["WordPress", "Elementor Pro", "Enterprise Funnels", "Core Web Vitals", "Custom CSS"],
+    results: ["+150% boost in qualified leads", "Sub-second load times", "100% mobile responsive"],
     link: "https://fairease.in/"
   },
   {
+    num: "02",
     title: "Ireshh — Clothing Brand",
-    category: "Fashion & E-Commerce",
-    description: "Built the complete online clothing store from scratch (0 to 1) and managing the full website. Handled store architecture, catalog variations, online payment gateways (Cards/UPI), automated shipping, and mobile UX.",
+    client: "Ireshh Apparel",
+    category: "E-Commerce",
+    tagline: "0-to-1 Full Scale E-Commerce Store",
+    description: "Built the complete online fashion brand storefront from scratch (0 to 1) and managing end-to-end site operations. Handled full store architecture, dynamic catalog matrix, automated payment gateways (Cards/UPI), auto shipping calculation, and frictionless mobile checkout.",
     image: "/ireshh.png",
-    tags: ["WooCommerce", "WordPress", "E-Commerce", "Payment Gateways", "Full Management"],
-    results: ["Built from 0 to 1", "End-to-end full site management", "Frictionless mobile checkout"],
+    tags: ["WooCommerce", "WordPress", "0-to-1 Build", "Payment Integrations", "Full Management"],
+    results: ["Built from 0 to 1", "End-to-end full site management", "Frictionless checkout UX"],
     link: "https://ireshh.com/"
   },
   {
+    num: "03",
     title: "TicketDev Travel",
-    category: "Tour & Travels",
-    description: "Designed and built a clean, responsive travel booking website featuring destination itineraries, simple inquiry forms, and WhatsApp integration for instant direct customer bookings.",
+    client: "TicketDev Tours & Holidays",
+    category: "Travel & Booking",
+    tagline: "Modern Tour Booking & Itinerary Platform",
+    description: "Designed and developed an ultra-clean, mobile-first travel booking platform featuring structured destination packages, one-click itinerary inquiries, and automated WhatsApp direct booking channels.",
     image: "/ticketdev-travels.png",
-    tags: ["Travel Website", "Booking", "SEO", "WhatsApp Integration"],
-    results: ["300% sales growth", "50% mobile conversion", "99.9% uptime"],
+    tags: ["Travel Portal", "WhatsApp Automation", "Speed Tuning", "SEO Architecture"],
+    results: ["300% sales growth", "50% mobile conversion lift", "99.9% production uptime"],
     link: "https://ticketdevtravels.com/"
   },
   {
+    num: "04",
     title: "Friends Group",
-    category: "Corporate Conglomerate",
-    description: "Corporate multi-page website for a business conglomerate spanning construction, manufacturing, and trading. Integrated interactive career portal and custom content management.",
+    client: "Friends Group Conglomerate",
+    category: "Corporate & BPO",
+    tagline: "Multi-Industry Enterprise Portal",
+    description: "Enterprise web portal consolidating three diverse business entities (construction, industrial manufacturing, and global trading) into a unified digital flagship with custom career applications and interactive portfolios.",
     image: "/friendsgroup.png",
-    tags: ["Corporate", "Multi-business", "WordPress", "Career Portal"],
-    results: ["250% brand engagement growth", "80% career interaction rate", "Consolidated 3 businesses into 1 portal"],
+    tags: ["Corporate Multi-Site", "Career Portal", "Custom WordPress", "Content Strategy"],
+    results: ["250% brand engagement lift", "Consolidated 3 business units", "80% application rate"],
     link: "https://friendsgroup.co.in/"
   },
   {
+    num: "05",
     title: "Expert VUW",
+    client: "Expert VUW Consulting",
     category: "Finance & Legal",
-    description: "Secure, scalable web portal for a finance and legal consulting firm. Integrated advanced consultation inquiry forms, service matrices, and SEO-optimized legal articles.",
+    tagline: "Bespoke Consulting & Financial Advisory Web System",
+    description: "Engineered a secure, authoritative digital presence for legal and finance experts. Features consultative lead-capture forms, dynamic service matrices, and SEO-targeted content clusters that dominate organic search.",
     image: "/expertvuw.png",
-    tags: ["Finance", "Legal Services", "SEO", "WordPress"],
-    results: ["200% increase in inquiries", "3x visibility on finance keywords", "90% faster loading time"],
+    tags: ["Finance Consulting", "Legal Portal", "High-Authority SEO", "Secure Forms"],
+    results: ["200% increase in consultations", "3x search visibility", "90% faster page render"],
     link: "https://expertvuw.in/"
   }
 ];
 
+const categories = ["All", "E-Commerce", "Corporate & BPO", "Travel & Booking", "Finance & Legal"];
+
 export default function Portfolio() {
+  const [activeCategory, setActiveCategory] = useState("All");
+
+  const filteredProjects = activeCategory === "All"
+    ? projects
+    : projects.filter(p => p.category === activeCategory);
+
   return (
-    <section id="portfolio" className="py-20 bg-white">
-      <div className="container mx-auto px-6">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
-            <span className="text-blue-600 font-semibold text-sm uppercase tracking-wider">Client Case Studies</span>
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mt-2 mb-6">
-              Production Work &amp; Case Studies
+    <section id="portfolio" className="py-24 md:py-32 bg-[#09090c] text-[#eeece8] relative">
+      <div className="container mx-auto px-6 max-w-6xl">
+        
+        {/* Editorial Section Header */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16 pb-8 border-b border-white/10">
+          <div>
+            <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-widest text-[#5b5fe0] mb-3">
+              <span>[ 02 / SELECTED CLIENT ARCHITECTURES ]</span>
+            </div>
+            <h2 className="text-3xl sm:text-5xl md:text-6xl font-bold tracking-tight text-[#eeece8]">
+              Proof in Production.
             </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Real results for real businesses. See how we've helped brands like Fairease, Ireshh, and TicketDev transform their digital presence and grow revenue.
-            </p>
           </div>
-          
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
-            {projects.slice(0, 3).map((project, index) => (
-              <Card key={index} className="group overflow-hidden hover:shadow-xl transition-all duration-300 border border-slate-200 shadow-sm flex flex-col justify-between rounded-2xl bg-white">
-                <div>
-                  <div className="relative overflow-hidden h-52 bg-slate-100 border-b border-slate-100">
-                    <img 
-                      src={project.image} 
-                      alt={project.title}
-                      className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-300"
-                    />
-                    <div className="absolute inset-0 bg-slate-900/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                      <a href={project.link} target="_blank" rel="noopener noreferrer">
-                        <Button variant="secondary" size="sm" className="shadow-lg font-semibold">
-                          <ExternalLink className="h-4 w-4 mr-2" />
-                          Visit Live Website
-                        </Button>
-                      </a>
-                    </div>
-                  </div>
-                  <CardContent className="p-6">
-                    <div className="flex items-center justify-between mb-3">
-                      <Badge variant="secondary" className="bg-blue-50 text-blue-700 font-medium">
-                        {project.category}
-                      </Badge>
-                    </div>
-                    <h3 className="text-xl font-bold text-gray-900 mb-2">
-                      {project.title}
-                    </h3>
-                    <p className="text-gray-600 mb-4 text-xs sm:text-sm leading-relaxed">
-                      {project.description}
-                    </p>
-                    <div className="flex flex-wrap gap-1 mb-4">
-                      {project.tags.map((tag, idx) => (
-                        <Badge key={idx} variant="outline" className="text-[10px] text-slate-600">
-                          {tag}
-                        </Badge>
-                      ))}
-                    </div>
-                    <div className="space-y-1.5 pt-3 border-t border-slate-100">
-                      <h4 className="font-semibold text-[11px] text-slate-500 uppercase tracking-wider mb-1.5">Key Deliverables:</h4>
-                      {project.results.map((result, idx) => (
-                        <div key={idx} className="flex items-center text-xs text-gray-700">
-                          <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full mr-2 flex-shrink-0"></div>
-                          {result}
-                        </div>
-                      ))}
-                    </div>
-                  </CardContent>
+          <p className="text-white/60 max-w-md text-sm sm:text-base leading-relaxed">
+            Real client systems engineered for high conversion, sub-second latency, and scalable commercial volume.
+          </p>
+        </div>
+
+        {/* Filter Pills */}
+        <div className="flex flex-wrap items-center gap-2 mb-16">
+          {categories.map((cat) => (
+            <button
+              key={cat}
+              onClick={() => {
+                studioAudio.playClick(750);
+                setActiveCategory(cat);
+              }}
+              onMouseEnter={() => studioAudio.playHover()}
+              className={`px-4 py-2 rounded-full text-xs font-mono tracking-wider uppercase transition-all ${
+                activeCategory === cat
+                  ? 'bg-white text-black font-semibold shadow-md'
+                  : 'bg-white/5 text-white/60 hover:text-white hover:bg-white/10 border border-white/5'
+              }`}
+            >
+              {cat}
+            </button>
+          ))}
+        </div>
+
+        {/* Chapter Showcase List */}
+        <div className="space-y-20 md:space-y-28">
+          {filteredProjects.map((project, idx) => (
+            <motion.article
+              key={project.num}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-50px' }}
+              transition={{ duration: 0.7, ease: [0.19, 1, 0.22, 1] }}
+              className="grid lg:grid-cols-12 gap-8 lg:gap-12 items-center group relative pt-6"
+            >
+              {/* Giant ghost numeral behind chapter */}
+              <div className="absolute -top-12 -left-4 pointer-events-none select-none z-0">
+                <span className="font-mono text-8xl md:text-9xl font-bold text-transparent stroke-text opacity-20">
+                  {project.num}
+                </span>
+              </div>
+
+              {/* Left Column: Project Narrative */}
+              <div className="lg:col-span-6 relative z-10 space-y-5">
+                <div className="flex items-center gap-3">
+                  <span className="text-xs font-mono text-[#5b5fe0] uppercase tracking-wider">
+                    CASE STUDY {project.num}
+                  </span>
+                  <span className="text-white/20">·</span>
+                  <span className="text-xs font-mono text-white/50 uppercase tracking-wider">
+                    {project.category}
+                  </span>
                 </div>
 
-                <div className="px-6 pb-6 pt-2">
-                  <a href={project.link} target="_blank" rel="noopener noreferrer" className="w-full block">
-                    <Button variant="outline" className="w-full text-slate-700 hover:text-blue-600 hover:border-blue-300 text-xs font-semibold">
-                      Visit Website <ExternalLink className="ml-2 h-3.5 w-3.5" />
-                    </Button>
+                <h3 className="text-2xl sm:text-4xl font-bold text-[#eeece8] tracking-tight group-hover:text-white transition-colors">
+                  {project.title}
+                </h3>
+
+                <p className="text-sm sm:text-base text-white/65 leading-relaxed font-light">
+                  {project.description}
+                </p>
+
+                {/* Key Business Results */}
+                <div className="space-y-2 pt-2">
+                  {project.results.map((res, i) => (
+                    <div key={i} className="flex items-center gap-2 text-xs sm:text-sm text-[#eeece8]/90">
+                      <CheckCircle2 className="w-4 h-4 text-[#3ddc84] flex-shrink-0" />
+                      <span>{res}</span>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Tech Tags */}
+                <div className="flex flex-wrap gap-2 pt-3">
+                  {project.tags.map((tag) => (
+                    <span
+                      key={tag}
+                      className="px-2.5 py-1 rounded-md text-[11px] font-mono tracking-wide bg-white/5 border border-white/10 text-white/70"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+
+                {/* Direct Live Link */}
+                <div className="pt-3">
+                  <a
+                    href={project.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onMouseEnter={() => studioAudio.playHover()}
+                    className="inline-flex items-center gap-2 text-sm font-semibold text-[#eeece8] hover:text-[#5b5fe0] transition-colors group/link"
+                    data-cursor="Visit"
+                  >
+                    <span>Launch Live Platform</span>
+                    <ArrowUpRight className="w-4 h-4 transition-transform group-hover/link:translate-x-1 group-hover/link:-translate-y-1" />
                   </a>
                 </div>
-              </Card>
-            ))}
-          </div>
-          
-          <div className="text-center">
-            <Link to="/portfolio">
-              <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white shadow-md">
-                View All Case Studies ({projects.length})
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Button>
-            </Link>
-          </div>
+              </div>
+
+              {/* Right Column: Visual Showcase Frame */}
+              <div className="lg:col-span-6 relative z-10">
+                <a
+                  href={project.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block relative rounded-2xl overflow-hidden border border-white/10 bg-[#141418] group/img shadow-2xl transition-all duration-500 hover:border-[#5b5fe0]/50"
+                  data-cursor="Live Site"
+                >
+                  {/* Browser top-bar mockup */}
+                  <div className="flex items-center justify-between px-4 py-2.5 bg-black/40 border-b border-white/5 backdrop-blur-sm">
+                    <div className="flex items-center gap-1.5">
+                      <span className="w-2.5 h-2.5 rounded-full bg-white/20" />
+                      <span className="w-2.5 h-2.5 rounded-full bg-white/20" />
+                      <span className="w-2.5 h-2.5 rounded-full bg-white/20" />
+                    </div>
+                    <span className="text-[11px] font-mono text-white/40 tracking-wider truncate max-w-[200px]">
+                      {project.link.replace('https://', '')}
+                    </span>
+                    <ExternalLink className="w-3.5 h-3.5 text-white/40" />
+                  </div>
+
+                  {/* Image with zoom on hover */}
+                  <div className="relative aspect-[16/10] overflow-hidden bg-slate-900">
+                    <img
+                      src={project.image}
+                      alt={project.title}
+                      className="w-full h-full object-cover object-top transition-transform duration-700 ease-out group-hover/img:scale-105"
+                      loading="lazy"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover/img:opacity-100 transition-opacity duration-300 flex items-end p-6">
+                      <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white text-black font-semibold text-xs shadow-lg">
+                        <span>Visit {project.client}</span>
+                        <ArrowUpRight className="w-3.5 h-3.5" />
+                      </span>
+                    </div>
+                  </div>
+                </a>
+              </div>
+
+            </motion.article>
+          ))}
         </div>
+
       </div>
     </section>
   );

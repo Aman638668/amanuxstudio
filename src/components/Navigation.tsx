@@ -1,14 +1,25 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { Menu, X, FileText } from 'lucide-react';
+import { Menu, X, ArrowUpRight, Sparkles } from 'lucide-react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
+import { studioAudio } from '@/lib/studio-audio';
 
 export default function Navigation() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
 
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   const scrollToSection = (sectionId: string) => {
+    studioAudio.playClick(850, 0.03);
     const element = document.getElementById(sectionId);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
@@ -35,106 +46,108 @@ export default function Navigation() {
   };
 
   const navItems = [
-    { label: 'Home', id: 'home' },
-    { label: 'About', id: 'about' },
+    { label: 'Work', id: 'portfolio' },
     { label: 'Services', href: '/services' },
-    { label: 'Portfolio', id: 'portfolio' },
-    { label: 'Why Us', id: 'why-us' },
+    { label: 'About', id: 'about' },
     { label: 'Blog', href: '/blog' },
+    { label: 'Resume', href: '/resume' },
     { label: 'Contact', id: 'contact' },
   ];
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-[100] bg-white/95 backdrop-blur-md border-b border-gray-200 transition-all">
+    <nav
+      className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-300 ${
+        scrolled
+          ? 'bg-[#09090c]/85 backdrop-blur-xl border-b border-white/10 py-3 shadow-xl shadow-black/40'
+          : 'bg-transparent border-b border-white/5 py-5'
+      }`}
+    >
       <div className="container mx-auto px-6">
-        <div className="flex items-center justify-between h-16">
-          {/* Logo */}
-          <div className="flex items-center">
-            <button
-              onClick={() => handleNavClick('home')}
-              className="text-2xl font-bold bg-gradient-to-r from-blue-700 to-indigo-600 bg-clip-text text-transparent hover:opacity-90 transition-opacity"
-            >
-              Aman UX Studio
-            </button>
-          </div>
+        <div className="flex items-center justify-between">
+          
+          {/* Studio Brand */}
+          <button
+            onClick={() => handleNavClick('home')}
+            onMouseEnter={() => studioAudio.playHover()}
+            className="flex items-center gap-2.5 text-left group"
+            data-cursor="Home"
+          >
+            <div className="w-7 h-7 rounded-lg bg-gradient-to-tr from-[#5b5fe0] to-blue-400 flex items-center justify-center text-white font-bold text-xs shadow-md shadow-[#5b5fe0]/30 group-hover:scale-105 transition-transform">
+              A
+            </div>
+            <div className="flex flex-col">
+              <span className="text-base font-bold tracking-tight text-[#eeece8] group-hover:text-white transition-colors">
+                AMAN UX STUDIO
+              </span>
+              <span className="text-[10px] font-mono tracking-widest text-white/50 uppercase">
+                Digital Engineering
+              </span>
+            </div>
+          </button>
 
-          {/* Desktop Navigation */}
-          <div className="hidden lg:flex items-center space-x-7">
+          {/* Desktop Navigation Links */}
+          <div className="hidden lg:flex items-center space-x-8">
             {navItems.map((item) => (
               <button
                 key={item.label}
                 onClick={() => item.href ? handleNavClick(item.href) : handleNavClick(item.id!)}
-                className="transition-colors font-medium text-sm text-gray-700 hover:text-blue-600"
+                onMouseEnter={() => studioAudio.playHover()}
+                className="transition-colors font-mono text-xs uppercase tracking-wider text-white/70 hover:text-white"
               >
                 {item.label}
               </button>
             ))}
           </div>
 
-          {/* CTA & Resume Buttons */}
-          <div className="hidden md:flex items-center space-x-3">
-            <Link
-              to="/resume"
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 text-sm font-semibold text-slate-700 hover:text-blue-600 border border-slate-300 rounded-lg hover:bg-slate-50 transition-colors"
-            >
-              <FileText className="h-4 w-4 text-blue-600" />
-              Resume
-            </Link>
-            <Button
-              className="bg-blue-600 hover:bg-blue-700 text-white shadow-sm"
+          {/* Direct CTA */}
+          <div className="hidden lg:flex items-center gap-3">
+            <button
               onClick={() => handleNavClick('contact')}
+              onMouseEnter={() => studioAudio.playHover()}
+              className="inline-flex items-center gap-1.5 px-5 py-2 rounded-full border border-white/15 bg-white/5 hover:bg-white text-white/90 hover:text-black font-medium text-xs tracking-wide uppercase transition-all duration-200"
+              data-cursor="Book Call"
             >
-              Get Started
-            </Button>
+              <span>Get in Touch</span>
+              <ArrowUpRight className="w-3.5 h-3.5" />
+            </button>
           </div>
 
-          {/* Mobile Menu Button */}
-          <button
-            className="lg:hidden p-2 text-gray-700 hover:text-blue-600 focus:outline-none"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            aria-label="Toggle Navigation Menu"
-          >
-            {isMenuOpen ? (
-              <X className="h-6 w-6" />
-            ) : (
-              <Menu className="h-6 w-6" />
-            )}
-          </button>
+          {/* Mobile Menu Trigger */}
+          <div className="lg:hidden flex items-center">
+            <button
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              className="p-2 rounded-lg text-white/80 hover:text-white hover:bg-white/10 transition-colors"
+              aria-label="Toggle menu"
+            >
+              {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+            </button>
+          </div>
+
         </div>
 
-        {/* Mobile Navigation Dropdown */}
+        {/* Mobile Dropdown Menu */}
         {isMenuOpen && (
-          <div className="lg:hidden py-4 border-t border-gray-100 animate-in slide-in-from-top-2 duration-200">
-            <div className="flex flex-col space-y-3">
-              {navItems.map((item) => (
-                <button
-                  key={item.label}
-                  onClick={() => item.href ? handleNavClick(item.href) : handleNavClick(item.id!)}
-                  className="transition-colors font-medium text-left text-gray-700 hover:text-blue-600 py-1"
-                >
-                  {item.label}
-                </button>
-              ))}
-
-              <div className="pt-2 flex flex-col gap-2">
-                <Link
-                  to="/resume"
-                  onClick={() => setIsMenuOpen(false)}
-                  className="flex items-center justify-center gap-2 py-2.5 text-sm font-semibold text-slate-700 border border-slate-300 rounded-lg hover:bg-slate-50 transition-colors"
-                >
-                  <FileText className="h-4 w-4 text-blue-600" />
-                  View Resume &amp; Experience
-                </Link>
-                <Button
-                  className="bg-blue-600 hover:bg-blue-700 text-white w-full"
-                  onClick={() => handleNavClick('contact')}
-                >
-                  Get Started
-                </Button>
-              </div>
+          <div className="lg:hidden mt-4 pb-6 border-t border-white/10 pt-4 space-y-3 bg-[#0d0d12]/95 backdrop-blur-2xl rounded-2xl p-6 border shadow-2xl">
+            {navItems.map((item) => (
+              <button
+                key={item.label}
+                onClick={() => item.href ? handleNavClick(item.href) : handleNavClick(item.id!)}
+                className="block w-full text-left font-mono text-sm uppercase tracking-wider text-white/80 hover:text-white py-2"
+              >
+                {item.label}
+              </button>
+            ))}
+            <div className="pt-4 border-t border-white/10">
+              <button
+                onClick={() => handleNavClick('contact')}
+                className="w-full py-3 rounded-full bg-[#5b5fe0] text-white font-semibold text-xs uppercase tracking-wider text-center"
+              >
+                Get in Touch
+              </button>
             </div>
           </div>
         )}
+
       </div>
     </nav>
   );

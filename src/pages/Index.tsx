@@ -1,3 +1,5 @@
+import { useState } from 'react';
+import { AnimatePresence } from 'framer-motion';
 import Navigation from '@/components/Navigation';
 import Hero from '@/components/Hero';
 import About from '@/components/About';
@@ -9,24 +11,78 @@ import RecentBlogs from '@/components/RecentBlogs';
 import Contact from '@/components/Contact';
 import Footer from '@/components/Footer';
 import Seo from '@/components/Seo';
+import { CustomCursor } from '@/components/studio/CustomCursor';
+import { StudioDock } from '@/components/studio/StudioDock';
+import { CraftMode } from '@/components/studio/CraftMode';
 
 export default function Index() {
+  const [experienceMode, setExperienceMode] = useState<'studio' | 'craft'>('studio');
+
+  const handleExploreWork = () => {
+    const el = document.getElementById('portfolio');
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-[#09090c] text-[#eeece8] selection:bg-[#5b5fe0] selection:text-white relative font-sans overflow-x-hidden">
       <Seo
-        title="Web Development & UX/UI Studio"
-        description="Aman UX Studio is a premium digital agency specializing in modern web development, WordPress solutions, UI/UX design, and SEO optimization."
+        title="Boutique Web Engineering &amp; UX Studio"
+        description="Aman UX Studio designs and engineers high-conversion corporate web platforms, headless e-commerce architectures, and bespoke interfaces that accelerate commercial growth."
       />
+
+      {/* Tactile Ambient Film Grain Overlay */}
+      <div className="ambient-grain" aria-hidden="true" />
+
+      {/* Spring Magnetic Cursor (Desktop) */}
+      <CustomCursor />
+
+      {/* Global Studio Navigation */}
       <Navigation />
-      <Hero />
-      <About />
-      <Services />
+
+      {/* Hero Section */}
+      <Hero onOpenCraft={() => setExperienceMode('craft')} />
+
+      {/* Portfolio / Client Chapters */}
       <Portfolio />
+
+      {/* Services / Disciplines */}
+      <Services />
+
+      {/* Identity / About */}
+      <About />
+
+      {/* Why Us / Reality Check */}
       <WhyChooseUs />
+
+      {/* Testimonials */}
       <Testimonials />
+
+      {/* Recent Blog Insights */}
       <RecentBlogs />
+
+      {/* Direct Contact & Inquiry Form */}
       <Contact />
+
+      {/* Footer */}
       <Footer />
+
+      {/* Floating System Dock Controls */}
+      <StudioDock
+        mode={experienceMode}
+        onToggleMode={(newMode) => setExperienceMode(newMode)}
+      />
+
+      {/* Interactive Craft Mode Story Overlay */}
+      <AnimatePresence>
+        {experienceMode === 'craft' && (
+          <CraftMode
+            onClose={() => setExperienceMode('studio')}
+            onExploreWork={handleExploreWork}
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 }
