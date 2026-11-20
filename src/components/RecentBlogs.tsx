@@ -50,10 +50,10 @@ const RecentBlogs = () => {
           <Link to="/blog/#blog">
             <button
               onMouseEnter={() => studioAudio.playHover()}
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-white/15 bg-white/5 hover:bg-white hover:text-black text-white text-xs font-mono uppercase tracking-wider transition-all"
+              className="btn-studio-secondary !h-9 !px-4 text-xs font-mono uppercase tracking-wider group"
             >
               <span>View All Articles</span>
-              <ArrowUpRight className="h-3.5 w-3.5" />
+              <ArrowUpRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
             </button>
           </Link>
         </div>

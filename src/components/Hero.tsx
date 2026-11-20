@@ -94,46 +94,36 @@ export default function Hero({ onOpenCraft }: HeroProps) {
             <button
               onClick={() => scrollToSection('contact')}
               onMouseEnter={() => studioAudio.playHover()}
-              className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-[#5b5fe0] hover:bg-[#6c70f0] text-white font-medium text-base transition-all shadow-xl shadow-[#5b5fe0]/25 hover:scale-105 active:scale-95"
+              className="btn-studio-primary group"
               data-cursor="Let's Talk"
             >
               <span>Start a Project</span>
-              <ArrowRight className="w-4 h-4" />
+              <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
             </button>
 
             <button
               onClick={() => scrollToSection('portfolio')}
               onMouseEnter={() => studioAudio.playHover()}
-              className="inline-flex items-center gap-2 px-8 py-4 rounded-full border border-white/15 bg-white/[0.04] hover:bg-white/10 text-white font-medium text-base transition-all hover:scale-105 active:scale-95"
+              className="btn-studio-secondary"
               data-cursor="Explore"
             >
               <span>Explore Selected Work</span>
             </button>
 
-            {onOpenCraft && (
-              <button
-                onClick={() => {
-                  studioAudio.playClick(950);
-                  onOpenCraft();
-                }}
+            <div className="hidden sm:flex items-center gap-2 pl-2">
+              <span className="text-white/20">|</span>
+              <a
+                href="/Aman_Sharma_Resume.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
                 onMouseEnter={() => studioAudio.playHover()}
-                className="inline-flex items-center gap-2 px-6 py-4 rounded-full border border-[#5b5fe0]/30 bg-[#5b5fe0]/10 hover:bg-[#5b5fe0]/20 text-[#a9abff] text-base font-medium transition-all group"
-                data-cursor="Story"
+                className="inline-flex items-center gap-1.5 text-xs font-mono uppercase tracking-wider text-white/50 hover:text-white transition-colors py-2 px-2"
+                data-cursor="PDF"
               >
-                <Sparkles className="w-4 h-4 text-amber-300 group-hover:rotate-12 transition-transform" />
-                <span>Experience Craft Mode</span>
-              </button>
-            )}
-
-            <a
-              href="/Aman_Sharma_Resume.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-5 py-4 rounded-full text-white/50 hover:text-white text-sm transition-colors"
-            >
-              <FileDown className="w-4 h-4" />
-              <span>Resume PDF</span>
-            </a>
+                <FileDown className="w-3.5 h-3.5 text-white/40" />
+                <span>Resume</span>
+              </a>
+            </div>
           </motion.div>
 
           {/* Studio Metrics Strip */}

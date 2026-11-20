@@ -120,3 +120,57 @@
 .stroke-text-accent {
   -webkit-text-stroke: 1.5px rgba(91, 95, 224, 0.4);
 }
+
+/* Studio High-Craft Button System (Inacio Standard) */
+.btn-studio-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  height: 2.875rem;
+  padding: 0 1.625rem;
+  border-radius: 9999px;
+  background-color: #5b5fe0;
+  color: #ffffff;
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.015em;
+  transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+  box-shadow: 0 10px 25px -5px rgba(91, 95, 224, 0.35);
+}
+.btn-studio-primary:hover {
+  background-color: #6c70f0;
+  transform: translateY(-1px);
+  box-shadow: 0 15px 30px -5px rgba(91, 95, 224, 0.45);
+}
+.btn-studio-primary:active {
+  transform: translateY(1px) scale(0.98);
+}
+
+.btn-studio-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  height: 2.875rem;
+  padding: 0 1.625rem;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background-color: rgba(255, 255, 255, 0.04);
+  color: #eeece8;
+  font-size: 0.875rem;
+  font-weight: 500;
+  letter-spacing: 0.015em;
+  backdrop-filter: blur(8px);
+  transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+}
+.btn-studio-secondary:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.3);
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+.btn-studio-secondary:active {
+  transform: translateY(1px) scale(0.98);
+}
+

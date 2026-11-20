@@ -196,11 +196,11 @@ export function CraftMode({ onClose, onExploreWork }: CraftModeProps) {
             studioAudio.playClick(500);
             onClose();
           }}
-          className="flex items-center gap-2 px-4 py-2 rounded-full border border-white/10 bg-white/5 hover:bg-white/15 backdrop-blur-md text-xs tracking-wider uppercase font-semibold transition-all hover:scale-105"
+          className="btn-studio-secondary !h-9 !px-4 !text-xs tracking-wider uppercase font-semibold"
           data-cursor="Close"
         >
           <span>Exit to Studio</span>
-          <X className="w-4 h-4" />
+          <X className="w-4 h-4 ml-1" />
         </button>
       </div>
 
@@ -250,20 +250,20 @@ export function CraftMode({ onClose, onExploreWork }: CraftModeProps) {
                     onClose();
                     onExploreWork();
                   }}
-                  className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-[#5b5fe0] hover:bg-[#6c70f0] text-white font-medium text-sm transition-all shadow-lg shadow-[#5b5fe0]/30 hover:scale-105"
+                  className="btn-studio-primary group"
                   data-cursor="Launch"
                 >
                   <span>Explore Client Work</span>
-                  <ArrowRight className="w-4 h-4" />
+                  <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
                 </button>
               ) : (
                 <button
                   onClick={nextChapter}
-                  className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-white text-black font-semibold text-sm hover:bg-white/90 transition-all hover:scale-105"
+                  className="btn-studio-primary group"
                   data-cursor="Next"
                 >
                   <span>Next Chapter</span>
-                  <ChevronRight className="w-4 h-4" />
+                  <ChevronRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
                 </button>
               )}
 
@@ -272,7 +272,7 @@ export function CraftMode({ onClose, onExploreWork }: CraftModeProps) {
                   studioAudio.playClick(500);
                   onClose();
                 }}
-                className="px-5 py-3.5 rounded-full border border-white/15 text-white/70 hover:text-white hover:bg-white/5 text-sm transition-colors"
+                className="btn-studio-secondary"
               >
                 Skip Story
               </button>

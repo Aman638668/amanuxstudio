@@ -177,7 +177,7 @@ export default function Contact() {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full h-12 rounded-xl bg-[#5b5fe0] hover:bg-[#6c70f0] text-white font-semibold text-sm transition-all shadow-lg shadow-[#5b5fe0]/30 hover:scale-[1.01] active:scale-[0.99] flex items-center justify-center gap-2"
+                  className="w-full h-12 rounded-full bg-[#5b5fe0] hover:bg-[#6c70f0] text-white font-semibold text-sm tracking-wide transition-all shadow-xl shadow-[#5b5fe0]/30 hover:shadow-[#5b5fe0]/50 hover:-translate-y-0.5 active:translate-y-0.5 flex items-center justify-center gap-2"
                   data-cursor="Submit"
                 >
                   {isSubmitting ? (

@@ -104,11 +104,11 @@ export default function Navigation() {
             <button
               onClick={() => handleNavClick('contact')}
               onMouseEnter={() => studioAudio.playHover()}
-              className="inline-flex items-center gap-1.5 px-5 py-2 rounded-full border border-white/15 bg-white/5 hover:bg-white text-white/90 hover:text-black font-medium text-xs tracking-wide uppercase transition-all duration-200"
+              className="btn-studio-secondary !h-9 !px-4 !text-xs uppercase tracking-wider group"
               data-cursor="Book Call"
             >
               <span>Get in Touch</span>
-              <ArrowUpRight className="w-3.5 h-3.5" />
+              <ArrowUpRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
             </button>
           </div>
 

@@ -51,27 +51,27 @@ export default function About() {
 
             <div className="flex flex-wrap items-center gap-3 pt-4">
               <Link to="/resume">
-                <Button
+                <button
                   onMouseEnter={() => studioAudio.playHover()}
-                  className="bg-white text-black hover:bg-white/90 font-semibold text-xs uppercase tracking-wider px-6 py-5 rounded-full"
+                  className="btn-studio-primary group"
                   data-cursor="Resume"
                 >
-                  View Background &amp; Credentials <ArrowRight className="ml-2 h-4 w-4" />
-                </Button>
+                  <span>View Background &amp; Credentials</span>
+                  <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                </button>
               </Link>
               <a
                 href="/Aman_Sharma_Resume.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <Button
-                  variant="outline"
+                <button
                   onMouseEnter={() => studioAudio.playHover()}
-                  className="border-white/15 bg-white/5 hover:bg-white/10 text-white font-medium text-xs uppercase tracking-wider px-6 py-5 rounded-full"
+                  className="btn-studio-secondary"
                 >
-                  <FileDown className="mr-2 h-4 w-4" />
-                  PDF Resume
-                </Button>
+                  <FileDown className="w-4 h-4 mr-1 text-white/60" />
+                  <span>PDF Resume</span>
+                </button>
               </a>
             </div>
           </div>

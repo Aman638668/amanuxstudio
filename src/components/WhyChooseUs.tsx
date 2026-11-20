@@ -91,13 +91,13 @@ export default function WhyChooseUs() {
             <p className="text-sm sm:text-base text-blue-100 max-w-2xl mx-auto mb-8">
               No sales pitches, no hidden fees, and no cookie-cutter templates. Get a clean, fast website designed to grow your business.
             </p>
-            <Button
-              size="lg"
+            <button
               onClick={scrollToContact}
-              className="bg-white text-slate-900 hover:bg-slate-100 font-bold px-8 py-6 rounded-full shadow-lg transition-transform hover:scale-105"
+              className="btn-studio-primary !bg-white !text-black hover:!bg-white/95 !h-12 !px-8 !text-sm !font-bold shadow-xl group"
             >
-              Start Your Project With Us <ArrowRight className="ml-2 h-4 w-4" />
-            </Button>
+              <span>Start Your Project With Us</span>
+              <ArrowRight className="w-4 h-4 ml-1 transition-transform group-hover:translate-x-1" />
+            </button>
           </div>
         </div>
       </div>

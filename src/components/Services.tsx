@@ -106,10 +106,10 @@ export default function Services() {
                 <Link
                   to={`/services#${service.id}`}
                   onMouseEnter={() => studioAudio.playHover()}
-                  className="inline-flex items-center gap-1.5 text-xs font-mono uppercase tracking-wider text-white/60 group-hover:text-[#5b5fe0] transition-colors"
+                  className="inline-flex items-center gap-1.5 text-xs font-mono uppercase tracking-wider text-white/60 hover:text-white transition-colors group/link"
                 >
                   <span>Explore Deliverables</span>
-                  <ArrowUpRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                  <ArrowUpRight className="w-3.5 h-3.5 transition-transform group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5" />
                 </Link>
               </div>
             </div>
@@ -121,10 +121,10 @@ export default function Services() {
           <Link to="/services">
             <button
               onMouseEnter={() => studioAudio.playHover()}
-              className="inline-flex items-center gap-2 px-8 py-4 rounded-full border border-white/15 bg-white/5 hover:bg-white hover:text-black text-white font-medium text-xs font-mono uppercase tracking-wider transition-all"
+              className="btn-studio-secondary !h-12 !px-8 text-xs font-mono uppercase tracking-wider group"
             >
               <span>View Full Services Catalog &amp; Deliverables</span>
-              <ArrowRight className="w-4 h-4" />
+              <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
             </button>
           </Link>
         </div>

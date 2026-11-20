@@ -104,10 +104,10 @@ export default function Portfolio() {
                 setActiveCategory(cat);
               }}
               onMouseEnter={() => studioAudio.playHover()}
-              className={`px-4 py-2 rounded-full text-xs font-mono tracking-wider uppercase transition-all ${
+              className={`h-8 px-4 rounded-full text-xs font-mono tracking-wider uppercase transition-all duration-200 ${
                 activeCategory === cat
-                  ? 'bg-white text-black font-semibold shadow-md'
-                  : 'bg-white/5 text-white/60 hover:text-white hover:bg-white/10 border border-white/5'
+                  ? 'bg-[#5b5fe0] text-white font-semibold shadow-md shadow-[#5b5fe0]/30'
+                  : 'bg-white/[0.04] text-white/60 hover:text-white hover:bg-white/10 border border-white/10'
               }`}
             >
               {cat}
@@ -182,11 +182,11 @@ export default function Portfolio() {
                     target="_blank"
                     rel="noopener noreferrer"
                     onMouseEnter={() => studioAudio.playHover()}
-                    className="inline-flex items-center gap-2 text-sm font-semibold text-[#eeece8] hover:text-[#5b5fe0] transition-colors group/link"
+                    className="btn-studio-secondary !h-10 !px-5 !text-xs font-semibold group/link"
                     data-cursor="Visit"
                   >
                     <span>Launch Live Platform</span>
-                    <ArrowUpRight className="w-4 h-4 transition-transform group-hover/link:translate-x-1 group-hover/link:-translate-y-1" />
+                    <ArrowUpRight className="w-3.5 h-3.5 transition-transform group-hover/link:translate-x-1 group-hover/link:-translate-y-1" />
                   </a>
                 </div>
               </div>
@@ -221,8 +221,8 @@ export default function Portfolio() {
                       className="w-full h-full object-cover object-top transition-transform duration-700 ease-out group-hover/img:scale-105"
                       loading="lazy"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover/img:opacity-100 transition-opacity duration-300 flex items-end p-6">
-                      <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white text-black font-semibold text-xs shadow-lg">
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover/img:opacity-100 transition-opacity duration-300 flex items-end p-6">
+                      <span className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#5b5fe0] text-white font-semibold text-xs shadow-xl">
                         <span>Visit {project.client}</span>
                         <ArrowUpRight className="w-3.5 h-3.5" />
                       </span>
