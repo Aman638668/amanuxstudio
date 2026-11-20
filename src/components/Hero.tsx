@@ -26,8 +26,8 @@ export default function Hero({ onOpenCraft }: HeroProps) {
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[500px] bg-gradient-to-tr from-blue-600/15 via-indigo-600/10 to-transparent blur-[120px] rounded-full pointer-events-none" />
       <div className="absolute bottom-10 right-10 w-[400px] h-[400px] bg-emerald-500/5 blur-[140px] rounded-full pointer-events-none" />
 
-      <div className="container mx-auto px-6 relative z-10">
-        <div className="max-w-5xl mx-auto">
+      <div className="container mx-auto px-6 max-w-7xl relative z-10">
+        <div>
           
           {/* Live Availability & Interactive Mode Badges */}
           <motion.div

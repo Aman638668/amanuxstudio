@@ -50,7 +50,7 @@ export const services = [
 export default function Services() {
   return (
     <section id="services" className="py-24 md:py-32 bg-[#09090c] text-[#eeece8] relative border-t border-white/5">
-      <div className="container mx-auto px-6 max-w-6xl">
+      <div className="container mx-auto px-6 max-w-7xl">
         
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16 pb-8 border-b border-white/10">

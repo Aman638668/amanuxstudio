@@ -19,7 +19,7 @@ export default function PageHeader({ title, description, badge }: PageHeaderProp
         </span>
       </div>
 
-      <div className="container mx-auto px-6 relative z-10 max-w-5xl text-center">
+      <div className="container mx-auto px-6 relative z-10 max-w-7xl text-center">
         {/* Monospace section indicator */}
         <motion.div
           initial={{ opacity: 0, y: 10 }}

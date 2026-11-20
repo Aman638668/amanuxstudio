@@ -23,7 +23,7 @@ export default function AboutPage() {
         description="We eliminate agency layers so you work 1-on-1 with Aman Sharma. Bespoke design, lightning-fast code, and websites engineered for actual business growth."
       />
 
-      <main className="flex-grow py-20 container mx-auto px-6 max-w-6xl relative z-10 space-y-24">
+      <main className="flex-grow py-20 container mx-auto px-6 max-w-7xl relative z-10 space-y-24">
         
         {/* Story Section */}
         <div className="grid md:grid-cols-12 gap-12 items-center">

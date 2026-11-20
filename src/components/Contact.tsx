@@ -65,7 +65,7 @@ export default function Contact() {
 
   return (
     <section id="contact" className="py-24 md:py-32 bg-[#09090c] text-[#eeece8] relative border-t border-white/5">
-      <div className="container mx-auto px-6 max-w-6xl">
+      <div className="container mx-auto px-6 max-w-7xl">
         <div className="text-center mb-16">
           <div className="flex items-center justify-center gap-2 text-xs font-mono uppercase tracking-widest text-blue-400 mb-3">
             <span>[ 07 / START A CONVERSATION ]</span>

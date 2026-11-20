@@ -22,7 +22,7 @@ export default function ResumePage() {
         <Navigation />
       </div>
 
-      <main className="flex-grow pt-32 pb-20 px-4 sm:px-6 container mx-auto max-w-5xl">
+      <main className="flex-grow pt-32 pb-20 px-4 sm:px-6 container mx-auto max-w-7xl">
         {/* Top Action Bar */}
         <div className="mb-8 flex flex-col sm:flex-row items-center justify-between gap-4 print:hidden bg-white/[0.03] border border-white/10 p-5 rounded-3xl shadow-xl">
           <div>

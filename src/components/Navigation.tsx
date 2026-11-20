@@ -54,7 +54,7 @@ export default function Navigation() {
 
   return (
     <header className="fixed top-3 sm:top-5 left-0 right-0 z-[100] px-4 sm:px-6 pointer-events-none">
-      <div className="max-w-6xl mx-auto flex items-center justify-between">
+      <div className="max-w-7xl mx-auto flex items-center justify-between">
         
         {/* Floating Capsule Island */}
         <nav
@@ -130,7 +130,7 @@ export default function Navigation() {
 
       {/* Mobile Drawer Overlay */}
       {isMenuOpen && (
-        <div className="pointer-events-auto lg:hidden max-w-6xl mx-auto mt-2 p-6 rounded-3xl border border-white/15 bg-[#0e0e14]/95 backdrop-blur-2xl shadow-2xl space-y-4">
+        <div className="pointer-events-auto lg:hidden max-w-7xl mx-auto mt-2 p-6 rounded-3xl border border-white/15 bg-[#0e0e14]/95 backdrop-blur-2xl shadow-2xl space-y-4">
           <div className="space-y-1">
             {navItems.map((item) => (
               <button

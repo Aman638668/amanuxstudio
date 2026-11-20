@@ -33,7 +33,7 @@ export default function PortfolioPage() {
         description="Every website we build is configured for sub-second speed, lead generation, and measurable commercial results."
       />
 
-      <main className="flex-grow py-20 container mx-auto px-6 max-w-6xl relative z-10 space-y-16">
+      <main className="flex-grow py-20 container mx-auto px-6 max-w-7xl relative z-10 space-y-16">
         
         {/* Category Filters */}
         <div className="flex flex-wrap items-center justify-center gap-2 pb-8 border-b border-white/10">

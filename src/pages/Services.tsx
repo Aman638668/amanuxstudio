@@ -173,7 +173,7 @@ export default function ServicesPage() {
         description="Everything you need to launch, scale, and convert online. Built with clean code, sub-second speed, and zero agency bloat."
       />
 
-      <main className="flex-grow py-20 container mx-auto px-6 max-w-6xl relative z-10 space-y-24">
+      <main className="flex-grow py-20 container mx-auto px-6 max-w-7xl relative z-10 space-y-24">
         
         {/* Services Grid */}
         <div className="grid md:grid-cols-2 gap-8">

@@ -105,7 +105,7 @@ export default function Terms() {
 
       {/* Header */}
       <header className="relative bg-[#09090c] text-white pt-36 pb-16 border-b border-white/10 overflow-hidden">
-        <div className="container mx-auto px-6 max-w-5xl relative z-10">
+        <div className="container mx-auto px-6 max-w-7xl relative z-10">
           <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs font-mono text-white/50 mb-6">
             <Link to="/" className="hover:text-white transition-colors">Home</Link>
             <ChevronRight className="w-3.5 h-3.5 text-white/30" />
@@ -128,7 +128,8 @@ export default function Terms() {
 
       {/* Content */}
       <main className="flex-grow py-14 lg:py-20 bg-[#09090c]">
-        <div className="container mx-auto px-6 max-w-4xl space-y-8">
+        <div className="container mx-auto px-6 max-w-7xl">
+          <div className="max-w-4xl mx-auto space-y-8">
           {terms.map((term) => {
             const Icon = term.icon;
             return (
@@ -151,6 +152,7 @@ export default function Terms() {
               </section>
             );
           })}
+          </div>
         </div>
       </main>
 
