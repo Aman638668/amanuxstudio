@@ -1,10 +1,10 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Mail, Phone, MapPin, Send, Loader2, CheckCircle2 } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
+import { studioAudio } from '@/lib/studio-audio';
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -32,6 +32,7 @@ export default function Contact() {
     }
 
     setIsSubmitting(true);
+    studioAudio.playClick(900);
     try {
       const response = await fetch('/api/discord-notify', {
         method: 'POST',
@@ -64,209 +65,214 @@ export default function Contact() {
   };
 
   return (
-    <section id="contact" className="py-20 bg-slate-50">
-      <div className="container mx-auto px-6">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
-            <span className="text-blue-600 font-semibold text-sm uppercase tracking-wider">Start a Conversation</span>
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mt-2 mb-6">
-              Let's Build Something Great Together
-            </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Ready to transform your digital presence? Send us a message and receive a custom proposal and consultation within 24 hours.
-            </p>
+    <section id="contact" className="py-24 md:py-32 bg-[#09090c] text-[#eeece8] relative border-t border-white/5">
+      <div className="container mx-auto px-6 max-w-6xl">
+        <div className="text-center mb-16">
+          <div className="flex items-center justify-center gap-2 text-xs font-mono uppercase tracking-widest text-[#5b5fe0] mb-3">
+            <span>[ 07 / START AN ARCHITECTURE ]</span>
+          </div>
+          <h2 className="text-3xl sm:text-5xl md:text-6xl font-bold tracking-tight text-[#eeece8] mt-2 mb-4">
+            Let's Engineer Your Vision.
+          </h2>
+          <p className="text-base sm:text-lg text-white/60 max-w-2xl mx-auto font-light">
+            Have a project in mind or need to upgrade your digital platform? Send us a message and receive a custom technical proposal and consultation within 24 hours.
+          </p>
+        </div>
+
+        <div className="grid lg:grid-cols-2 gap-12 items-start">
+          {/* Contact Form Card */}
+          <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-8 md:p-10 shadow-2xl backdrop-blur-sm">
+            <div className="mb-8">
+              <h3 className="text-xl font-bold text-[#eeece8] mb-1">
+                Project Specification &amp; Inquiry
+              </h3>
+              <p className="text-xs sm:text-sm text-white/50 font-light">
+                Direct developer intake. Zero sales spam.
+              </p>
+            </div>
+
+            {submitted ? (
+              <div className="py-12 text-center space-y-4">
+                <div className="h-16 w-16 bg-[#3ddc84]/10 border border-[#3ddc84]/30 text-[#3ddc84] rounded-full mx-auto flex items-center justify-center">
+                  <CheckCircle2 className="h-8 w-8" />
+                </div>
+                <h4 className="text-2xl font-bold text-white">Message Delivered</h4>
+                <p className="text-white/60 max-w-sm mx-auto text-sm font-light">
+                  We have received your project details and dispatched a notification alert. We will analyze your requirements and connect with you shortly.
+                </p>
+                <button
+                  onClick={() => setSubmitted(false)}
+                  className="mt-4 px-6 py-2.5 rounded-full border border-white/15 text-xs font-mono uppercase tracking-wider text-white hover:bg-white/10 transition-colors"
+                >
+                  Send Another Inquiry
+                </button>
+              </div>
+            ) : (
+              <form onSubmit={handleSubmit} className="space-y-5">
+                <div>
+                  <label htmlFor="name" className="block text-xs font-mono uppercase tracking-wider text-white/70 mb-2">
+                    Full Name / Company *
+                  </label>
+                  <Input
+                    id="name"
+                    name="name"
+                    type="text"
+                    placeholder="e.g. Elena Rostova"
+                    value={formData.name}
+                    onChange={handleChange}
+                    required
+                    className="w-full h-12 bg-white/[0.04] border-white/10 text-white placeholder:text-white/30 focus:border-[#5b5fe0] rounded-xl"
+                  />
+                </div>
+
+                <div className="grid sm:grid-cols-2 gap-4">
+                  <div>
+                    <label htmlFor="email" className="block text-xs font-mono uppercase tracking-wider text-white/70 mb-2">
+                      Email Address *
+                    </label>
+                    <Input
+                      id="email"
+                      name="email"
+                      type="email"
+                      placeholder="elena@company.com"
+                      value={formData.email}
+                      onChange={handleChange}
+                      required
+                      className="w-full h-12 bg-white/[0.04] border-white/10 text-white placeholder:text-white/30 focus:border-[#5b5fe0] rounded-xl"
+                    />
+                  </div>
+
+                  <div>
+                    <label htmlFor="phone" className="block text-xs font-mono uppercase tracking-wider text-white/70 mb-2">
+                      Phone / WhatsApp
+                    </label>
+                    <Input
+                      id="phone"
+                      name="phone"
+                      type="tel"
+                      placeholder="+91 92111 04514"
+                      value={formData.phone}
+                      onChange={handleChange}
+                      className="w-full h-12 bg-white/[0.04] border-white/10 text-white placeholder:text-white/30 focus:border-[#5b5fe0] rounded-xl"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label htmlFor="message" className="block text-xs font-mono uppercase tracking-wider text-white/70 mb-2">
+                    Project Goals, Budget &amp; Timeline *
+                  </label>
+                  <Textarea
+                    id="message"
+                    name="message"
+                    placeholder="Tell us about your brand, current challenges, desired timeline, or goals..."
+                    value={formData.message}
+                    onChange={handleChange}
+                    required
+                    rows={4}
+                    className="w-full bg-white/[0.04] border-white/10 text-white placeholder:text-white/30 focus:border-[#5b5fe0] rounded-xl"
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="w-full h-12 rounded-xl bg-[#5b5fe0] hover:bg-[#6c70f0] text-white font-semibold text-sm transition-all shadow-lg shadow-[#5b5fe0]/30 hover:scale-[1.01] active:scale-[0.99] flex items-center justify-center gap-2"
+                  data-cursor="Submit"
+                >
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                      <span>Transmitting Inquiry...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Send className="w-4 h-4" />
+                      <span>Dispatch Technical Inquiry</span>
+                    </>
+                  )}
+                </button>
+              </form>
+            )}
           </div>
 
-          <div className="grid lg:grid-cols-2 gap-12 items-start">
-            {/* Contact Form */}
-            <Card className="shadow-xl border-slate-100 bg-white rounded-2xl overflow-hidden">
-              <CardHeader className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white p-8">
-                <CardTitle className="text-2xl font-bold text-white">
-                  Send Us a Message
-                </CardTitle>
-                <p className="text-blue-100 text-sm mt-1">
-                  Fill in your details and we'll connect with you directly.
-                </p>
-              </CardHeader>
-              <CardContent className="p-8">
-                {submitted ? (
-                  <div className="py-12 text-center space-y-4">
-                    <div className="h-16 w-16 bg-emerald-100 text-emerald-600 rounded-full mx-auto flex items-center justify-center">
-                      <CheckCircle2 className="h-8 w-8" />
-                    </div>
-                    <h3 className="text-2xl font-bold text-slate-800">Message Delivered!</h3>
-                    <p className="text-slate-600 max-w-sm mx-auto text-sm">
-                      We have received your project details and sent a confirmation alert to our Discord channel. We will get back to you shortly.
-                    </p>
-                    <Button
-                      variant="outline"
-                      onClick={() => setSubmitted(false)}
-                      className="mt-4"
-                    >
-                      Send Another Message
-                    </Button>
+          {/* Contact Information & Channels */}
+          <div className="space-y-8 lg:pl-6">
+            <div>
+              <h3 className="text-2xl font-bold text-white mb-3">
+                Direct Studio Coordinates
+              </h3>
+              <p className="text-sm text-white/60 mb-8 leading-relaxed font-light">
+                Skip the traditional agency bureaucracy. Reach out through any of our direct studio channels for immediate consultation.
+              </p>
+
+              <div className="space-y-5">
+                <a
+                  href="mailto:amanuxstudio@gmail.com"
+                  className="flex items-center p-4 rounded-xl border border-white/10 bg-white/[0.02] hover:bg-white/[0.05] transition-colors group"
+                >
+                  <div className="w-11 h-11 rounded-lg bg-blue-500/10 border border-blue-500/20 text-blue-400 flex items-center justify-center mr-4">
+                    <Mail className="h-5 w-5" />
                   </div>
-                ) : (
-                  <form onSubmit={handleSubmit} className="space-y-5">
-                    <div>
-                      <label htmlFor="name" className="block text-sm font-semibold text-gray-700 mb-1.5">
-                        Full Name *
-                      </label>
-                      <Input
-                        id="name"
-                        name="name"
-                        type="text"
-                        placeholder="John Doe"
-                        value={formData.name}
-                        onChange={handleChange}
-                        required
-                        className="w-full h-11 border-slate-200"
-                      />
-                    </div>
-
-                    <div className="grid sm:grid-cols-2 gap-4">
-                      <div>
-                        <label htmlFor="email" className="block text-sm font-semibold text-gray-700 mb-1.5">
-                          Email Address *
-                        </label>
-                        <Input
-                          id="email"
-                          name="email"
-                          type="email"
-                          placeholder="john@example.com"
-                          value={formData.email}
-                          onChange={handleChange}
-                          required
-                          className="w-full h-11 border-slate-200"
-                        />
-                      </div>
-
-                      <div>
-                        <label htmlFor="phone" className="block text-sm font-semibold text-gray-700 mb-1.5">
-                          Phone Number (Optional)
-                        </label>
-                        <Input
-                          id="phone"
-                          name="phone"
-                          type="tel"
-                          placeholder="+91 98765 43210"
-                          value={formData.phone}
-                          onChange={handleChange}
-                          className="w-full h-11 border-slate-200"
-                        />
-                      </div>
-                    </div>
-
-                    <div>
-                      <label htmlFor="message" className="block text-sm font-semibold text-gray-700 mb-1.5">
-                        Project Details / Inquiry *
-                      </label>
-                      <Textarea
-                        id="message"
-                        name="message"
-                        placeholder="Tell us about your project, goals, timeline, and requirements..."
-                        value={formData.message}
-                        onChange={handleChange}
-                        required
-                        rows={5}
-                        className="w-full border-slate-200"
-                      />
-                    </div>
-
-                    <Button
-                      type="submit"
-                      size="lg"
-                      disabled={isSubmitting}
-                      className="w-full h-12 bg-blue-600 hover:bg-blue-700 text-white font-semibold text-base transition-all shadow-md hover:shadow-lg"
-                    >
-                      {isSubmitting ? (
-                        <>
-                          <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                          Sending Inquiry to Discord...
-                        </>
-                      ) : (
-                        <>
-                          <Send className="mr-2 h-5 w-5" />
-                          Send Message
-                        </>
-                      )}
-                    </Button>
-                  </form>
-                )}
-              </CardContent>
-            </Card>
-
-            {/* Contact Information */}
-            <div className="space-y-8 lg:pl-6">
-              <div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-4">
-                  Get in Touch
-                </h3>
-                <p className="text-gray-600 mb-8 leading-relaxed">
-                  We'd love to hear about your project. Choose the best way to reach us and we'll get back to you within 24 hours.
-                </p>
-
-                <div className="space-y-6">
-                  <div className="flex items-center">
-                    <div className="bg-blue-100 p-3.5 rounded-2xl mr-4 shadow-sm text-blue-600">
-                      <Mail className="h-6 w-6" />
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-gray-900">Email Us</h4>
-                      <a href="mailto:amanuxstudio@gmail.com" className="text-gray-600 hover:text-blue-600 transition-colors">
-                        amanuxstudio@gmail.com
-                      </a>
+                  <div>
+                    <div className="text-xs font-mono uppercase text-white/50 tracking-wider">Email Direct</div>
+                    <div className="text-sm font-medium text-white group-hover:text-blue-300 transition-colors">
+                      amanuxstudio@gmail.com
                     </div>
                   </div>
+                </a>
 
-                  <div className="flex items-center">
-                    <div className="bg-emerald-100 p-3.5 rounded-2xl mr-4 shadow-sm text-emerald-600">
-                      <Phone className="h-6 w-6" />
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-gray-900">Call / WhatsApp</h4>
-                      <a href="tel:+919211104514" className="text-gray-600 hover:text-emerald-600 transition-colors">
-                        +91 92111-04514
-                      </a>
+                <a
+                  href="https://wa.me/919211104514"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center p-4 rounded-xl border border-white/10 bg-white/[0.02] hover:bg-white/[0.05] transition-colors group"
+                >
+                  <div className="w-11 h-11 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-[#3ddc84] flex items-center justify-center mr-4">
+                    <Phone className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <div className="text-xs font-mono uppercase text-white/50 tracking-wider">WhatsApp &amp; Direct Phone</div>
+                    <div className="text-sm font-medium text-white group-hover:text-[#3ddc84] transition-colors">
+                      +91 92111-04514
                     </div>
                   </div>
+                </a>
 
-                  <div className="flex items-center">
-                    <div className="bg-purple-100 p-3.5 rounded-2xl mr-4 shadow-sm text-purple-600">
-                      <MapPin className="h-6 w-6" />
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-gray-900">Location</h4>
-                      <p className="text-gray-600">New Delhi, India</p>
+                <div className="flex items-center p-4 rounded-xl border border-white/10 bg-white/[0.02]">
+                  <div className="w-11 h-11 rounded-lg bg-purple-500/10 border border-purple-500/20 text-purple-400 flex items-center justify-center mr-4">
+                    <MapPin className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <div className="text-xs font-mono uppercase text-white/50 tracking-wider">Studio Base</div>
+                    <div className="text-sm font-medium text-white">
+                      New Delhi, India · Global Remote Delivery
                     </div>
                   </div>
                 </div>
               </div>
-
-              <div className="bg-gradient-to-br from-blue-50 to-indigo-50 p-8 rounded-2xl border border-blue-100">
-                <h4 className="text-lg font-bold text-gray-900 mb-3">
-                  Quick Response Guarantee
-                </h4>
-                <ul className="space-y-2.5 text-sm text-gray-700">
-                  <li className="flex items-center">
-                    <div className="w-2 h-2 bg-emerald-500 rounded-full mr-3"></div>
-                    Guaranteed response within 24 hours
-                  </li>
-                  <li className="flex items-center">
-                    <div className="w-2 h-2 bg-emerald-500 rounded-full mr-3"></div>
-                    Free 30-minute consultation call
-                  </li>
-                  <li className="flex items-center">
-                    <div className="w-2 h-2 bg-emerald-500 rounded-full mr-3"></div>
-                    Transparent scope &amp; competitive pricing
-                  </li>
-                  <li className="flex items-center">
-                    <div className="w-2 h-2 bg-emerald-500 rounded-full mr-3"></div>
-                    Direct developer communication (no middlemen)
-                  </li>
-                </ul>
-              </div>
             </div>
+
+            <div className="p-6 rounded-2xl border border-white/10 bg-gradient-to-br from-white/[0.04] to-transparent">
+              <h4 className="text-sm font-bold text-white mb-3 uppercase tracking-wider font-mono">
+                Studio Quality Guarantee
+              </h4>
+              <ul className="space-y-2 text-xs text-white/70 font-light">
+                <li className="flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#3ddc84]" />
+                  Guaranteed response within 24 hours
+                </li>
+                <li className="flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#3ddc84]" />
+                  Direct 1-on-1 developer partnership
+                </li>
+                <li className="flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#3ddc84]" />
+                  Fixed-scope sprint delivery &amp; no surprise costs
+                </li>
+              </ul>
+            </div>
+
           </div>
         </div>
       </div>

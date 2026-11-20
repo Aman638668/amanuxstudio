@@ -1,0 +1,321 @@
+import { useEffect, useRef, useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ArrowRight, ChevronRight, ChevronLeft, Sparkles, X, ExternalLink } from 'lucide-react';
+import { studioAudio } from '@/lib/studio-audio';
+
+interface CraftModeProps {
+  onClose: () => void;
+  onExploreWork: () => void;
+}
+
+const chapters = [
+  {
+    num: "01",
+    subtitle: "The Craft Philosophy",
+    title: "We don't build generic websites.",
+    body: "Most digital agencies push bloated cookie-cutter themes loaded with 50 plugins. Aman UX Studio engineers custom, bespoke digital platforms crafted from first principles to convert visitors into enterprise pipeline.",
+    hint: "Move your cursor to warp the particle matrix"
+  },
+  {
+    num: "02",
+    subtitle: "Sub-Second Velocity",
+    title: "Performance is not a feature. It is the foundation.",
+    body: "Every microsecond of friction cost businesses revenue. We build modern React, TypeScript, and hardened headless architectures delivering sub-second load times and 90+ Core Web Vitals.",
+    hint: "Every particle calculates real-time spatial vectors"
+  },
+  {
+    num: "03",
+    subtitle: "Conversion Architecture",
+    title: "Visual elegance engineered for real transaction volume.",
+    body: "Design without conversion strategy is just art. We design high-converting e-commerce funnels, frictionless checkout pipelines, and corporate BPO portals that scale client revenue.",
+    hint: "Designed for Fairease, Ireshh, TicketDev & more"
+  },
+  {
+    num: "04",
+    subtitle: "End-to-End Delivery",
+    title: "From 0 to 1, and beyond.",
+    body: "Whether scaling an e-commerce clothing brand from zero or building multi-business conglomerate portals, we manage architecture, design tokens, security hardening, and ongoing velocity.",
+    hint: "Ready to launch your vision?"
+  }
+];
+
+export function CraftMode({ onClose, onExploreWork }: CraftModeProps) {
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const [currentChapter, setCurrentChapter] = useState(0);
+  const mouseRef = useRef({ x: -1000, y: -1000, radius: 140 });
+
+  // Interactive Particle Simulation
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    let animId: number;
+    let width = (canvas.width = window.innerWidth);
+    let height = (canvas.height = window.innerHeight);
+
+    const handleResize = () => {
+      if (!canvas) return;
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    const particleCount = Math.min(Math.floor((width * height) / 12000), 120);
+    const particles: Array<{
+      x: number;
+      y: number;
+      vx: number;
+      vy: number;
+      size: number;
+      baseX: number;
+      baseY: number;
+      color: string;
+    }> = [];
+
+    const colors = ['#5b5fe0', '#eeece8', '#7c80f6', '#3ddc84'];
+
+    for (let i = 0; i < particleCount; i++) {
+      const x = Math.random() * width;
+      const y = Math.random() * height;
+      particles.push({
+        x,
+        y,
+        baseX: x,
+        baseY: y,
+        vx: (Math.random() - 0.5) * 0.8,
+        vy: (Math.random() - 0.5) * 0.8,
+        size: Math.random() * 2.2 + 0.8,
+        color: colors[Math.floor(Math.random() * colors.length)],
+      });
+    }
+
+    const handleMouseMove = (e: MouseEvent) => {
+      mouseRef.current.x = e.clientX;
+      mouseRef.current.y = e.clientY;
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+
+    const render = () => {
+      ctx.clearRect(0, 0, width, height);
+
+      // Connect near particles
+      for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+          const dx = particles[i].x - particles[j].x;
+          const dy = particles[i].y - particles[j].y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < 110) {
+            ctx.beginPath();
+            ctx.strokeStyle = `rgba(238, 236, 232, ${0.12 * (1 - dist / 110)})`;
+            ctx.lineWidth = 0.7;
+            ctx.moveTo(particles[i].x, particles[i].y);
+            ctx.lineTo(particles[j].x, particles[j].y);
+            ctx.stroke();
+          }
+        }
+      }
+
+      // Update and draw particles
+      particles.forEach((p) => {
+        p.x += p.vx;
+        p.y += p.vy;
+
+        // Bounce on boundaries
+        if (p.x < 0 || p.x > width) p.vx *= -1;
+        if (p.y < 0 || p.y > height) p.vy *= -1;
+
+        // Mouse interaction (repulsion)
+        const dx = mouseRef.current.x - p.x;
+        const dy = mouseRef.current.y - p.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < mouseRef.current.radius) {
+          const force = (mouseRef.current.radius - dist) / mouseRef.current.radius;
+          p.x -= (dx / dist) * force * 4;
+          p.y -= (dy / dist) * force * 4;
+        }
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fillStyle = p.color;
+        ctx.shadowBlur = 8;
+        ctx.shadowColor = p.color;
+        ctx.fill();
+        ctx.shadowBlur = 0;
+      });
+
+      animId = requestAnimationFrame(render);
+    };
+
+    render();
+
+    return () => {
+      cancelAnimationFrame(animId);
+      window.removeEventListener('resize', handleResize);
+      window.removeEventListener('mousemove', handleMouseMove);
+    };
+  }, []);
+
+  const nextChapter = () => {
+    studioAudio.playClick(880);
+    setCurrentChapter((prev) => (prev + 1) % chapters.length);
+  };
+
+  const prevChapter = () => {
+    studioAudio.playClick(640);
+    setCurrentChapter((prev) => (prev - 1 + chapters.length) % chapters.length);
+  };
+
+  const ch = chapters[currentChapter];
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.5 }}
+      className="fixed inset-0 z-[120] bg-[#09090c] text-[#eeece8] flex flex-col justify-between p-6 md:p-12 overflow-hidden select-none"
+    >
+      {/* Background Canvas */}
+      <canvas ref={canvasRef} className="absolute inset-0 pointer-events-auto" />
+
+      {/* Top Bar */}
+      <div className="relative z-10 flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 px-3 py-1 rounded-full border border-white/10 bg-white/5 backdrop-blur-md text-xs font-mono">
+            <span className="w-2 h-2 rounded-full bg-[#3ddc84] animate-pulse" />
+            <span>AMAN UX STUDIO · CRAFT STORY</span>
+          </div>
+        </div>
+
+        <button
+          onClick={() => {
+            studioAudio.playClick(500);
+            onClose();
+          }}
+          className="flex items-center gap-2 px-4 py-2 rounded-full border border-white/10 bg-white/5 hover:bg-white/15 backdrop-blur-md text-xs tracking-wider uppercase font-semibold transition-all hover:scale-105"
+          data-cursor="Close"
+        >
+          <span>Exit to Studio</span>
+          <X className="w-4 h-4" />
+        </button>
+      </div>
+
+      {/* Ghost Chapter Number in background */}
+      <div className="absolute right-6 md:right-20 top-1/2 -translate-y-1/2 pointer-events-none select-none">
+        <span className="font-bold text-[140px] md:text-[280px] leading-none text-transparent stroke-text opacity-15">
+          {ch.num}
+        </span>
+      </div>
+
+      {/* Chapter Content Overlay */}
+      <div className="relative z-10 max-w-2xl my-auto">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={currentChapter}
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.55, ease: [0.19, 1, 0.22, 1] }}
+          >
+            <div className="flex items-center gap-2 text-xs font-mono tracking-widest text-[#5b5fe0] uppercase mb-4">
+              <span>Chapter {ch.num}</span>
+              <span>/</span>
+              <span>04</span>
+              <span>·</span>
+              <span className="text-white/60">{ch.subtitle}</span>
+            </div>
+
+            <h2 className="text-3xl sm:text-5xl md:text-6xl font-bold tracking-tight text-[#eeece8] leading-[1.08] mb-6">
+              {ch.title}
+            </h2>
+
+            <p className="text-base sm:text-lg text-white/70 leading-relaxed max-w-xl mb-8">
+              {ch.body}
+            </p>
+
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/10 bg-white/[0.04] text-xs text-white/60 font-mono mb-8">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#5b5fe0]" />
+              <span>{ch.hint}</span>
+            </div>
+
+            <div className="flex items-center gap-4">
+              {currentChapter === chapters.length - 1 ? (
+                <button
+                  onClick={() => {
+                    studioAudio.playClick(920);
+                    onClose();
+                    onExploreWork();
+                  }}
+                  className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-[#5b5fe0] hover:bg-[#6c70f0] text-white font-medium text-sm transition-all shadow-lg shadow-[#5b5fe0]/30 hover:scale-105"
+                  data-cursor="Launch"
+                >
+                  <span>Explore Client Work</span>
+                  <ArrowRight className="w-4 h-4" />
+                </button>
+              ) : (
+                <button
+                  onClick={nextChapter}
+                  className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-white text-black font-semibold text-sm hover:bg-white/90 transition-all hover:scale-105"
+                  data-cursor="Next"
+                >
+                  <span>Next Chapter</span>
+                  <ChevronRight className="w-4 h-4" />
+                </button>
+              )}
+
+              <button
+                onClick={() => {
+                  studioAudio.playClick(500);
+                  onClose();
+                }}
+                className="px-5 py-3.5 rounded-full border border-white/15 text-white/70 hover:text-white hover:bg-white/5 text-sm transition-colors"
+              >
+                Skip Story
+              </button>
+            </div>
+          </motion.div>
+        </AnimatePresence>
+      </div>
+
+      {/* Bottom Chapter Progress Bar */}
+      <div className="relative z-10 flex items-center justify-between border-t border-white/10 pt-6">
+        <div className="flex items-center gap-2">
+          {chapters.map((_, idx) => (
+            <button
+              key={idx}
+              onClick={() => {
+                studioAudio.playClick(700 + idx * 60);
+                setCurrentChapter(idx);
+              }}
+              className={`h-1.5 rounded-full transition-all duration-300 ${
+                idx === currentChapter ? 'w-10 bg-[#5b5fe0]' : 'w-4 bg-white/20 hover:bg-white/40'
+              }`}
+              title={`Go to chapter ${idx + 1}`}
+            />
+          ))}
+        </div>
+
+        <div className="flex items-center gap-3">
+          <button
+            onClick={prevChapter}
+            className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center hover:bg-white/10 text-white/70 hover:text-white transition-colors"
+            title="Previous chapter"
+          >
+            <ChevronLeft className="w-4 h-4" />
+          </button>
+          <button
+            onClick={nextChapter}
+            className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center hover:bg-white/10 text-white/70 hover:text-white transition-colors"
+            title="Next chapter"
+          >
+            <ChevronRight className="w-4 h-4" />
+          </button>
+        </div>
+      </div>
+    </motion.div>
+  );
+}

@@ -99,3 +99,24 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Ambient Film Grain Overlay */
+.ambient-grain {
+  position: fixed;
+  inset: -50%;
+  width: 200%;
+  height: 200%;
+  pointer-events: none;
+  opacity: 0.035;
+  z-index: 90;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Outlined Ghost Numerals */
+.stroke-text {
+  -webkit-text-stroke: 1.5px rgba(238, 236, 232, 0.25);
+}
+
+.stroke-text-accent {
+  -webkit-text-stroke: 1.5px rgba(91, 95, 224, 0.4);
+}
