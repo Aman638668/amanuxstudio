@@ -7,7 +7,7 @@ interface CosmicDotLoaderProps {
   duration?: number; // 8000ms
 }
 
-// Cubic & quintic smooth easing functions
+// Cubic & quintic easing helpers
 const easeInOutCubic = (t: number) =>
   t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
 
@@ -16,7 +16,7 @@ const easeOutQuint = (t: number) => 1 - Math.pow(1 - t, 5);
 const clamp = (val: number, min: number, max: number) =>
   Math.max(min, Math.min(max, val));
 
-// Bulletproof dot renderer that NEVER throws negative radius exceptions
+// Rock-solid dot renderer that guarantees positive radius and finite numbers
 const drawSafeDot = (
   ctx: CanvasRenderingContext2D,
   x: number,
@@ -26,7 +26,7 @@ const drawSafeDot = (
   alpha: number
 ) => {
   if (!Number.isFinite(x) || !Number.isFinite(y)) return;
-  const safeRadius = Math.max(0.2, Number.isFinite(radius) ? radius : 0.5);
+  const safeRadius = Math.max(0.3, Number.isFinite(radius) ? radius : 1);
   const safeAlpha = clamp(Number.isFinite(alpha) ? alpha : 0, 0, 1);
   if (safeAlpha <= 0.01) return;
 
@@ -50,7 +50,7 @@ export const CosmicDotLoader: React.FC<CosmicDotLoaderProps> = ({
   const mouseRef = useRef({ x: 0, y: 0, smoothX: 0, smoothY: 0 });
 
   useEffect(() => {
-    // Safety fallback: if anything stalls or user navigates, complete after duration + 500ms
+    // Safety fallback: if anything stalls, complete after duration + 500ms
     const safetyTimer = setTimeout(() => {
       onComplete();
     }, duration + 500);
@@ -65,16 +65,14 @@ export const CosmicDotLoader: React.FC<CosmicDotLoaderProps> = ({
     let width = window.innerWidth;
     let height = window.innerHeight;
 
-    // Retina / High-DPI canvas setup
     const setupCanvasDpi = () => {
       width = window.innerWidth;
       height = window.innerHeight;
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      canvas.width = width * dpr;
-      canvas.height = height * dpr;
+      canvas.width = Math.floor(width * dpr);
+      canvas.height = Math.floor(height * dpr);
       canvas.style.width = `${width}px`;
       canvas.style.height = `${height}px`;
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     };
     setupCanvasDpi();
 
@@ -94,30 +92,31 @@ export const CosmicDotLoader: React.FC<CosmicDotLoaderProps> = ({
     // 1. GENERATE PURE PARTICLES (100% DOTS)
     // =============================================================
 
-    // Target solar system coordinates in galaxy space
-    const SUN_GALAXY_POS = { x: 190, y: 6, z: 95 };
+    // Target star offset within galaxy (where our solar system lives)
+    const TARGET_DIST = 160;
+    const TARGET_BASE_ANGLE = 0.95;
 
-    // A. GALAXY PARTICLES (1,800 dots)
-    const GALAXY_COUNT = 1800;
+    // A. GALAXY PARTICLES (1,600 dots)
+    const GALAXY_COUNT = 1600;
     const ARMS = 4;
     const galaxyStars: {
       dist: number;
-      angle: number;
+      armAngle: number;
+      twist: number;
       y: number;
-      speed: number;
       size: number;
       color: string;
       alpha: number;
       isTarget: boolean;
     }[] = [];
 
-    // Star index 0 is our TARGET STAR (natural dot, not a giant circle)
+    // Target Star (Our Sun embryo in the galaxy)
     galaxyStars.push({
-      dist: Math.sqrt(SUN_GALAXY_POS.x * SUN_GALAXY_POS.x + SUN_GALAXY_POS.z * SUN_GALAXY_POS.z),
-      angle: Math.atan2(SUN_GALAXY_POS.z, SUN_GALAXY_POS.x),
-      y: SUN_GALAXY_POS.y,
-      speed: 0.0005,
-      size: 2.4,
+      dist: TARGET_DIST,
+      armAngle: TARGET_BASE_ANGLE,
+      twist: 0,
+      y: 4,
+      size: 2.8,
       color: "#fef08a",
       alpha: 1.0,
       isTarget: true,
@@ -126,30 +125,30 @@ export const CosmicDotLoader: React.FC<CosmicDotLoaderProps> = ({
     for (let i = 1; i < GALAXY_COUNT; i++) {
       const arm = i % ARMS;
       const armOffset = (arm * Math.PI * 2) / ARMS;
-      const dist = Math.pow(Math.random(), 1.5) * 580 + 18;
-      const angle = armOffset + dist * 0.0075 + (Math.random() - 0.5) * 0.35;
-      const y = (Math.random() - 0.5) * Math.max(8, 55 - dist * 0.07);
+      const dist = Math.pow(Math.random(), 1.4) * 480 + 15;
+      const twist = dist * 0.0078 + (Math.random() - 0.5) * 0.35;
+      const y = (Math.random() - 0.5) * Math.max(6, 45 - dist * 0.06);
 
       let color = "#3b82f6";
-      let size = Math.random() * 1.6 + 0.7;
-      let alpha = Math.random() * 0.6 + 0.25;
+      let size = Math.random() * 1.5 + 0.8;
+      let alpha = Math.random() * 0.6 + 0.3;
 
-      if (dist < 60) {
-        color = Math.random() > 0.35 ? "#ffffff" : "#fef08a";
-        size = Math.random() * 2.0 + 1.0;
+      if (dist < 50) {
+        color = Math.random() > 0.4 ? "#ffffff" : "#fef08a";
+        size = Math.random() * 2.0 + 1.1;
         alpha = Math.random() * 0.4 + 0.6;
-      } else if (dist < 230) {
+      } else if (dist < 200) {
         color = Math.random() > 0.5 ? "#38bdf8" : "#60a5fa";
       } else {
         color = Math.random() > 0.5 ? "#818cf8" : "#2563eb";
-        alpha = Math.random() * 0.4 + 0.2;
+        alpha = Math.random() * 0.4 + 0.25;
       }
 
       galaxyStars.push({
         dist,
-        angle,
+        armAngle: armOffset,
+        twist,
         y,
-        speed: 0.0005 + (600 - dist) * 0.000005,
         size,
         color,
         alpha,
@@ -158,33 +157,33 @@ export const CosmicDotLoader: React.FC<CosmicDotLoaderProps> = ({
     }
 
     // B. SOLAR SYSTEM PARTICLES
-    // Sun dots (200 fine dots forming the Sun's glowing sphere)
-    const SUN_COUNT = 200;
+    // Sun dots (180 dots forming a dense, shimmering sphere)
+    const SUN_COUNT = 180;
     const sunDots: { x: number; y: number; z: number; color: string; size: number; alpha: number }[] = [];
     for (let i = 0; i < SUN_COUNT; i++) {
       const phi = Math.acos(-1 + (2 * i) / SUN_COUNT);
       const theta = Math.sqrt(SUN_COUNT * Math.PI) * phi;
-      const r = 24 + (Math.random() - 0.5) * 4;
+      const r = 26 + (Math.random() - 0.5) * 4;
       sunDots.push({
         x: r * Math.sin(phi) * Math.cos(theta),
         y: r * Math.sin(phi) * Math.sin(theta),
         z: r * Math.cos(phi),
-        color: Math.random() > 0.3 ? "#fbbf24" : "#ffffff",
+        color: Math.random() > 0.35 ? "#fbbf24" : "#ffffff",
         size: Math.random() * 1.8 + 1.0,
         alpha: Math.random() * 0.4 + 0.6,
       });
     }
 
-    // Planetary configurations
+    // Planetary definitions
     const PLANET_CONFIGS = [
       { name: "Mercury", orbitR: 50, speed: 2.8, size: 2.0, color: "#94a3b8", count: 8 },
       { name: "Venus",   orbitR: 78, speed: 2.0, size: 2.8, color: "#fde68a", count: 12 },
-      { name: "Earth",   orbitR: 120, speed: 1.4, size: 3.8, color: "#38bdf8", count: 24, isEarth: true },
-      { name: "Mars",    orbitR: 160, speed: 1.1, size: 2.6, color: "#f87171", count: 10 },
-      { name: "Jupiter", orbitR: 215, speed: 0.7, size: 6.0, color: "#fed7aa", count: 32 },
-      { name: "Saturn",  orbitR: 270, speed: 0.5, size: 5.2, color: "#fef08a", count: 26, hasRings: true },
-      { name: "Uranus",  orbitR: 320, speed: 0.35, size: 4.0, color: "#a5f3fc", count: 14 },
-      { name: "Neptune", orbitR: 370, speed: 0.25, size: 3.8, color: "#60a5fa", count: 14 },
+      { name: "Earth",   orbitR: 125, speed: 1.4, size: 3.8, color: "#38bdf8", count: 24, isEarth: true },
+      { name: "Mars",    orbitR: 165, speed: 1.1, size: 2.6, color: "#f87171", count: 10 },
+      { name: "Jupiter", orbitR: 220, speed: 0.7, size: 6.0, color: "#fed7aa", count: 32 },
+      { name: "Saturn",  orbitR: 275, speed: 0.5, size: 5.2, color: "#fef08a", count: 26, hasRings: true },
+      { name: "Uranus",  orbitR: 325, speed: 0.35, size: 4.0, color: "#a5f3fc", count: 14 },
+      { name: "Neptune", orbitR: 375, speed: 0.25, size: 3.8, color: "#60a5fa", count: 14 },
     ];
 
     const orbitPathDots: { orbitR: number; angle: number; color: string; isEarth: boolean }[] = [];
@@ -250,9 +249,9 @@ export const CosmicDotLoader: React.FC<CosmicDotLoaderProps> = ({
       }
     });
 
-    // C. EARTH GLOBE PARTICLES (1,250 dots Fibonacci Sphere)
-    const EARTH_DOT_COUNT = 1250;
-    const FINAL_EARTH_RADIUS = 130;
+    // C. EARTH GLOBE PARTICLES (1,200 dots Fibonacci Sphere)
+    const EARTH_DOT_COUNT = 1200;
+    const FINAL_EARTH_RADIUS = 135;
 
     const isContinent = (lat: number, lon: number): boolean => {
       if (lat > 1.25 || lat < -1.2) return true;
@@ -311,8 +310,8 @@ export const CosmicDotLoader: React.FC<CosmicDotLoaderProps> = ({
       });
     }
 
-    // Atmosphere dots (220 dots)
-    const ATMO_COUNT = 220;
+    // Atmosphere dots (200 dots)
+    const ATMO_COUNT = 200;
     for (let i = 0; i < ATMO_COUNT; i++) {
       const phi = Math.acos(-1 + (2 * i) / ATMO_COUNT);
       const theta = Math.sqrt(ATMO_COUNT * Math.PI) * phi;
@@ -337,7 +336,7 @@ export const CosmicDotLoader: React.FC<CosmicDotLoaderProps> = ({
     }
 
     // =============================================================
-    // 2. TIMELINE RENDER LOOP (Accurate timing & zero negative values)
+    // 2. TIMELINE RENDER LOOP
     // =============================================================
     let startTime: number | null = null;
     let galaxyClock = 0;
@@ -354,7 +353,7 @@ export const CosmicDotLoader: React.FC<CosmicDotLoaderProps> = ({
         const p = clamp(elapsed / duration, 0, 1.0);
         setProgress(Math.round(p * 100));
 
-        // Smooth mouse lerping
+        // Smooth mouse lerp
         mouseRef.current.smoothX += (mouseRef.current.x - mouseRef.current.smoothX) * 0.06;
         mouseRef.current.smoothY += (mouseRef.current.y - mouseRef.current.smoothY) * 0.06;
         const mx = mouseRef.current.smoothX;
@@ -362,11 +361,11 @@ export const CosmicDotLoader: React.FC<CosmicDotLoaderProps> = ({
         const normMx = mx / (width / 2);
         const normMy = my / (height / 2);
 
-        galaxyClock += 0.0018;
-        solarClock += 0.012;
-        earthSpinClock += 0.006;
+        galaxyClock += 0.002;
+        solarClock += 0.014;
+        earthSpinClock += 0.007;
 
-        // Phase hud text
+        // HUD phase readout
         if (p < 0.26) {
           setHudPhase("01 // SPIRAL GALAXY // TARGETING SOLAR SYSTEM");
         } else if (p < 0.50) {
@@ -385,103 +384,57 @@ export const CosmicDotLoader: React.FC<CosmicDotLoaderProps> = ({
           return;
         }
 
-        // Clear Canvas
+        // Apply DPI transform and clear canvas
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
         ctx.fillStyle = "#06070a";
         ctx.fillRect(0, 0, width, height);
 
         const cx = width / 2;
         const cy = height / 2;
 
-        // Target star coordinates in galaxy space
-        const targetStarAngle = TARGET_ANGLE + galaxyClock;
-        const targetStarX = Math.cos(targetStarAngle) * TARGET_DIST;
-        const targetStarZ = Math.sin(targetStarAngle) * TARGET_DIST;
-        const targetStarY = TARGET_Y;
-
-        // Earth position in solar system
-        const earthOrbitR = 120;
-        const earthOrbAngle = 0.35 + solarClock * 1.4;
-        const currentEarthX = Math.cos(earthOrbAngle) * earthOrbitR;
-        const currentEarthZ = Math.sin(earthOrbAngle) * earthOrbitR;
-
         // =============================================================
-        // STAGE 1 & 2: GALAXY & SMOOTH CAMERA DIVE INTO TARGET STAR (0.00 to 0.52)
+        // STAGE 1 & 2: GALAXY & CAMERA DIVE INTO TARGET STAR (0.00 to 0.52)
         // =============================================================
         if (p < 0.52) {
+          // Dive progress: 0.00 to 0.26 (galaxy view), 0.26 to 0.50 (dive to target star)
           let diveT = 0;
           if (p >= 0.26) {
-            diveT = easeInOutCubic((p - 0.26) / 0.22);
+            diveT = easeInOutCubic((p - 0.26) / 0.24);
           }
 
-          const focusX = targetStarX * diveT;
-          const focusY = targetStarY * diveT;
-          const focusZ = targetStarZ * diveT;
-          const camDistance = 1100 - diveT * 1000; // 1100 down to 100
+          // Target star current position in rotating galaxy plane
+          const curTargetAngle = TARGET_BASE_ANGLE + galaxyClock;
+          const targetScreenDist = TARGET_DIST * (1 - diveT * 0.95); // glides to center (0,0)
+          const targetX = Math.cos(curTargetAngle) * targetScreenDist;
+          const targetY = Math.sin(curTargetAngle) * (targetScreenDist * 0.5); // perspective tilt
 
-          const gRotX = 0.82 + normMy * 0.22 * (1 - diveT);
-          const gRotY = galaxyClock + normMx * 0.22 * (1 - diveT);
-          const cosX = Math.cos(gRotX);
-          const sinX = Math.sin(gRotX);
-          const cosY = Math.cos(gRotY);
-          const sinY = Math.sin(gRotY);
+          // Pan offset moves target star to center of screen (cx, cy)
+          const panX = targetX * diveT;
+          const panY = targetY * diveT;
 
-          const galaxyFade = Math.max(0, 1.0 - Math.pow(diveT, 2.2) * 0.98);
+          // Camera zoom factor: zooms in smoothly as we approach target star
+          const zoom = 1.0 + diveT * 4.5;
+          const galaxyFade = Math.max(0, 1.0 - Math.pow(diveT, 2) * 0.96);
 
-          ctx.save();
+          const tiltX = 0.55 + normMy * 0.2 * (1 - diveT);
+
           for (let i = 0; i < galaxyStars.length; i++) {
             const pt = galaxyStars[i];
 
-            let curAngle = pt.angle + galaxyClock;
-            let gx = Math.cos(curAngle) * pt.dist;
-            let gz = Math.sin(curAngle) * pt.dist;
-            let gy = pt.y;
+            let starAngle = pt.armAngle + pt.twist + galaxyClock;
+            let rawDist = pt.dist;
 
+            // Target star glides cleanly to center
             if (pt.isTarget) {
-              gx = targetStarX;
-              gy = targetStarY;
-              gz = targetStarZ;
-            }
+              const sx = cx + (targetX - panX);
+              const sy = cy + (targetY - panY);
+              const starRadius = clamp(2.4 + diveT * 2.0, 1.8, 3.8);
 
-            const relX = gx - focusX;
-            const relY = gy - focusY;
-            const relZ = gz - focusZ;
-
-            const x1 = relX * cosY - relZ * sinY;
-            const z1 = relX * sinY + relZ * cosY;
-            const y2 = relY * cosX - z1 * sinX;
-            const z2 = relY * sinX + z1 * cosX;
-
-            const depth = z2 + camDistance;
-            if (depth <= 10) continue;
-            const scale = 500 / depth;
-
-            let sx = cx + x1 * scale;
-            let sy = cy + y2 * scale;
-
-            // Interactive hover displacement
-            if (p < 0.28 && !pt.isTarget) {
-              const dx = sx - (cx + mx);
-              const dy = sy - (cy + my);
-              const mDist = Math.sqrt(dx * dx + dy * dy);
-              if (mDist < 150 && mDist > 0) {
-                const force = (1 - mDist / 150) * 26;
-                sx += (dx / mDist) * force;
-                sy += (dy / mDist) * force;
-              }
-            }
-
-            let dotRadius = Math.max(0.4, pt.size * scale);
-            let dotAlpha = pt.alpha * galaxyFade;
-
-            if (pt.isTarget) {
-              dotAlpha = 1.0;
-              // Target star is kept natural in size (1.8px to 3.2px)
-              dotRadius = clamp(pt.size * scale, 1.8, 3.2);
-
-              // Subtle glowing beacon ring
-              if (p < 0.44) {
-                const beaconPulse = 1.0 + Math.sin(elapsed * 0.008) * 0.3;
-                const ringR = Math.max(0.5, 7 * beaconPulse * (1 - diveT * 0.5));
+              // Twinkling beacon ring
+              if (p < 0.45) {
+                const ringR = Math.max(0.5, 8 * (1.0 + Math.sin(elapsed * 0.008) * 0.3) * (1 - diveT * 0.5));
                 ctx.beginPath();
                 ctx.arc(sx, sy, ringR, 0, Math.PI * 2);
                 ctx.strokeStyle = "#fbbf24";
@@ -489,79 +442,79 @@ export const CosmicDotLoader: React.FC<CosmicDotLoaderProps> = ({
                 ctx.lineWidth = 1;
                 ctx.stroke();
               }
+
+              drawSafeDot(ctx, sx, sy, starRadius, pt.color, 1.0);
+              continue;
             }
+
+            // Other stars expand outward as camera dives in (warp starfield)
+            const curDist = rawDist * (1.0 + diveT * 2.5);
+            let sx = cx + (Math.cos(starAngle) * curDist - panX);
+            let sy = cy + (Math.sin(starAngle) * (curDist * tiltX) - panY);
+
+            // Interactive mouse hover displacement
+            if (p < 0.28) {
+              const dx = sx - (cx + mx);
+              const dy = sy - (cy + my);
+              const mDist = Math.sqrt(dx * dx + dy * dy);
+              if (mDist < 160 && mDist > 0) {
+                const force = (1 - mDist / 160) * 28;
+                sx += (dx / mDist) * force;
+                sy += (dy / mDist) * force;
+              }
+            }
+
+            // Dots remain natural size
+            const dotRadius = clamp(pt.size * (1 + diveT * 0.5), 0.5, 2.8);
+            const dotAlpha = pt.alpha * galaxyFade;
 
             drawSafeDot(ctx, sx, sy, dotRadius, pt.color, dotAlpha);
           }
-          ctx.restore();
         }
 
         // =============================================================
-        // STAGE 3: SOLAR SYSTEM BLOOMS OUTWARD FROM TARGET DOT (0.44 to 0.76)
+        // STAGE 3: SOLAR SYSTEM BLOOMS OUTWARD AT CENTER (0.44 to 0.76)
         // =============================================================
         if (p >= 0.44 && p < 0.76) {
           const bloomT = easeOutQuint(clamp((p - 0.44) / 0.14, 0, 1));
           const diveToEarthT = easeInOutCubic(clamp((p - 0.62) / 0.12, 0, 1));
 
-          const sCamDist = 700 - diveToEarthT * 480;
-          const camFocusX = currentEarthX * diveToEarthT;
-          const camFocusZ = currentEarthZ * diveToEarthT;
+          // Earth position in orbit around (cx, cy)
+          const earthOrbitR = 125 * bloomT;
+          const earthAngle = 0.35 + solarClock * 1.4;
+          const earthOrbitX = Math.cos(earthAngle) * earthOrbitR;
+          const earthOrbitY = Math.sin(earthAngle) * (earthOrbitR * 0.55);
 
-          const sRotX = 0.58 + normMy * 0.28 * (1 - diveToEarthT);
-          const sRotY = solarClock * 0.22 + normMx * 0.28 * (1 - diveToEarthT);
-          const cosSX = Math.cos(sRotX);
-          const sinSX = Math.sin(sRotX);
-          const cosSY = Math.cos(sRotY);
-          const sinSY = Math.sin(sRotY);
+          // As we dive to Earth, the camera centers on Earth:
+          const solarPanX = earthOrbitX * diveToEarthT;
+          const solarPanY = earthOrbitY * diveToEarthT;
 
-          ctx.save();
+          const solarFade = 1.0 - diveToEarthT * 0.9;
 
-          // 1. Sun Dots (Bloom outward from center point)
+          // 1. Sun Dots (Bloom outward from center cx, cy)
           for (let i = 0; i < sunDots.length; i++) {
             const pt = sunDots[i];
-            const wx = pt.x * bloomT - camFocusX;
-            const wy = pt.y * bloomT;
-            const wz = pt.z * bloomT - camFocusZ;
-
-            const x1 = wx * cosSY - wz * sinSY;
-            const z1 = wx * sinSY + wz * cosSY;
-            const y2 = wy * cosSX - z1 * sinSX;
-            const z2 = wy * sinSX + z1 * cosSX;
-
-            const depth = z2 + sCamDist;
-            if (depth <= 10) continue;
-            const scale = 500 / depth;
-
-            const dotRadius = clamp(pt.size * scale, 0.4, 3.0);
-            const sunAlpha = pt.alpha * clamp(bloomT * 1.5, 0, 1) * (1 - diveToEarthT * 0.9);
-
-            drawSafeDot(ctx, cx + x1 * scale, cy + y2 * scale, dotRadius, pt.color, sunAlpha);
+            const pulse = 1.0 + Math.sin(solarClock * 3 + i) * 0.05;
+            const sx = cx + (pt.x * bloomT * pulse) - solarPanX;
+            const sy = cy + (pt.y * bloomT * pulse * 0.7) - solarPanY;
+            const sunAlpha = pt.alpha * clamp(bloomT * 1.5, 0, 1) * solarFade;
+            drawSafeDot(ctx, sx, sy, clamp(pt.size, 0.5, 2.8), pt.color, sunAlpha);
           }
 
-          // 2. Orbital Rings (Expand outward)
+          // 2. Dotted Orbital Rings
           if (bloomT > 0.08) {
             const ringExpansion = easeOutQuint(clamp((bloomT - 0.08) / 0.92, 0, 1));
             for (let i = 0; i < orbitPathDots.length; i++) {
               const pt = orbitPathDots[i];
               const curR = pt.orbitR * ringExpansion;
-              const wx = Math.cos(pt.angle) * curR - camFocusX;
-              const wz = Math.sin(pt.angle) * curR - camFocusZ;
-
-              const x1 = wx * cosSY - wz * sinSY;
-              const z1 = wx * sinSY + wz * cosSY;
-              const y2 = -z1 * sinSX;
-              const z2 = z1 * cosSX;
-
-              const depth = z2 + sCamDist;
-              if (depth <= 10) continue;
-              const scale = 500 / depth;
-
-              const ringAlpha = (pt.isEarth ? 0.35 : 0.12) * ringExpansion * (1 - diveToEarthT * 0.9);
-              drawSafeDot(ctx, cx + x1 * scale, cy + y2 * scale, clamp(0.9 * scale, 0.3, 1.5), pt.color, ringAlpha);
+              const sx = cx + Math.cos(pt.angle) * curR - solarPanX;
+              const sy = cy + Math.sin(pt.angle) * (curR * 0.55) - solarPanY;
+              const ringAlpha = (pt.isEarth ? 0.4 : 0.14) * ringExpansion * solarFade;
+              drawSafeDot(ctx, sx, sy, pt.isEarth ? 1.0 : 0.8, pt.color, ringAlpha);
             }
           }
 
-          // 3. Planets (Orbiting)
+          // 3. Orbiting Planets
           if (bloomT > 0.12) {
             const planetExpansion = easeOutQuint(clamp((bloomT - 0.12) / 0.88, 0, 1));
             for (let i = 0; i < planetDots.length; i++) {
@@ -570,47 +523,33 @@ export const CosmicDotLoader: React.FC<CosmicDotLoaderProps> = ({
               const curR = pt.orbitR * planetExpansion;
 
               let px = Math.cos(curAngle) * curR;
-              let py = 0;
-              let pz = Math.sin(curAngle) * curR;
+              let py = Math.sin(curAngle) * (curR * 0.55);
 
               if (pt.isRing) {
                 px += Math.cos(pt.ringAng!) * (pt.ringDist! * planetExpansion);
-                py += (Math.sin(pt.ringAng!) * pt.ringDist! * 0.2) * planetExpansion;
-                pz += Math.sin(pt.ringAng!) * (pt.ringDist! * planetExpansion);
+                py += Math.sin(pt.ringAng!) * (pt.ringDist! * 0.3 * planetExpansion);
               } else {
                 px += pt.subX * planetExpansion;
-                py += pt.subY * planetExpansion;
-                pz += pt.subZ * planetExpansion;
+                py += pt.subY * planetExpansion * 0.55;
               }
 
-              const wx = px - camFocusX;
-              const wy = py;
-              const wz = pz - camFocusZ;
+              const sx = cx + px - solarPanX;
+              const sy = cy + py - solarPanY;
 
-              const x1 = wx * cosSY - wz * sinSY;
-              const z1 = wx * sinSY + wz * cosSY;
-              const y2 = wy * cosSX - z1 * sinSX;
-              const z2 = wy * sinSX + z1 * cosSX;
-
-              const depth = z2 + sCamDist;
-              if (depth <= 10) continue;
-              const scale = 500 / depth;
-
-              let dotRadius = clamp(pt.size * scale, 0.4, 3.2);
+              let dotRadius = clamp(pt.size, 0.5, 3.2);
               let dotAlpha = 0.9 * planetExpansion;
 
               if (pt.isEarth) {
-                dotRadius = clamp(pt.size * scale, 1.8, 3.5);
+                // Earth dot stays crisp and highlighted in cyan
+                dotRadius = clamp(pt.size * (1 + diveToEarthT * 0.5), 2.2, 3.8);
                 dotAlpha = 1.0;
               } else {
-                dotAlpha *= (1 - diveToEarthT * 0.92);
+                dotAlpha *= solarFade;
               }
 
-              drawSafeDot(ctx, cx + x1 * scale, cy + y2 * scale, dotRadius, pt.color, dotAlpha);
+              drawSafeDot(ctx, sx, sy, dotRadius, pt.color, dotAlpha);
             }
           }
-
-          ctx.restore();
         }
 
         // =============================================================
@@ -622,6 +561,7 @@ export const CosmicDotLoader: React.FC<CosmicDotLoaderProps> = ({
           const shatterT = isShattering ? (p - 0.86) / 0.14 : 0;
           const shatterEase = Math.pow(shatterT, 1.5);
 
+          // 3D Earth rotation angles + mouse tilt
           const eRotX = 0.22 + normMy * 0.45;
           const eRotY = earthSpinClock + normMx * 0.65;
           const cosEX = Math.cos(eRotX);
@@ -629,9 +569,7 @@ export const CosmicDotLoader: React.FC<CosmicDotLoaderProps> = ({
           const cosEY = Math.cos(eRotY);
           const sinEY = Math.sin(eRotY);
 
-          ctx.save();
-
-          // Expanding blast rings of glowing dots during shatter
+          // Expanding blast shockwave rings during shatter
           if (isShattering) {
             const blastR = Math.max(0.1, shatterEase * (Math.max(width, height) * 0.85));
             const SHOCK_COUNT = 70;
@@ -643,7 +581,7 @@ export const CosmicDotLoader: React.FC<CosmicDotLoaderProps> = ({
             }
           }
 
-          // Render 3D Earth Globe Dots
+          // 3D Earth Globe Dots
           const projectedGlobe: {
             sx: number;
             sy: number;
@@ -703,17 +641,16 @@ export const CosmicDotLoader: React.FC<CosmicDotLoaderProps> = ({
             });
           }
 
+          // Sort back-to-front
           projectedGlobe.sort((a, b) => a.z - b.z);
 
           for (let i = 0; i < projectedGlobe.length; i++) {
             const d = projectedGlobe[i];
             drawSafeDot(ctx, d.sx, d.sy, d.radius, d.color, d.alpha);
           }
-
-          ctx.restore();
         }
       } catch (err) {
-        console.warn("Render exception:", err);
+        console.warn("Render error:", err);
       }
 
       animationFrameId = requestAnimationFrame(render);
