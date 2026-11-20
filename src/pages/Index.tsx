@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { AnimatePresence } from 'framer-motion';
 import Navigation from '@/components/Navigation';
 import Hero from '@/components/Hero';
@@ -12,9 +12,23 @@ import Contact from '@/components/Contact';
 import Footer from '@/components/Footer';
 import Seo from '@/components/Seo';
 import { CraftMode } from '@/components/studio/CraftMode';
+import CosmicDotLoader from '@/components/CosmicDotLoader';
 
 export default function Index() {
   const [experienceMode, setExperienceMode] = useState<'studio' | 'craft'>('studio');
+  const [showCosmicLoader, setShowCosmicLoader] = useState(true);
+
+  // Disable background scrolling while cosmic loader is active
+  useEffect(() => {
+    if (showCosmicLoader) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [showCosmicLoader]);
 
   const handleExploreWork = () => {
     const el = document.getElementById('portfolio');
@@ -25,8 +39,19 @@ export default function Index() {
 
   return (
     <div className="min-h-screen bg-[#09090c] text-[#eeece8] selection:bg-blue-600 selection:text-white relative font-sans overflow-x-hidden">
+      {/* 5-Second Cosmic Dot Loader (Home Page Only) */}
+      <AnimatePresence mode="wait">
+        {showCosmicLoader && (
+          <CosmicDotLoader
+            key="home-cosmic-loader"
+            duration={5000}
+            onComplete={() => setShowCosmicLoader(false)}
+          />
+        )}
+      </AnimatePresence>
+
       <Seo
-        title="Web Design &amp; UI/UX Development Studio"
+        title="Web Design & UI/UX Development Studio"
         description="Aman UX Studio creates custom, high-converting websites, bespoke WordPress solutions, and clean UI/UX designs for growing businesses and startups."
       />
 
