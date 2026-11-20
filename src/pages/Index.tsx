@@ -39,12 +39,12 @@ export default function Index() {
 
   return (
     <div className="min-h-screen bg-[#09090c] text-[#eeece8] selection:bg-blue-600 selection:text-white relative font-sans overflow-x-hidden">
-      {/* 5-Second Cosmic Dot Loader (Home Page Only) */}
+      {/* Smooth Continuous Cosmic Dot Loader (Home Page Only) */}
       <AnimatePresence mode="wait">
         {showCosmicLoader && (
           <CosmicDotLoader
             key="home-cosmic-loader"
-            duration={5000}
+            duration={7500}
             onComplete={() => setShowCosmicLoader(false)}
           />
         )}
