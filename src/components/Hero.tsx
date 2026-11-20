@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { ArrowRight, FileDown } from 'lucide-react';
+import { ArrowRight, FileDown, Sparkles } from 'lucide-react';
 import { studioAudio } from '@/lib/studio-audio';
 
 interface HeroProps {
@@ -29,20 +29,33 @@ export default function Hero({ onOpenCraft }: HeroProps) {
       <div className="container mx-auto px-6 relative z-10">
         <div className="max-w-5xl mx-auto">
           
-          {/* Live Availability Badge */}
+          {/* Live Availability & Interactive Mode Badges */}
           <motion.div
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: [0.19, 1, 0.22, 1] }}
-            className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full border border-white/10 bg-white/[0.04] backdrop-blur-md mb-8"
+            className="flex flex-wrap items-center gap-3 mb-8"
           >
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#3ddc84] opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-[#3ddc84]"></span>
-            </span>
-            <span className="text-xs font-mono tracking-wider uppercase text-white/80">
-              Available for New Projects · Web Developer &amp; UI/UX Designer
-            </span>
+            <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full border border-white/10 bg-white/[0.04] backdrop-blur-md">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#3ddc84] opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-[#3ddc84]"></span>
+              </span>
+              <span className="text-xs font-mono tracking-wider uppercase text-white/80">
+                Available for New Projects · Web Developer &amp; UI/UX
+              </span>
+            </div>
+
+            {onOpenCraft && (
+              <button
+                onClick={onOpenCraft}
+                onMouseEnter={() => studioAudio.playHover()}
+                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full border border-blue-500/30 bg-blue-500/10 text-xs font-mono uppercase tracking-wider text-blue-300 hover:bg-blue-500/20 hover:text-white transition-all group"
+              >
+                <Sparkles className="w-3.5 h-3.5 text-blue-400 group-hover:rotate-12 transition-transform" />
+                <span>Interactive 2D Canvas</span>
+              </button>
+            )}
           </motion.div>
 
           {/* Kinetic Editorial Heading */}

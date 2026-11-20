@@ -11,42 +11,41 @@ export default function ResumePage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-900 flex flex-col font-sans">
+    <div className="min-h-screen bg-[#09090c] text-[#eeece8] flex flex-col font-sans selection:bg-blue-600 selection:text-white">
       <Seo
         title="Resume & Experience - Aman Sharma"
-        description="Full-stack & WordPress Web Developer with 2+ years of production experience building high-converting platforms like Fairease and Ireshh."
+        description="Web Developer & UI/UX Designer with 2+ years of production experience building high-converting platforms like Fairease, Ireshh, and Expert VUW."
         url="/resume"
       />
+      <div className="ambient-grain print:hidden" aria-hidden="true" />
       <div className="print:hidden">
         <Navigation />
       </div>
 
-      <main className="flex-grow pt-28 pb-20 px-4 sm:px-6 container mx-auto max-w-5xl">
+      <main className="flex-grow pt-32 pb-20 px-4 sm:px-6 container mx-auto max-w-5xl">
         {/* Top Action Bar */}
-        <div className="mb-8 flex flex-col sm:flex-row items-center justify-between gap-4 print:hidden bg-white dark:bg-slate-800 p-4 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700">
+        <div className="mb-8 flex flex-col sm:flex-row items-center justify-between gap-4 print:hidden bg-white/[0.03] border border-white/10 p-5 rounded-3xl shadow-xl">
           <div>
-            <h1 className="text-xl font-bold text-slate-900 dark:text-white">Aman Sharma — Curriculum Vitae</h1>
-            <p className="text-xs text-slate-500">Web Developer | Full-Stack &amp; WordPress Specialist</p>
+            <h1 className="text-xl font-bold text-white">Aman Sharma — Curriculum Vitae</h1>
+            <p className="text-xs font-mono text-blue-400">Web Developer &amp; UI/UX Specialist · 50+ Websites Delivered</p>
           </div>
           <div className="flex items-center gap-3">
-            <Button
-              variant="outline"
-              size="sm"
+            <button
               onClick={handlePrint}
-              className="border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-200"
+              className="btn-studio-secondary btn-studio-sm"
             >
-              <Printer className="mr-2 h-4 w-4" /> Print
-            </Button>
-            <a href="/Aman_Sharma_Resume.pdf" target="_blank" rel="noopener noreferrer">
-              <Button size="sm" className="bg-blue-600 hover:bg-blue-700 text-white shadow-sm">
-                <FileDown className="mr-2 h-4 w-4" /> Download PDF
-              </Button>
+              <Printer className="mr-1.5 h-3.5 w-3.5 text-white/60" />
+              <span>Print CV</span>
+            </button>
+            <a href="/Aman_Sharma_Resume.pdf" target="_blank" rel="noopener noreferrer" className="btn-studio-primary btn-studio-sm font-semibold">
+              <FileDown className="mr-1.5 h-3.5 w-3.5" />
+              <span>Download PDF</span>
             </a>
           </div>
         </div>
 
         {/* Paper Document Container */}
-        <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-slate-200 dark:border-slate-700 p-8 sm:p-12 print:p-0 print:shadow-none print:border-none print:bg-white text-slate-800 dark:text-slate-100">
+        <div className="bg-[#0f0f15] rounded-3xl shadow-2xl border border-white/10 p-8 sm:p-12 print:p-0 print:shadow-none print:border-none print:bg-white text-white print:text-black">
           
           {/* Header */}
           <div className="text-center pb-8 border-b-2 border-slate-900 dark:border-slate-100 mb-8">

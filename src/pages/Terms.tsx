@@ -93,40 +93,41 @@ export default function Terms() {
   ];
 
   return (
-    <div className="min-h-screen bg-white dark:bg-slate-950 font-sans flex flex-col text-slate-800 dark:text-slate-100">
+    <div className="min-h-screen bg-[#09090c] text-[#eeece8] font-sans flex flex-col selection:bg-blue-600 selection:text-white">
       <Seo
         title="Terms of Service | Aman UX Studio"
         description="Review the terms and conditions governing UI/UX design, custom web development, and digital services delivered by Aman UX Studio."
         url="/terms"
       />
+      <div className="ambient-grain" aria-hidden="true" />
 
       <Navigation />
 
       {/* Header */}
-      <header className="relative bg-[#0A0E17] text-white pt-28 pb-16 lg:py-24 border-b border-slate-800 overflow-hidden">
+      <header className="relative bg-[#09090c] text-white pt-36 pb-16 border-b border-white/10 overflow-hidden">
         <div className="container mx-auto px-6 max-w-5xl relative z-10">
-          <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs sm:text-sm text-slate-400 font-medium mb-6">
+          <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs font-mono text-white/50 mb-6">
             <Link to="/" className="hover:text-white transition-colors">Home</Link>
-            <ChevronRight className="w-3.5 h-3.5 text-slate-600" />
-            <span className="text-slate-300">Terms of Service</span>
+            <ChevronRight className="w-3.5 h-3.5 text-white/30" />
+            <span className="text-white/80">Terms of Service</span>
           </nav>
 
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-xs font-bold tracking-wider uppercase bg-purple-500/10 text-purple-300 border border-purple-500/30 mb-4">
-            <FileText className="w-3.5 h-3.5 text-purple-400" />
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-xs font-mono uppercase tracking-wider bg-blue-500/10 text-blue-400 border border-blue-500/20 mb-4">
+            <FileText className="w-3.5 h-3.5 text-blue-400" />
             Legal Agreement
           </div>
 
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight mb-4">
+          <h1 className="text-3xl sm:text-5xl font-bold text-[#eeece8] tracking-tight mb-4">
             Terms of Service
           </h1>
-          <p className="text-slate-400 text-sm sm:text-base max-w-2xl leading-relaxed">
+          <p className="text-white/70 text-sm sm:text-base max-w-2xl leading-relaxed font-normal">
             Standard engagement terms for design, web development, and client delivery. Last updated: {lastUpdated}.
           </p>
         </div>
       </header>
 
       {/* Content */}
-      <main className="flex-grow py-14 lg:py-20 bg-slate-50/50 dark:bg-slate-950">
+      <main className="flex-grow py-14 lg:py-20 bg-[#09090c]">
         <div className="container mx-auto px-6 max-w-4xl space-y-8">
           {terms.map((term) => {
             const Icon = term.icon;
@@ -134,17 +135,19 @@ export default function Terms() {
               <section
                 key={term.id}
                 id={term.id}
-                className="p-6 sm:p-8 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-xs"
+                className="p-6 sm:p-8 rounded-3xl bg-white/[0.025] border border-white/10 shadow-xl"
               >
-                <div className="flex items-center gap-3 mb-4 pb-3 border-b border-slate-100 dark:border-slate-800">
-                  <div className="w-9 h-9 rounded-xl bg-purple-50 dark:bg-purple-950/50 text-purple-600 dark:text-purple-400 flex items-center justify-center flex-shrink-0">
-                    <Icon className="w-4 h-4" />
+                <div className="flex items-center gap-3 mb-6 pb-4 border-b border-white/10">
+                  <div className="w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/20 text-blue-400 flex items-center justify-center shrink-0">
+                    <Icon className="w-5 h-5" />
                   </div>
-                  <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white">
+                  <h2 className="text-xl sm:text-2xl font-bold text-white">
                     {term.title}
                   </h2>
                 </div>
-                {term.content}
+                <div className="text-white/70 text-sm leading-relaxed space-y-4">
+                  {term.content}
+                </div>
               </section>
             );
           })}

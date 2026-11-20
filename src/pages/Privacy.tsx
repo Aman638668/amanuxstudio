@@ -194,49 +194,50 @@ export default function Privacy() {
   ];
 
   return (
-    <div className="min-h-screen bg-white dark:bg-slate-950 font-sans flex flex-col text-slate-800 dark:text-slate-100">
+    <div className="min-h-screen bg-[#09090c] text-[#eeece8] font-sans flex flex-col selection:bg-blue-600 selection:text-white">
       <Seo
         title="Privacy Policy | Aman UX Studio"
-        description="Learn how Aman UX Studio protects your privacy, secures client project data, and adheres to GDPR and data protection standards."
+        description="Learn how Aman UX Studio protects your privacy, secures client project data, and adheres to data protection standards."
         url="/privacy"
       />
+      <div className="ambient-grain" aria-hidden="true" />
 
       <Navigation />
 
       {/* Header */}
-      <header className="relative bg-[#0A0E17] text-white pt-28 pb-16 lg:py-24 border-b border-slate-800 overflow-hidden">
-        <div className="absolute top-0 right-1/4 w-96 h-96 bg-purple-600/15 rounded-full blur-3xl pointer-events-none" />
+      <header className="relative bg-[#09090c] text-white pt-36 pb-16 border-b border-white/10 overflow-hidden">
+        <div className="absolute top-0 right-1/4 w-96 h-96 bg-blue-600/10 rounded-full blur-[120px] pointer-events-none" />
         <div className="container mx-auto px-6 max-w-5xl relative z-10">
-          <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs sm:text-sm text-slate-400 font-medium mb-6">
+          <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs font-mono text-white/50 mb-6">
             <Link to="/" className="hover:text-white transition-colors">Home</Link>
-            <ChevronRight className="w-3.5 h-3.5 text-slate-600" />
-            <span className="text-slate-300">Privacy Policy</span>
+            <ChevronRight className="w-3.5 h-3.5 text-white/30" />
+            <span className="text-white/80">Privacy Policy</span>
           </nav>
 
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-xs font-bold tracking-wider uppercase bg-blue-500/10 text-blue-300 border border-blue-500/30 mb-4">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-xs font-mono uppercase tracking-wider bg-blue-500/10 text-blue-400 border border-blue-500/20 mb-4">
             <ShieldCheck className="w-3.5 h-3.5 text-blue-400" />
             Data Protection &amp; Security
           </div>
 
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight mb-4">
+          <h1 className="text-3xl sm:text-5xl font-bold text-[#eeece8] tracking-tight mb-4">
             Privacy Policy
           </h1>
-          <p className="text-slate-400 text-sm sm:text-base max-w-2xl leading-relaxed">
+          <p className="text-white/70 text-sm sm:text-base max-w-2xl leading-relaxed font-normal">
             Transparent data practices, end-to-end security, and client confidentiality. Last updated: {lastUpdated}.
           </p>
         </div>
       </header>
 
       {/* Content */}
-      <main className="flex-grow py-14 lg:py-20 bg-slate-50/50 dark:bg-slate-950">
+      <main className="flex-grow py-14 lg:py-20 bg-[#09090c]">
         <div className="container mx-auto px-6 max-w-5xl">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
             
             {/* Quick Navigation Anchor Sidebar */}
-            <aside className="lg:col-span-4 lg:sticky lg:top-24 hidden lg:block">
-              <div className="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs">
-                <div className="flex items-center gap-2 font-bold text-sm text-slate-900 dark:text-white mb-4 pb-3 border-b border-slate-100 dark:border-slate-800">
-                  <FileText className="w-4 h-4 text-blue-600" />
+            <aside className="lg:col-span-4 lg:sticky lg:top-28 hidden lg:block">
+              <div className="p-6 rounded-2xl bg-white/[0.025] border border-white/10 shadow-xl">
+                <div className="flex items-center gap-2 font-mono text-xs uppercase tracking-wider text-white mb-4 pb-3 border-b border-white/10">
+                  <FileText className="w-4 h-4 text-blue-400" />
                   Policy Sections
                 </div>
                 <nav className="space-y-1.5 text-xs font-medium">
@@ -244,7 +245,7 @@ export default function Privacy() {
                     <a
                       key={sec.id}
                       href={`#${sec.id}`}
-                      className="block px-3 py-2 rounded-lg text-slate-600 dark:text-slate-400 hover:text-blue-600 hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-colors"
+                      className="block px-3 py-2 rounded-lg text-white/60 hover:text-white hover:bg-white/5 transition-colors"
                     >
                       {sec.title}
                     </a>
@@ -261,17 +262,19 @@ export default function Privacy() {
                   <section
                     key={sec.id}
                     id={sec.id}
-                    className="p-6 sm:p-8 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-xs scroll-mt-24"
+                    className="p-6 sm:p-8 rounded-3xl bg-white/[0.025] border border-white/10 shadow-xl scroll-mt-28"
                   >
-                    <div className="flex items-center gap-3 mb-4 pb-3 border-b border-slate-100 dark:border-slate-800">
-                      <div className="w-9 h-9 rounded-xl bg-blue-50 dark:bg-blue-950/50 text-blue-600 dark:text-blue-400 flex items-center justify-center flex-shrink-0">
-                        <IconComponent className="w-4 h-4" />
+                    <div className="flex items-center gap-3 mb-6 pb-4 border-b border-white/10">
+                      <div className="w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/20 text-blue-400 flex items-center justify-center">
+                        <IconComponent className="w-5 h-5" />
                       </div>
-                      <h2 className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white">
+                      <h2 className="text-xl sm:text-2xl font-bold text-white">
                         {sec.title}
                       </h2>
                     </div>
-                    {sec.content}
+                    <div className="text-white/70 text-sm leading-relaxed space-y-4">
+                      {sec.content}
+                    </div>
                   </section>
                 );
               })}

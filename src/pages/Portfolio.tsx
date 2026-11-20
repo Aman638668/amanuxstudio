@@ -1,102 +1,162 @@
+import { useState } from 'react';
 import Navigation from '@/components/Navigation';
 import PageHeader from '@/components/PageHeader';
 import Footer from '@/components/Footer';
 import Seo from '@/components/Seo';
-import { Card, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { ExternalLink, ArrowRight } from 'lucide-react';
+import { ExternalLink, ArrowRight, ArrowUpRight, CheckCircle2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { projects } from '@/components/Portfolio';
+import { studioAudio } from '@/lib/studio-audio';
+
+const categories = ["All", "E-Commerce", "Corporate & BPO", "Travel & Booking", "Finance & Legal"];
 
 export default function PortfolioPage() {
+  const [activeCategory, setActiveCategory] = useState("All");
+
+  const filteredProjects = activeCategory === "All"
+    ? projects
+    : projects.filter(p => p.category === activeCategory);
+
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col font-sans">
+    <div className="min-h-screen bg-[#09090c] text-[#eeece8] flex flex-col font-sans selection:bg-blue-600 selection:text-white">
       <Seo
         title="Client Portfolio & Case Studies"
-        description="Explore production case studies including Fairease Outsourcing, Ireshh Clothing, TicketDev Travel, and Expertvuw."
+        description="Explore live production case studies by Aman UX Studio including Fairease Outsourcing, Ireshh Clothing, TicketDev Travel, and Expert VUW."
         url="/portfolio"
       />
+      <div className="ambient-grain" aria-hidden="true" />
       <Navigation />
+
       <PageHeader
-        title="Our Work & Case Studies"
-        description="Real-world production websites built for measurable performance, lead generation, and business growth."
+        badge="SELECTED WORK"
+        title="Featured Client Case Studies."
+        description="Every website we build is configured for sub-second speed, lead generation, and measurable commercial results."
       />
 
-      <main className="flex-grow py-16 container mx-auto px-6 max-w-6xl">
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {projects.map((project, index) => (
-            <Card key={index} className="group overflow-hidden hover:shadow-xl transition-all duration-300 border border-slate-200 shadow-sm flex flex-col justify-between rounded-2xl bg-white">
-              <div>
-                <div className="relative overflow-hidden h-52 bg-slate-100 border-b border-slate-100">
-                  <img 
-                    src={project.image} 
-                    alt={project.title}
-                    className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-300"
-                  />
-                  <div className="absolute inset-0 bg-slate-900/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                    <a href={project.link} target="_blank" rel="noopener noreferrer">
-                      <Button variant="secondary" size="sm" className="shadow-lg font-semibold">
-                        <ExternalLink className="h-4 w-4 mr-2" />
-                        Visit Live Website
-                      </Button>
-                    </a>
-                  </div>
-                </div>
-                <CardContent className="p-6">
-                  <div className="flex items-center justify-between mb-3">
-                    <Badge variant="secondary" className="bg-blue-50 text-blue-700 font-medium">
-                      {project.category}
-                    </Badge>
-                  </div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">
-                    {project.title}
-                  </h3>
-                  <p className="text-gray-600 mb-4 text-xs sm:text-sm leading-relaxed">
-                    {project.description}
-                  </p>
-                  <div className="flex flex-wrap gap-1 mb-4">
-                    {project.tags.map((tag, idx) => (
-                      <Badge key={idx} variant="outline" className="text-[10px] text-slate-600">
-                        {tag}
-                      </Badge>
-                    ))}
-                  </div>
-                  <div className="space-y-1.5 pt-3 border-t border-slate-100">
-                    <h4 className="font-semibold text-[11px] text-slate-500 uppercase tracking-wider mb-1.5">Key Deliverables:</h4>
-                    {project.results.map((result, idx) => (
-                      <div key={idx} className="flex items-center text-xs text-gray-700">
-                        <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full mr-2 flex-shrink-0"></div>
-                        {result}
-                      </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </div>
-
-              <div className="px-6 pb-6 pt-2">
-                <a href={project.link} target="_blank" rel="noopener noreferrer" className="w-full block">
-                  <Button variant="outline" className="w-full text-slate-700 hover:text-blue-600 hover:border-blue-300 text-xs font-semibold">
-                    Visit Website <ExternalLink className="ml-2 h-3.5 w-3.5" />
-                  </Button>
-                </a>
-              </div>
-            </Card>
+      <main className="flex-grow py-20 container mx-auto px-6 max-w-6xl relative z-10 space-y-16">
+        
+        {/* Category Filters */}
+        <div className="flex flex-wrap items-center justify-center gap-2 pb-8 border-b border-white/10">
+          {categories.map((cat) => (
+            <button
+              key={cat}
+              onClick={() => {
+                studioAudio.playClick(750);
+                setActiveCategory(cat);
+              }}
+              onMouseEnter={() => studioAudio.playHover()}
+              className={`h-9 px-4 rounded-full text-xs font-medium tracking-wide transition-all duration-200 ${
+                activeCategory === cat
+                  ? 'bg-blue-600 text-white font-semibold shadow-md shadow-blue-600/30'
+                  : 'bg-white/[0.04] text-white/70 hover:text-white hover:bg-white/10 border border-white/10'
+              }`}
+            >
+              {cat}
+            </button>
           ))}
         </div>
 
-        {/* Bottom CTA */}
-        <div className="mt-16 text-center bg-white p-10 rounded-2xl border border-slate-200 shadow-sm max-w-3xl mx-auto">
-          <h3 className="text-2xl font-bold text-slate-900 mb-2">Have a Similar Project in Mind?</h3>
-          <p className="text-sm text-slate-600 mb-6">
-            Whether you need a full-scale e-commerce store like Ireshh or a corporate presence like Fairease, let's discuss your requirements.
-          </p>
-          <Link to="/contact">
-            <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white font-semibold">
-              Get a Free Project Proposal <ArrowRight className="ml-2 h-4 w-4" />
-            </Button>
-          </Link>
+        {/* Project Case Studies Grid */}
+        <div className="grid md:grid-cols-2 gap-8">
+          {filteredProjects.map((project) => (
+            <article
+              key={project.num}
+              className="group relative rounded-3xl border border-white/10 bg-white/[0.025] hover:bg-white/[0.05] p-6 sm:p-8 flex flex-col justify-between hover:border-blue-500/40 transition-all duration-300 shadow-xl overflow-hidden"
+            >
+              <div className="space-y-5">
+                {/* Visual Frame */}
+                <a
+                  href={project.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block relative rounded-2xl overflow-hidden border border-white/10 bg-[#141418] aspect-[16/10] group/img shadow-xl"
+                >
+                  <img
+                    src={project.image}
+                    alt={project.title}
+                    className="w-full h-full object-cover object-top transition-transform duration-700 ease-out group-hover/img:scale-105"
+                    loading="lazy"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover/img:opacity-100 transition-opacity duration-300 flex items-end p-4">
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-blue-600 text-white text-xs font-semibold shadow-lg">
+                      <span>Visit Live Website</span>
+                      <ArrowUpRight className="w-3.5 h-3.5" />
+                    </span>
+                  </div>
+                </a>
+
+                {/* Narrative */}
+                <div>
+                  <div className="flex items-center justify-between text-xs font-mono text-blue-400 mb-2">
+                    <span className="uppercase tracking-wider">{project.category}</span>
+                    <span className="text-white/30">CASE #{project.num}</span>
+                  </div>
+
+                  <h3 className="text-xl sm:text-2xl font-bold text-white group-hover:text-blue-300 transition-colors mb-2">
+                    {project.title}
+                  </h3>
+
+                  <p className="text-xs sm:text-sm text-white/70 leading-relaxed font-normal mb-4">
+                    {project.description}
+                  </p>
+
+                  {/* Results */}
+                  <div className="space-y-1.5 pt-2 border-t border-white/5">
+                    {project.results.map((res, i) => (
+                      <div key={i} className="flex items-center gap-2 text-xs text-white/90">
+                        <CheckCircle2 className="w-3.5 h-3.5 text-[#3ddc84] shrink-0" />
+                        <span>{res}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Action Bar */}
+              <div className="pt-6 mt-6 border-t border-white/10 flex items-center justify-between">
+                <div className="flex flex-wrap gap-1.5">
+                  {project.tags.slice(0, 3).map((tag) => (
+                    <span
+                      key={tag}
+                      className="px-2 py-0.5 rounded text-[10px] font-mono bg-white/5 border border-white/10 text-white/60"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+
+                <a
+                  href={project.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn-studio-primary btn-studio-sm font-semibold shrink-0"
+                >
+                  <span>Visit Site</span>
+                  <ArrowUpRight className="w-3.5 h-3.5 ml-1" />
+                </a>
+              </div>
+            </article>
+          ))}
         </div>
+
+        {/* CTA Bar */}
+        <div className="rounded-3xl border border-white/15 bg-gradient-to-b from-white/[0.06] to-white/[0.02] p-8 sm:p-12 text-center relative overflow-hidden shadow-2xl">
+          <div className="max-w-2xl mx-auto space-y-4">
+            <h3 className="text-2xl sm:text-4xl font-bold text-white tracking-tight">
+              Have a Project in Mind?
+            </h3>
+            <p className="text-sm sm:text-base text-white/70 leading-relaxed font-normal">
+              Whether you need an e-commerce storefront or a custom corporate rebuild, let's craft something exceptional.
+            </p>
+            <div className="pt-2">
+              <Link to="/contact" className="btn-studio-primary group">
+                <span>Start a Project</span>
+                <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+              </Link>
+            </div>
+          </div>
+        </div>
+
       </main>
 
       <Footer />

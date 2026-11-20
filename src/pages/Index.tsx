@@ -11,7 +11,6 @@ import RecentBlogs from '@/components/RecentBlogs';
 import Contact from '@/components/Contact';
 import Footer from '@/components/Footer';
 import Seo from '@/components/Seo';
-import { StudioDock } from '@/components/studio/StudioDock';
 import { CraftMode } from '@/components/studio/CraftMode';
 
 export default function Index() {
@@ -63,12 +62,6 @@ export default function Index() {
 
       {/* Footer */}
       <Footer />
-
-      {/* Floating System Dock Controls */}
-      <StudioDock
-        mode={experienceMode}
-        onToggleMode={(newMode) => setExperienceMode(newMode)}
-      />
 
       {/* Interactive Craft Mode Story Overlay */}
       <AnimatePresence>

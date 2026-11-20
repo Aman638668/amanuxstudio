@@ -4,24 +4,20 @@ import Navigation from '@/components/Navigation';
 import PageHeader from '@/components/PageHeader';
 import Footer from '@/components/Footer';
 import Seo from '@/components/Seo';
-import { Card, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
 import { 
   Globe, 
   ShoppingCart, 
   Palette, 
   Search, 
   ShieldCheck, 
-  Cpu, 
   ArrowRight, 
   Check, 
   Layers, 
   CheckCircle2, 
-  Clock, 
-  Zap, 
-  Smartphone 
+  Zap,
+  ArrowUpRight
 } from 'lucide-react';
+import { studioAudio } from '@/lib/studio-audio';
 
 const servicesList = [
   {
@@ -120,27 +116,27 @@ const processSteps = [
   {
     number: "01",
     title: "Discovery & Strategy",
-    desc: "We analyze your target audience, business goals, and competitors to determine the exact technical stack and sitemap required."
+    desc: "We analyze your target market, competitors, and conversion objectives to define sitemap and tech architecture."
   },
   {
     number: "02",
     title: "UI/UX Wireframing",
-    desc: "We map out user flows and craft interactive Figma designs so you can experience the look and feel before coding begins."
+    desc: "We map user journeys and create interactive Figma designs so you experience the look and feel before code starts."
   },
   {
     number: "03",
     title: "Clean Web Development",
-    desc: "We build your website using clean, maintainable code—whether modern React/Next.js or tailored WordPress/WooCommerce."
+    desc: "We build your website using lean, maintainable code—whether modern React/Next.js or tailored WordPress."
   },
   {
     number: "04",
     title: "QA & Performance Tuning",
-    desc: "Rigorous cross-browser testing, mobile responsiveness checks, and Core Web Vitals optimization to guarantee sub-second speeds."
+    desc: "Rigorous cross-browser testing, mobile responsiveness audits, and sub-second Core Web Vitals tuning."
   },
   {
     number: "05",
-    title: "Launch & Proactive Support",
-    desc: "We handle domain DNS cutover, SSL, search engine indexing, and provide ongoing direct developer maintenance."
+    title: "Launch & Direct Support",
+    desc: "We handle domain DNS cutover, SSL certification, search engine indexing, and provide direct developer maintenance."
   }
 ];
 
@@ -162,146 +158,133 @@ export default function ServicesPage() {
   }, [location]);
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col font-sans">
+    <div className="min-h-screen bg-[#09090c] text-[#eeece8] flex flex-col font-sans selection:bg-blue-600 selection:text-white">
       <Seo
         title="Services & Web Design Solutions"
-        description="Comprehensive web development, custom WordPress, WooCommerce e-commerce, UI/UX design, and Core Web Vitals speed optimization by Aman UX Studio."
+        description="Comprehensive web development, custom WordPress, WooCommerce e-commerce, UI/UX design in Figma, and Core Web Vitals speed optimization by Aman UX Studio."
         url="/services"
       />
+      <div className="ambient-grain" aria-hidden="true" />
       <Navigation />
+
       <PageHeader
-        title="Our Services & Technical Solutions"
-        description="End-to-end digital craftsmanship tailored to your business goals. From high-converting e-commerce stores to scalable custom web apps."
+        badge="STUDIO DISCIPLINES"
+        title="End-to-End Web Design & Development."
+        description="Everything you need to launch, scale, and convert online. Built with clean code, sub-second speed, and zero agency bloat."
       />
 
-      <main className="flex-grow py-16 container mx-auto px-6 max-w-6xl">
-        {/* Intro Banner */}
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <span className="text-blue-600 font-semibold text-xs sm:text-sm uppercase tracking-wider">
-            What We Do
-          </span>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 mt-2 mb-4">
-            Everything You Need to Build, Launch &amp; Scale
-          </h2>
-          <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
-            No cookie-cutter templates or unneeded bloat. Every service is delivered with obsessive attention to user experience, clean code, and business conversion.
-          </p>
-        </div>
-
-        {/* Detailed Services Grid */}
-        <div className="grid md:grid-cols-2 gap-8 mb-24">
-          {servicesList.map((service) => {
+      <main className="flex-grow py-20 container mx-auto px-6 max-w-6xl relative z-10 space-y-24">
+        
+        {/* Services Grid */}
+        <div className="grid md:grid-cols-2 gap-8">
+          {servicesList.map((service, index) => {
             const Icon = service.icon;
             return (
-              <Card 
-                key={service.id} 
-                id={service.id} 
-                className="scroll-mt-28 border border-slate-200 bg-white shadow-sm hover:shadow-xl transition-all duration-300 rounded-2xl flex flex-col justify-between overflow-hidden"
+              <div
+                key={service.id}
+                id={service.id}
+                className="scroll-mt-28 rounded-3xl border border-white/10 bg-white/[0.025] hover:bg-white/[0.045] p-8 sm:p-10 flex flex-col justify-between hover:border-blue-500/40 transition-all duration-300 shadow-xl"
               >
-                <div className="p-8">
-                  <div className="h-12 w-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center mb-6 shadow-inner">
-                    <Icon className="h-6 w-6" />
+                <div>
+                  <div className="flex items-center justify-between mb-6">
+                    <div className="w-12 h-12 rounded-2xl bg-blue-500/10 border border-blue-500/20 text-blue-400 flex items-center justify-center">
+                      <Icon className="w-6 h-6" />
+                    </div>
+                    <span className="font-mono text-xs text-white/30">0{index + 1}</span>
                   </div>
 
-                  <h3 className="text-xl sm:text-2xl font-bold text-slate-900 mb-2">
+                  <h3 className="text-xl sm:text-2xl font-bold text-white mb-2">
                     {service.title}
                   </h3>
-                  <p className="text-xs sm:text-sm font-semibold text-blue-600 mb-4">
+                  <p className="text-xs sm:text-sm font-mono text-blue-400 mb-4">
                     {service.tagline}
                   </p>
-                  <p className="text-sm text-slate-600 leading-relaxed mb-6">
+                  <p className="text-xs sm:text-sm text-white/70 leading-relaxed font-normal mb-6">
                     {service.description}
                   </p>
 
-                  <div className="space-y-2.5 pt-4 border-t border-slate-100 mb-6">
-                    <h4 className="text-xs font-bold uppercase tracking-wider text-slate-800">Key Deliverables:</h4>
+                  <div className="space-y-2 pt-4 border-t border-white/5 mb-6">
+                    <div className="text-xs font-mono uppercase tracking-wider text-white/50 mb-3">Key Deliverables:</div>
                     {service.deliverables.map((item, idx) => (
-                      <div key={idx} className="flex items-start text-xs sm:text-sm text-slate-700">
-                        <Check className="h-4 w-4 text-emerald-500 mr-2 flex-shrink-0 mt-0.5" />
+                      <div key={idx} className="flex items-start text-xs sm:text-sm text-white/80">
+                        <Check className="h-4 w-4 text-[#3ddc84] mr-2 shrink-0 mt-0.5" />
                         <span>{item}</span>
                       </div>
                     ))}
                   </div>
 
-                  <div className="flex flex-wrap gap-1.5">
+                  <div className="flex flex-wrap gap-1.5 pt-2">
                     {service.tech.map((t, idx) => (
-                      <Badge key={idx} variant="outline" className="text-[10px] text-slate-600 bg-slate-50">
+                      <span key={idx} className="text-[11px] font-mono px-2.5 py-1 rounded-md bg-white/5 border border-white/10 text-white/60">
                         {t}
-                      </Badge>
+                      </span>
                     ))}
                   </div>
                 </div>
 
-                <div className="p-6 bg-slate-50 border-t border-slate-100 flex items-center justify-between">
-                  <span className="text-xs font-medium text-slate-500">Custom Scope &amp; Fast Delivery</span>
+                <div className="pt-6 mt-6 border-t border-white/10 flex items-center justify-between">
+                  <span className="text-xs font-mono text-white/40">Custom Scope &amp; Fast Delivery</span>
                   <Link
                     to="/contact"
-                    className="btn-studio-primary btn-studio-sm"
+                    className="btn-studio-primary btn-studio-sm font-semibold"
                   >
-                    <span>Discuss This Service</span>
-                    <ArrowRight className="h-3.5 w-3.5" />
+                    <span>Discuss Project</span>
+                    <ArrowUpRight className="w-3.5 h-3.5 ml-1" />
                   </Link>
                 </div>
-              </Card>
+              </div>
             );
           })}
         </div>
 
-        {/* Process Section */}
-        <div className="mb-24">
-          <div className="text-center max-w-2xl mx-auto mb-12">
-            <span className="text-blue-600 font-semibold text-xs uppercase tracking-wider">Our Proven Methodology</span>
-            <h3 className="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-2 mb-3">
-              How We Take Projects From Concept to Launch
-            </h3>
-            <p className="text-xs sm:text-sm text-slate-600">
+        {/* 5-Step Methodology */}
+        <div className="rounded-3xl border border-white/10 bg-white/[0.02] p-8 sm:p-12 space-y-10">
+          <div className="text-center max-w-2xl mx-auto space-y-3">
+            <span className="text-xs font-mono uppercase tracking-widest text-blue-400">[ METHODOLOGY ]</span>
+            <h3 className="text-2xl sm:text-3xl font-bold text-white">How We Take Projects From Concept to Launch</h3>
+            <p className="text-xs sm:text-sm text-white/60 leading-relaxed">
               A transparent, 5-step roadmap ensuring on-time delivery with zero technical surprises.
             </p>
           </div>
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-4">
             {processSteps.map((step, idx) => (
-              <div key={idx} className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm relative flex flex-col justify-between">
-                <div>
-                  <div className="text-2xl font-black text-blue-600/30 font-mono mb-3">
-                    {step.number}
-                  </div>
-                  <h4 className="font-bold text-slate-900 text-sm mb-2">
-                    {step.title}
-                  </h4>
-                  <p className="text-xs text-slate-600 leading-relaxed">
-                    {step.desc}
-                  </p>
+              <div key={idx} className="p-5 rounded-2xl border border-white/5 bg-white/[0.02] space-y-2 hover:border-white/15 transition-colors">
+                <div className="text-2xl font-black text-blue-500/30 font-mono">
+                  {step.number}
                 </div>
+                <h4 className="font-bold text-white text-sm">
+                  {step.title}
+                </h4>
+                <p className="text-xs text-white/60 leading-relaxed font-normal">
+                  {step.desc}
+                </p>
               </div>
             ))}
           </div>
         </div>
 
-        {/* CTA Card */}
-        <div className="rounded-3xl bg-gradient-to-r from-blue-700 via-indigo-700 to-slate-900 p-8 sm:p-14 text-white text-center shadow-xl">
-          <h3 className="text-2xl sm:text-4xl font-extrabold mb-4">
-            Have a Project in Mind? Let's Talk.
-          </h3>
-          <p className="text-sm sm:text-base text-blue-100 max-w-2xl mx-auto mb-8 leading-relaxed">
-            Whether you need a full corporate rebuild like Fairease, a custom e-commerce storefront, or a high-performance web app, we provide free consultation and transparent proposals within 24 hours.
-          </p>
-          <div className="flex flex-wrap gap-4 justify-center">
-            <Link
-              to="/contact"
-              className="btn-studio-white group"
-            >
-              <span>Get a Free Consultation &amp; Proposal</span>
-              <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-            </Link>
-            <Link
-              to="/portfolio"
-              className="btn-studio-secondary"
-            >
-              <span>View Past Case Studies</span>
-            </Link>
+        {/* CTA Bar */}
+        <div className="rounded-3xl border border-white/15 bg-gradient-to-b from-white/[0.06] to-white/[0.02] p-8 sm:p-12 text-center relative overflow-hidden shadow-2xl">
+          <div className="max-w-2xl mx-auto space-y-4">
+            <h3 className="text-2xl sm:text-4xl font-bold text-white tracking-tight">
+              Have a Website in Mind? Let's Talk.
+            </h3>
+            <p className="text-sm sm:text-base text-white/70 leading-relaxed font-normal">
+              Whether you need a custom corporate website, an e-commerce storefront, or speed tuning, we provide free consultation and transparent proposals within 24 hours.
+            </p>
+            <div className="flex flex-wrap gap-4 justify-center pt-2">
+              <Link to="/contact" className="btn-studio-primary group">
+                <span>Get a Free Consultation &amp; Proposal</span>
+                <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+              </Link>
+              <Link to="/portfolio" className="btn-studio-secondary">
+                <span>View Past Case Studies</span>
+              </Link>
+            </div>
           </div>
         </div>
+
       </main>
 
       <Footer />
