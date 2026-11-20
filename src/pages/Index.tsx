@@ -44,7 +44,7 @@ export default function Index() {
         {showCosmicLoader && (
           <CosmicDotLoader
             key="home-cosmic-loader"
-            duration={7500}
+            duration={8000}
             onComplete={() => setShowCosmicLoader(false)}
           />
         )}
