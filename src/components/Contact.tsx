@@ -1,4 +1,3 @@
-import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Mail, Phone, MapPin, Send, Loader2, CheckCircle2 } from 'lucide-react';
@@ -68,14 +67,14 @@ export default function Contact() {
     <section id="contact" className="py-24 md:py-32 bg-[#09090c] text-[#eeece8] relative border-t border-white/5">
       <div className="container mx-auto px-6 max-w-6xl">
         <div className="text-center mb-16">
-          <div className="flex items-center justify-center gap-2 text-xs font-mono uppercase tracking-widest text-[#5b5fe0] mb-3">
-            <span>[ 07 / START AN ARCHITECTURE ]</span>
+          <div className="flex items-center justify-center gap-2 text-xs font-mono uppercase tracking-widest text-blue-400 mb-3">
+            <span>[ 07 / START A CONVERSATION ]</span>
           </div>
           <h2 className="text-3xl sm:text-5xl md:text-6xl font-bold tracking-tight text-[#eeece8] mt-2 mb-4">
-            Let's Engineer Your Vision.
+            Let's Build Something Great Together.
           </h2>
-          <p className="text-base sm:text-lg text-white/60 max-w-2xl mx-auto font-light">
-            Have a project in mind or need to upgrade your digital platform? Send us a message and receive a custom technical proposal and consultation within 24 hours.
+          <p className="text-base sm:text-lg text-white/70 max-w-2xl mx-auto font-normal">
+            Ready to transform your digital presence? Send us a message and receive a custom proposal and consultation within 24 hours.
           </p>
         </div>
 
@@ -84,10 +83,10 @@ export default function Contact() {
           <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-8 md:p-10 shadow-2xl backdrop-blur-sm">
             <div className="mb-8">
               <h3 className="text-xl font-bold text-[#eeece8] mb-1">
-                Project Specification &amp; Inquiry
+                Send Us a Message
               </h3>
-              <p className="text-xs sm:text-sm text-white/50 font-light">
-                Direct developer intake. Zero sales spam.
+              <p className="text-xs sm:text-sm text-white/60 font-normal">
+                Fill in your details below and we will get back to you directly.
               </p>
             </div>
 
@@ -96,32 +95,32 @@ export default function Contact() {
                 <div className="h-16 w-16 bg-[#3ddc84]/10 border border-[#3ddc84]/30 text-[#3ddc84] rounded-full mx-auto flex items-center justify-center">
                   <CheckCircle2 className="h-8 w-8" />
                 </div>
-                <h4 className="text-2xl font-bold text-white">Message Delivered</h4>
-                <p className="text-white/60 max-w-sm mx-auto text-sm font-light">
-                  We have received your project details and dispatched a notification alert. We will analyze your requirements and connect with you shortly.
+                <h4 className="text-2xl font-bold text-white">Message Delivered!</h4>
+                <p className="text-white/70 max-w-sm mx-auto text-sm font-normal">
+                  Thank you! We have received your project details and will get back to you within 24 hours.
                 </p>
                 <button
                   onClick={() => setSubmitted(false)}
-                  className="mt-4 px-6 py-2.5 rounded-full border border-white/15 text-xs font-mono uppercase tracking-wider text-white hover:bg-white/10 transition-colors"
+                  className="btn-studio-secondary !h-10 !px-6 !text-xs mt-4"
                 >
-                  Send Another Inquiry
+                  Send Another Message
                 </button>
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-5">
                 <div>
                   <label htmlFor="name" className="block text-xs font-mono uppercase tracking-wider text-white/70 mb-2">
-                    Full Name / Company *
+                    Full Name *
                   </label>
                   <Input
                     id="name"
                     name="name"
                     type="text"
-                    placeholder="e.g. Elena Rostova"
+                    placeholder="e.g. John Doe"
                     value={formData.name}
                     onChange={handleChange}
                     required
-                    className="w-full h-12 bg-white/[0.04] border-white/10 text-white placeholder:text-white/30 focus:border-[#5b5fe0] rounded-xl"
+                    className="w-full h-12 bg-white/[0.04] border-white/10 text-white placeholder:text-white/40 focus:border-blue-500 rounded-xl"
                   />
                 </div>
 
@@ -134,17 +133,17 @@ export default function Contact() {
                       id="email"
                       name="email"
                       type="email"
-                      placeholder="elena@company.com"
+                      placeholder="john@example.com"
                       value={formData.email}
                       onChange={handleChange}
                       required
-                      className="w-full h-12 bg-white/[0.04] border-white/10 text-white placeholder:text-white/30 focus:border-[#5b5fe0] rounded-xl"
+                      className="w-full h-12 bg-white/[0.04] border-white/10 text-white placeholder:text-white/40 focus:border-blue-500 rounded-xl"
                     />
                   </div>
 
                   <div>
                     <label htmlFor="phone" className="block text-xs font-mono uppercase tracking-wider text-white/70 mb-2">
-                      Phone / WhatsApp
+                      Phone Number (Optional)
                     </label>
                     <Input
                       id="phone"
@@ -153,42 +152,42 @@ export default function Contact() {
                       placeholder="+91 92111 04514"
                       value={formData.phone}
                       onChange={handleChange}
-                      className="w-full h-12 bg-white/[0.04] border-white/10 text-white placeholder:text-white/30 focus:border-[#5b5fe0] rounded-xl"
+                      className="w-full h-12 bg-white/[0.04] border-white/10 text-white placeholder:text-white/40 focus:border-blue-500 rounded-xl"
                     />
                   </div>
                 </div>
 
                 <div>
                   <label htmlFor="message" className="block text-xs font-mono uppercase tracking-wider text-white/70 mb-2">
-                    Project Goals, Budget &amp; Timeline *
+                    Project Details / Inquiry *
                   </label>
                   <Textarea
                     id="message"
                     name="message"
-                    placeholder="Tell us about your brand, current challenges, desired timeline, or goals..."
+                    placeholder="Tell us about your project, goals, timeline, and requirements..."
                     value={formData.message}
                     onChange={handleChange}
                     required
                     rows={4}
-                    className="w-full bg-white/[0.04] border-white/10 text-white placeholder:text-white/30 focus:border-[#5b5fe0] rounded-xl"
+                    className="w-full bg-white/[0.04] border-white/10 text-white placeholder:text-white/40 focus:border-blue-500 rounded-xl"
                   />
                 </div>
 
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full h-12 rounded-full bg-[#5b5fe0] hover:bg-[#6c70f0] text-white font-semibold text-sm tracking-wide transition-all shadow-xl shadow-[#5b5fe0]/30 hover:shadow-[#5b5fe0]/50 hover:-translate-y-0.5 active:translate-y-0.5 flex items-center justify-center gap-2"
+                  className="btn-studio-primary !w-full !h-12 !text-sm group"
                   data-cursor="Submit"
                 >
                   {isSubmitting ? (
                     <>
                       <Loader2 className="w-4 h-4 animate-spin" />
-                      <span>Transmitting Inquiry...</span>
+                      <span>Sending Message...</span>
                     </>
                   ) : (
                     <>
-                      <Send className="w-4 h-4" />
-                      <span>Dispatch Technical Inquiry</span>
+                      <Send className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                      <span>Send Message</span>
                     </>
                   )}
                 </button>
@@ -200,22 +199,22 @@ export default function Contact() {
           <div className="space-y-8 lg:pl-6">
             <div>
               <h3 className="text-2xl font-bold text-white mb-3">
-                Direct Studio Coordinates
+                Get in Touch Directly
               </h3>
-              <p className="text-sm text-white/60 mb-8 leading-relaxed font-light">
-                Skip the traditional agency bureaucracy. Reach out through any of our direct studio channels for immediate consultation.
+              <p className="text-sm text-white/70 mb-8 leading-relaxed font-normal">
+                Prefer to reach out directly? Connect via email, phone, or WhatsApp for an immediate consultation.
               </p>
 
               <div className="space-y-5">
                 <a
                   href="mailto:amanuxstudio@gmail.com"
-                  className="flex items-center p-4 rounded-xl border border-white/10 bg-white/[0.02] hover:bg-white/[0.05] transition-colors group"
+                  className="flex items-center p-4 rounded-xl border border-white/10 bg-white/[0.02] hover:bg-white/[0.06] transition-colors group"
                 >
                   <div className="w-11 h-11 rounded-lg bg-blue-500/10 border border-blue-500/20 text-blue-400 flex items-center justify-center mr-4">
                     <Mail className="h-5 w-5" />
                   </div>
                   <div>
-                    <div className="text-xs font-mono uppercase text-white/50 tracking-wider">Email Direct</div>
+                    <div className="text-xs font-mono uppercase text-white/50 tracking-wider">Email Us</div>
                     <div className="text-sm font-medium text-white group-hover:text-blue-300 transition-colors">
                       amanuxstudio@gmail.com
                     </div>
@@ -226,13 +225,13 @@ export default function Contact() {
                   href="https://wa.me/919211104514"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center p-4 rounded-xl border border-white/10 bg-white/[0.02] hover:bg-white/[0.05] transition-colors group"
+                  className="flex items-center p-4 rounded-xl border border-white/10 bg-white/[0.02] hover:bg-white/[0.06] transition-colors group"
                 >
                   <div className="w-11 h-11 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-[#3ddc84] flex items-center justify-center mr-4">
                     <Phone className="h-5 w-5" />
                   </div>
                   <div>
-                    <div className="text-xs font-mono uppercase text-white/50 tracking-wider">WhatsApp &amp; Direct Phone</div>
+                    <div className="text-xs font-mono uppercase text-white/50 tracking-wider">Call / WhatsApp</div>
                     <div className="text-sm font-medium text-white group-hover:text-[#3ddc84] transition-colors">
                       +91 92111-04514
                     </div>
@@ -244,9 +243,9 @@ export default function Contact() {
                     <MapPin className="h-5 w-5" />
                   </div>
                   <div>
-                    <div className="text-xs font-mono uppercase text-white/50 tracking-wider">Studio Base</div>
+                    <div className="text-xs font-mono uppercase text-white/50 tracking-wider">Location</div>
                     <div className="text-sm font-medium text-white">
-                      New Delhi, India · Global Remote Delivery
+                      New Delhi, India · Global Remote Clients
                     </div>
                   </div>
                 </div>
@@ -257,7 +256,7 @@ export default function Contact() {
               <h4 className="text-sm font-bold text-white mb-3 uppercase tracking-wider font-mono">
                 Studio Quality Guarantee
               </h4>
-              <ul className="space-y-2 text-xs text-white/70 font-light">
+              <ul className="space-y-2 text-xs text-white/80 font-normal">
                 <li className="flex items-center gap-2">
                   <span className="w-1.5 h-1.5 rounded-full bg-[#3ddc84]" />
                   Guaranteed response within 24 hours
@@ -268,7 +267,7 @@ export default function Contact() {
                 </li>
                 <li className="flex items-center gap-2">
                   <span className="w-1.5 h-1.5 rounded-full bg-[#3ddc84]" />
-                  Fixed-scope sprint delivery &amp; no surprise costs
+                  Transparent scope &amp; competitive pricing
                 </li>
               </ul>
             </div>

@@ -26,10 +26,10 @@ export default function Index() {
   };
 
   return (
-    <div className="min-h-screen bg-[#09090c] text-[#eeece8] selection:bg-[#5b5fe0] selection:text-white relative font-sans overflow-x-hidden">
+    <div className="min-h-screen bg-[#09090c] text-[#eeece8] selection:bg-blue-600 selection:text-white relative font-sans overflow-x-hidden">
       <Seo
-        title="Boutique Web Engineering &amp; UX Studio"
-        description="Aman UX Studio designs and engineers high-conversion corporate web platforms, headless e-commerce architectures, and bespoke interfaces that accelerate commercial growth."
+        title="Web Design &amp; UI/UX Development Studio"
+        description="Aman UX Studio creates custom, high-converting websites, bespoke WordPress solutions, and clean UI/UX designs for growing businesses and startups."
       />
 
       {/* Tactile Ambient Film Grain Overlay */}

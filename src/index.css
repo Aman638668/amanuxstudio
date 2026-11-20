@@ -121,7 +121,7 @@
   -webkit-text-stroke: 1.5px rgba(91, 95, 224, 0.4);
 }
 
-/* Studio High-Craft Button System (Inacio Standard) */
+/* Studio High-Craft Button System (Aman UX Studio Standard) */
 .btn-studio-primary {
   display: inline-flex;
   align-items: center;
@@ -130,21 +130,27 @@
   height: 2.875rem;
   padding: 0 1.625rem;
   border-radius: 9999px;
-  background-color: #5b5fe0;
-  color: #ffffff;
+  background: #2563eb;
+  color: #ffffff !important;
   font-size: 0.875rem;
   font-weight: 600;
-  letter-spacing: 0.015em;
-  transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
-  box-shadow: 0 10px 25px -5px rgba(91, 95, 224, 0.35);
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  user-select: none;
+  text-decoration: none !important;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 6px 20px -2px rgba(37, 99, 235, 0.45);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
 }
 .btn-studio-primary:hover {
-  background-color: #6c70f0;
-  transform: translateY(-1px);
-  box-shadow: 0 15px 30px -5px rgba(91, 95, 224, 0.45);
+  background: #1d4ed8;
+  color: #ffffff !important;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px -2px rgba(37, 99, 235, 0.55);
 }
 .btn-studio-primary:active {
-  transform: translateY(1px) scale(0.98);
+  transform: translateY(0) scale(0.98);
 }
 
 .btn-studio-secondary {
@@ -155,22 +161,64 @@
   height: 2.875rem;
   padding: 0 1.625rem;
   border-radius: 9999px;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  background-color: rgba(255, 255, 255, 0.04);
-  color: #eeece8;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background-color: rgba(255, 255, 255, 0.06);
+  color: #ffffff !important;
   font-size: 0.875rem;
   font-weight: 500;
-  letter-spacing: 0.015em;
-  backdrop-filter: blur(8px);
-  transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  user-select: none;
+  text-decoration: none !important;
+  backdrop-filter: blur(10px);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
 }
 .btn-studio-secondary:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.3);
-  color: #ffffff;
-  transform: translateY(-1px);
+  background-color: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.32);
+  color: #ffffff !important;
+  transform: translateY(-2px);
 }
 .btn-studio-secondary:active {
-  transform: translateY(1px) scale(0.98);
+  transform: translateY(0) scale(0.98);
 }
+
+.btn-studio-white {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  height: 2.875rem;
+  padding: 0 1.75rem;
+  border-radius: 9999px;
+  background-color: #ffffff;
+  color: #09090c !important;
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  user-select: none;
+  text-decoration: none !important;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.35);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+}
+.btn-studio-white:hover {
+  background-color: #f3f4f6;
+  color: #000000 !important;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px -4px rgba(0, 0, 0, 0.45);
+}
+.btn-studio-white:active {
+  transform: translateY(0) scale(0.98);
+}
+
+.btn-studio-sm {
+  height: 2.375rem !important;
+  padding: 0 1.125rem !important;
+  font-size: 0.8125rem !important;
+}
+
 

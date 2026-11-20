@@ -211,7 +211,7 @@ const TechBrowserMockup = ({ coverImage, title }: { coverImage?: string; title: 
           ) : (
             <div className="w-full h-full p-6 flex flex-col justify-center items-center text-center">
               <Code2 className="w-12 h-12 text-purple-400 mb-3" />
-              <p className="text-white font-bold text-sm">Full-Stack Architecture</p>
+              <p className="text-white font-bold text-sm">Full-Stack Solution</p>
               <p className="text-slate-400 text-xs mt-1">High-Performance Production Stack</p>
             </div>
           )}
@@ -300,7 +300,7 @@ const TechBlueprintCard = ({ number }: { number: string }) => {
       </div>
 
       <div className="pt-2 border-t border-slate-800 text-[10px] text-slate-400 flex items-center justify-between">
-        <span>Verified Architecture</span>
+        <span>Verified Performance</span>
         <Check className="w-3.5 h-3.5 text-emerald-400" />
       </div>
     </div>

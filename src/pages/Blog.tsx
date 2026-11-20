@@ -61,14 +61,14 @@ const Blog = () => {
     return (
         <div className="min-h-screen bg-slate-50 flex flex-col font-sans">
             <Seo
-                title="Engineering & Web Development Blog"
-                description="Technical articles, architectural case studies, performance optimization guides, and conversion UX teardowns from Aman UX Studio."
+                title="Web Design & Development Blog"
+                description="Practical guides on web design, custom WordPress development, speed optimization, and UI/UX case studies from Aman UX Studio."
                 url="/blog"
             />
             <Navigation />
             <PageHeader
-                title="Engineering Insights & Tech Articles"
-                description="Actionable web architecture guides, Core Web Vitals optimization playbooks, and production case studies from building platforms like Fairease and Ireshh."
+                title="Web Design & Development Articles"
+                description="Practical web design guides, WordPress optimization tips, and case studies from building platforms like Fairease, Ireshh, and Expert VUW."
             />
             
             <main className="flex-grow container mx-auto px-6 py-16">

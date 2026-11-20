@@ -72,7 +72,7 @@ export default function Navigation() {
             className="flex items-center gap-2.5 text-left group"
             data-cursor="Home"
           >
-            <div className="w-7 h-7 rounded-lg bg-gradient-to-tr from-[#5b5fe0] to-blue-400 flex items-center justify-center text-white font-bold text-xs shadow-md shadow-[#5b5fe0]/30 group-hover:scale-105 transition-transform">
+            <div className="w-7 h-7 rounded-lg bg-gradient-to-tr from-blue-600 to-sky-400 flex items-center justify-center text-white font-bold text-xs shadow-md shadow-blue-600/30 group-hover:scale-105 transition-transform">
               A
             </div>
             <div className="flex flex-col">
@@ -80,7 +80,7 @@ export default function Navigation() {
                 AMAN UX STUDIO
               </span>
               <span className="text-[10px] font-mono tracking-widest text-white/50 uppercase">
-                Digital Engineering
+                Web Design &amp; UI/UX
               </span>
             </div>
           </button>
@@ -104,7 +104,7 @@ export default function Navigation() {
             <button
               onClick={() => handleNavClick('contact')}
               onMouseEnter={() => studioAudio.playHover()}
-              className="btn-studio-secondary !h-9 !px-4 !text-xs uppercase tracking-wider group"
+              className="btn-studio-primary btn-studio-sm uppercase tracking-wider group"
               data-cursor="Book Call"
             >
               <span>Get in Touch</span>
@@ -140,9 +140,9 @@ export default function Navigation() {
             <div className="pt-4 border-t border-white/10">
               <button
                 onClick={() => handleNavClick('contact')}
-                className="w-full py-3 rounded-full bg-[#5b5fe0] text-white font-semibold text-xs uppercase tracking-wider text-center"
+                className="btn-studio-primary w-full text-center"
               >
-                Get in Touch
+                <span>Get in Touch</span>
               </button>
             </div>
           </div>

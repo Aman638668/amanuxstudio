@@ -6,12 +6,12 @@ const comparisons = [
     problemTitle: "The Disappearing Agency Act",
     problemDesc: "You're pitched by smooth salespeople, but once the final payment is cleared, support tickets go unanswered for weeks when a checkout breaks or plugins crash.",
     solutionTitle: "Direct 1-on-1 Developer Accountability",
-    solutionDesc: "You work directly with Aman Sharma—the actual engineer writing your code. Direct WhatsApp/email access with guaranteed 24-hour turnaround, even post-launch."
+    solutionDesc: "You work directly with Aman Sharma—the actual designer and web developer building your site. Direct WhatsApp/email access with guaranteed 24-hour turnaround, even post-launch."
   },
   {
     problemTitle: "Bloated Templates & 6-Second Load Times",
     problemDesc: "Agencies slap together 35+ unneeded plugins on a generic theme. Your site drags at 6+ seconds, destroying your ad budget and scaring away 50% of visitors.",
-    solutionTitle: "Obsessive Speed & Conversion Engineering",
+    solutionTitle: "Obsessive Speed & Conversion Focus",
     solutionDesc: "Clean, bespoke code tailored to your exact business model. We optimize Core Web Vitals for sub-second speeds that rank on Google and convert visitors into revenue."
   },
   {
@@ -93,7 +93,7 @@ export default function WhyChooseUs() {
             </p>
             <button
               onClick={scrollToContact}
-              className="btn-studio-primary !bg-white !text-black hover:!bg-white/95 !h-12 !px-8 !text-sm !font-bold shadow-xl group"
+              className="btn-studio-white group"
             >
               <span>Start Your Project With Us</span>
               <ArrowRight className="w-4 h-4 ml-1 transition-transform group-hover:translate-x-1" />

@@ -40,21 +40,20 @@ const RecentBlogs = () => {
       <div className="container mx-auto px-6 max-w-6xl">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-16 pb-8 border-b border-white/10 gap-6">
           <div>
-            <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-widest text-[#5b5fe0] mb-3">
+            <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-widest text-blue-400 mb-3">
               <span>[ 06 / INSIGHTS &amp; WRITING ]</span>
             </div>
             <h2 className="text-3xl sm:text-5xl font-bold text-[#eeece8] tracking-tight">
-              Engineering Notes &amp; Insights
+              Articles &amp; Web Insights
             </h2>
           </div>
-          <Link to="/blog/#blog">
-            <button
-              onMouseEnter={() => studioAudio.playHover()}
-              className="btn-studio-secondary !h-9 !px-4 text-xs font-mono uppercase tracking-wider group"
-            >
-              <span>View All Articles</span>
-              <ArrowUpRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-            </button>
+          <Link
+            to="/blog"
+            onMouseEnter={() => studioAudio.playHover()}
+            className="btn-studio-secondary btn-studio-sm font-mono uppercase tracking-wider group"
+          >
+            <span>View All Articles</span>
+            <ArrowUpRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
           </Link>
         </div>
 

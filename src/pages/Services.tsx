@@ -31,7 +31,7 @@ const servicesList = [
     tagline: "High-performance web applications built with modern React, Next.js, and TypeScript.",
     description: "We build modern, scalable web applications from scratch without relying on sluggish templates. Ideal for startups and companies that require dynamic functionality, real-time databases, and custom user portals.",
     deliverables: [
-      "Custom React / Next.js architecture with clean TypeScript",
+      "Custom React & Next.js frontend with clean TypeScript",
       "Supabase / PostgreSQL database modeling & authentication",
       "API integrations (payment gateways, CRMs, webhooks)",
       "Zero-latency static generation & server-side rendering (SSR)",
@@ -42,9 +42,9 @@ const servicesList = [
   {
     id: "wordpress",
     icon: Layers,
-    title: "WordPress & Elementor Engineering",
-    tagline: "Corporate platforms built for easy marketing management, enterprise speed, and zero headaches.",
-    description: "WordPress powers over 40% of the web, but poorly built sites crash and load slowly. We engineer custom WordPress and Elementor architectures—like our work on Fairease and Expertvuw—ensuring lightning-fast load times and bulletproof security.",
+    title: "WordPress & Elementor Development",
+    tagline: "Corporate websites built for easy content management, fast speeds, and zero headaches.",
+    description: "WordPress powers over 40% of the web, but poorly built sites crash and load slowly. We design and build custom WordPress and Elementor websites—like our work on Fairease and Expert VUW—ensuring fast load times and clean, reliable design.",
     deliverables: [
       "Pixel-perfect custom Elementor Pro & block layouts",
       "Bespoke PHP hooks, custom post types & taxonomies",
@@ -87,13 +87,13 @@ const servicesList = [
   {
     id: "seo-performance",
     icon: Search,
-    title: "SEO Architecture & Core Web Vitals Tuning",
-    tagline: "Dominate search rankings with sub-second speeds and structured semantic markup.",
-    description: "Google ranks fast, accessible websites. We perform in-depth speed tuning and technical on-page SEO to ensure your platform passes Core Web Vitals (LCP, INP, CLS) and gets found by target buyers.",
+    title: "SEO & Core Web Vitals Optimization",
+    tagline: "Rank higher on Google with fast speeds and structured semantic markup.",
+    description: "Google ranks fast, accessible websites. We optimize load speeds and technical on-page SEO so your website passes Core Web Vitals (LCP, INP, CLS) and gets found by customers.",
     deliverables: [
-      "Sub-second load times & Google PageSpeed 90+ targets",
+      "Sub-second load times & Google PageSpeed 90+ score",
       "JSON-LD Schema markup for rich Google search snippets",
-      "Dynamic XML sitemaps, robots.txt & canonical tag architecture",
+      "Dynamic XML sitemaps, robots.txt & canonical tags",
       "Image optimization (WebP/AVIF compression & lazy loading)",
       "Comprehensive on-page keyword targeting & meta tags"
     ],
@@ -129,8 +129,8 @@ const processSteps = [
   },
   {
     number: "03",
-    title: "Clean-Code Engineering",
-    desc: "We build your platform using clean, maintainable code—whether custom React/Next.js or hardened WordPress/WooCommerce."
+    title: "Clean Web Development",
+    desc: "We build your website using clean, maintainable code—whether modern React/Next.js or tailored WordPress/WooCommerce."
   },
   {
     number: "04",
@@ -164,7 +164,7 @@ export default function ServicesPage() {
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col font-sans">
       <Seo
-        title="Services & Digital Engineering Solutions"
+        title="Services & Web Design Solutions"
         description="Comprehensive web development, custom WordPress, WooCommerce e-commerce, UI/UX design, and Core Web Vitals speed optimization by Aman UX Studio."
         url="/services"
       />
@@ -234,10 +234,12 @@ export default function ServicesPage() {
 
                 <div className="p-6 bg-slate-50 border-t border-slate-100 flex items-center justify-between">
                   <span className="text-xs font-medium text-slate-500">Custom Scope &amp; Fast Delivery</span>
-                  <Link to="/contact">
-                    <Button size="sm" className="bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs">
-                      Discuss This Service <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
-                    </Button>
+                  <Link
+                    to="/contact"
+                    className="btn-studio-primary btn-studio-sm"
+                  >
+                    <span>Discuss This Service</span>
+                    <ArrowRight className="h-3.5 w-3.5" />
                   </Link>
                 </div>
               </Card>
@@ -285,15 +287,18 @@ export default function ServicesPage() {
             Whether you need a full corporate rebuild like Fairease, a custom e-commerce storefront, or a high-performance web app, we provide free consultation and transparent proposals within 24 hours.
           </p>
           <div className="flex flex-wrap gap-4 justify-center">
-            <Link to="/contact">
-              <Button size="lg" className="bg-white text-slate-900 hover:bg-slate-100 font-bold px-8 py-6 rounded-full shadow-lg">
-                Get a Free Consultation &amp; Proposal <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
+            <Link
+              to="/contact"
+              className="btn-studio-white group"
+            >
+              <span>Get a Free Consultation &amp; Proposal</span>
+              <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
             </Link>
-            <Link to="/portfolio">
-              <Button size="lg" variant="outline" className="border-white/70 text-white hover:bg-white hover:text-slate-900 font-semibold px-8 py-6 rounded-full bg-transparent">
-                View Past Case Studies
-              </Button>
+            <Link
+              to="/portfolio"
+              className="btn-studio-secondary"
+            >
+              <span>View Past Case Studies</span>
             </Link>
           </div>
         </div>

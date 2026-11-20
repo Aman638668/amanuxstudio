@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowRight, ChevronRight, ChevronLeft, Sparkles, X, ExternalLink } from 'lucide-react';
+import { ArrowRight, ChevronRight, ChevronLeft, X } from 'lucide-react';
 import { studioAudio } from '@/lib/studio-audio';
 
 interface CraftModeProps {
@@ -11,31 +11,31 @@ interface CraftModeProps {
 const chapters = [
   {
     num: "01",
-    subtitle: "The Craft Philosophy",
-    title: "We don't build generic websites.",
-    body: "Most digital agencies push bloated cookie-cutter themes loaded with 50 plugins. Aman UX Studio engineers custom, bespoke digital platforms crafted from first principles to convert visitors into enterprise pipeline.",
-    hint: "Move your cursor to warp the particle matrix"
+    subtitle: "Design & UX Philosophy",
+    title: "We design websites that convert, not bloated templates.",
+    body: "Many websites struggle with cluttered themes and slow plugins. Aman UX Studio designs custom, user-friendly layouts in Figma and develops fast, clean websites that turn visitors into inquiries and paying customers.",
+    hint: "Move your cursor to interact with the background particles"
   },
   {
     num: "02",
-    subtitle: "Sub-Second Velocity",
-    title: "Performance is not a feature. It is the foundation.",
-    body: "Every microsecond of friction cost businesses revenue. We build modern React, TypeScript, and hardened headless architectures delivering sub-second load times and 90+ Core Web Vitals.",
-    hint: "Every particle calculates real-time spatial vectors"
+    subtitle: "Fast Loading & SEO",
+    title: "Speed is the foundation of every successful website.",
+    body: "Slow websites lose visitors and rank lower on Google. We optimize every page for fast sub-second load times, clean code structure, and strong technical SEO to maximize your visibility.",
+    hint: "Optimized for 90+ Google Core Web Vitals"
   },
   {
     num: "03",
-    subtitle: "Conversion Architecture",
-    title: "Visual elegance engineered for real transaction volume.",
-    body: "Design without conversion strategy is just art. We design high-converting e-commerce funnels, frictionless checkout pipelines, and corporate BPO portals that scale client revenue.",
-    hint: "Designed for Fairease, Ireshh, TicketDev & more"
+    subtitle: "WordPress & E-Commerce",
+    title: "Clean storefronts and corporate websites that scale.",
+    body: "From 0-to-1 online clothing stores with UPI/Card checkout (like Ireshh) to corporate portals with lead funnels (like Fairease), we build robust solutions tailored to your business needs.",
+    hint: "Trusted by Fairease, Ireshh, TicketDev & more"
   },
   {
     num: "04",
-    subtitle: "End-to-End Delivery",
-    title: "From 0 to 1, and beyond.",
-    body: "Whether scaling an e-commerce clothing brand from zero or building multi-business conglomerate portals, we manage architecture, design tokens, security hardening, and ongoing velocity.",
-    hint: "Ready to launch your vision?"
+    subtitle: "Direct 1-on-1 Partnership",
+    title: "Work directly with the developer building your site.",
+    body: "No junior account managers, no confusing agency markups. You collaborate directly with Aman Sharma for transparent communication, fast turnarounds, and ongoing support.",
+    hint: "Ready to start your project?"
   }
 ];
 
@@ -75,7 +75,7 @@ export function CraftMode({ onClose, onExploreWork }: CraftModeProps) {
       color: string;
     }> = [];
 
-    const colors = ['#5b5fe0', '#eeece8', '#7c80f6', '#3ddc84'];
+    const colors = ['#2563eb', '#eeece8', '#60a5fa', '#3ddc84'];
 
     for (let i = 0; i < particleCount; i++) {
       const x = Math.random() * width;
@@ -185,9 +185,9 @@ export function CraftMode({ onClose, onExploreWork }: CraftModeProps) {
       {/* Top Bar */}
       <div className="relative z-10 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="flex items-center gap-2 px-3 py-1 rounded-full border border-white/10 bg-white/5 backdrop-blur-md text-xs font-mono">
+          <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-white/10 bg-white/5 backdrop-blur-md text-xs font-mono">
             <span className="w-2 h-2 rounded-full bg-[#3ddc84] animate-pulse" />
-            <span>AMAN UX STUDIO · CRAFT STORY</span>
+            <span>AMAN UX STUDIO · INTERACTIVE OVERVIEW</span>
           </div>
         </div>
 
@@ -199,7 +199,7 @@ export function CraftMode({ onClose, onExploreWork }: CraftModeProps) {
           className="btn-studio-secondary !h-9 !px-4 !text-xs tracking-wider uppercase font-semibold"
           data-cursor="Close"
         >
-          <span>Exit to Studio</span>
+          <span>Exit to Website</span>
           <X className="w-4 h-4 ml-1" />
         </button>
       </div>
@@ -221,8 +221,8 @@ export function CraftMode({ onClose, onExploreWork }: CraftModeProps) {
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.55, ease: [0.19, 1, 0.22, 1] }}
           >
-            <div className="flex items-center gap-2 text-xs font-mono tracking-widest text-[#5b5fe0] uppercase mb-4">
-              <span>Chapter {ch.num}</span>
+            <div className="flex items-center gap-2 text-xs font-mono tracking-widest text-blue-400 uppercase mb-4">
+              <span>Overview {ch.num}</span>
               <span>/</span>
               <span>04</span>
               <span>·</span>
@@ -233,12 +233,12 @@ export function CraftMode({ onClose, onExploreWork }: CraftModeProps) {
               {ch.title}
             </h2>
 
-            <p className="text-base sm:text-lg text-white/70 leading-relaxed max-w-xl mb-8">
+            <p className="text-base sm:text-lg text-white/75 leading-relaxed max-w-xl mb-8 font-normal">
               {ch.body}
             </p>
 
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/10 bg-white/[0.04] text-xs text-white/60 font-mono mb-8">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#5b5fe0]" />
+              <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
               <span>{ch.hint}</span>
             </div>
 
@@ -253,7 +253,7 @@ export function CraftMode({ onClose, onExploreWork }: CraftModeProps) {
                   className="btn-studio-primary group"
                   data-cursor="Launch"
                 >
-                  <span>Explore Client Work</span>
+                  <span>View Client Work</span>
                   <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
                 </button>
               ) : (
@@ -262,7 +262,7 @@ export function CraftMode({ onClose, onExploreWork }: CraftModeProps) {
                   className="btn-studio-primary group"
                   data-cursor="Next"
                 >
-                  <span>Next Chapter</span>
+                  <span>Next</span>
                   <ChevronRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
                 </button>
               )}
@@ -274,7 +274,7 @@ export function CraftMode({ onClose, onExploreWork }: CraftModeProps) {
                 }}
                 className="btn-studio-secondary"
               >
-                Skip Story
+                Close
               </button>
             </div>
           </motion.div>
@@ -292,9 +292,9 @@ export function CraftMode({ onClose, onExploreWork }: CraftModeProps) {
                 setCurrentChapter(idx);
               }}
               className={`h-1.5 rounded-full transition-all duration-300 ${
-                idx === currentChapter ? 'w-10 bg-[#5b5fe0]' : 'w-4 bg-white/20 hover:bg-white/40'
+                idx === currentChapter ? 'w-10 bg-blue-500' : 'w-4 bg-white/20 hover:bg-white/40'
               }`}
-              title={`Go to chapter ${idx + 1}`}
+              title={`Go to slide ${idx + 1}`}
             />
           ))}
         </div>
@@ -303,14 +303,14 @@ export function CraftMode({ onClose, onExploreWork }: CraftModeProps) {
           <button
             onClick={prevChapter}
             className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center hover:bg-white/10 text-white/70 hover:text-white transition-colors"
-            title="Previous chapter"
+            title="Previous"
           >
             <ChevronLeft className="w-4 h-4" />
           </button>
           <button
             onClick={nextChapter}
             className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center hover:bg-white/10 text-white/70 hover:text-white transition-colors"
-            title="Next chapter"
+            title="Next"
           >
             <ChevronRight className="w-4 h-4" />
           </button>

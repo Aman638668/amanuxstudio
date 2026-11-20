@@ -32,14 +32,14 @@ export default function Testimonials() {
     <section id="testimonials" className="py-24 bg-[#0c0c10] text-[#eeece8] relative border-t border-white/5">
       <div className="container mx-auto px-6 max-w-6xl">
         <div className="text-center mb-16">
-          <div className="flex items-center justify-center gap-2 text-xs font-mono uppercase tracking-widest text-[#5b5fe0] mb-3">
-            <span>[ 05 / CLIENT ACCREDITATION ]</span>
+          <div className="flex items-center justify-center gap-2 text-xs font-mono uppercase tracking-widest text-blue-400 mb-3">
+            <span>[ 05 / CLIENT REVIEWS ]</span>
           </div>
           <h2 className="text-3xl sm:text-5xl font-bold text-[#eeece8] tracking-tight mb-4">
-            Endorsements from the Frontline.
+            What Our Clients Say.
           </h2>
-          <p className="text-base sm:text-lg text-white/60 max-w-2xl mx-auto font-light">
-            Direct feedback from founders and marketing executives who rely on Aman UX Studio for their digital platforms.
+          <p className="text-base sm:text-lg text-white/60 max-w-2xl mx-auto font-normal">
+            Direct feedback from founders and business owners who partner with Aman UX Studio for their websites.
           </p>
         </div>
         
@@ -62,7 +62,7 @@ export default function Testimonials() {
               </div>
               
               <div className="flex items-center gap-3 pt-4 border-t border-white/5">
-                <div className="w-10 h-10 rounded-full bg-[#5b5fe0]/20 border border-[#5b5fe0]/40 flex items-center justify-center text-xs font-bold text-white">
+                <div className="w-10 h-10 rounded-full bg-blue-600/20 border border-blue-500/40 flex items-center justify-center text-xs font-bold text-blue-300">
                   {t.avatar}
                 </div>
                 <div>

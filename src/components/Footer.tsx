@@ -86,11 +86,11 @@ export default function Footer() {
                       onChange={(e) => setTempEmail(e.target.value)}
                       placeholder="Enter your email"
                       required
-                      className="bg-white/[0.04] border-white/10 text-white placeholder:text-white/40 h-10 rounded-full px-4 text-xs focus:border-[#5b5fe0]"
+                      className="bg-white/[0.04] border-white/10 text-white placeholder:text-white/40 h-10 rounded-full px-4 text-xs focus:border-blue-500"
                     />
                     <button
                       type="submit"
-                      className="btn-studio-primary !h-10 !px-5 !text-xs font-semibold"
+                      className="btn-studio-primary btn-studio-sm font-semibold"
                       disabled={status === "loading"}
                     >
                       {status === "loading" ? <Loader2 className="h-4 w-4 animate-spin" /> : "Join"}

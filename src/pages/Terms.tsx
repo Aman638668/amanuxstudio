@@ -24,7 +24,7 @@ export default function Terms() {
       title: "1. Scope of Services",
       content: (
         <p className="text-slate-600 dark:text-slate-300 leading-relaxed text-sm sm:text-base">
-          Aman UX Studio provides UI/UX design, custom web development, WordPress engineering, and performance optimization services. Specific project deliverables, turnaround timelines, and revision allowances are defined in each project proposal or service agreement agreed upon before work commences.
+          Aman UX Studio provides UI/UX design, custom web development, WordPress development, and speed optimization services. Specific project deliverables, turnaround timelines, and revision allowances are defined in each project proposal or service agreement agreed upon before work commences.
         </p>
       )
     },
@@ -76,7 +76,7 @@ export default function Terms() {
       title: "5. Limitation of Liability",
       content: (
         <p className="text-slate-600 dark:text-slate-300 leading-relaxed text-sm sm:text-base">
-          While we engineer all platforms to the highest industry standards with rigorous testing, Aman UX Studio cannot be held liable for third-party hosting downtimes, domain expiration by the client, or unauthorized modifications made to the codebase after project hand-off.
+          While we build and test all websites to high quality standards, Aman UX Studio cannot be held liable for third-party hosting downtimes, domain expiration by the client, or unauthorized modifications made after project hand-off.
         </p>
       )
     },

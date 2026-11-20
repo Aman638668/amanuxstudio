@@ -86,7 +86,7 @@ export default function ResumePage() {
               About Me
             </h2>
             <p className="text-sm leading-relaxed text-slate-700 dark:text-slate-300 text-justify">
-              Web Developer with 2+ years of hands-on experience in building and deploying responsive production websites and full-stack web applications. Proficient in modern JavaScript/TypeScript (React, Next.js), WordPress, WooCommerce, Elementor Pro, API integrations, and database architectures (PostgreSQL, Supabase). Proven experience configuring production websites from 0 to 1, including <strong>Fairease Outsourcing</strong>, <strong>Ireshh Clothing</strong>, and <strong>Expertvuw</strong>. Currently pursuing a BCA through Online Manipal University.
+              Web Developer with 2+ years of hands-on experience in building and deploying responsive production websites and full-stack web applications. Proficient in modern JavaScript/TypeScript (React, Next.js), WordPress, WooCommerce, Elementor Pro, API integrations, and databases (PostgreSQL, Supabase). Proven experience configuring production websites from 0 to 1, including <strong>Fairease Outsourcing</strong>, <strong>Ireshh Clothing</strong>, and <strong>Expertvuw</strong>. Currently pursuing a BCA through Online Manipal University.
             </p>
           </section>
 
@@ -162,7 +162,7 @@ export default function ResumePage() {
                   Tech: WordPress, WooCommerce, Payment Gateways (Cards &amp; UPI), Inventory &amp; Variations, Hosting
                 </div>
                 <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
-                  Engineered the complete e-commerce store from scratch (0 to 1) for fashion apparel brand Ireshh. Configured product variations, payment gateway integrations, automated shipping calculators, mobile checkout, and ongoing maintenance.
+                  Built and launched the complete e-commerce store from scratch (0 to 1) for fashion apparel brand Ireshh. Configured product variations, payment gateway integrations, automated shipping calculators, mobile checkout, and ongoing maintenance.
                 </p>
               </div>
 
@@ -177,10 +177,10 @@ export default function ResumePage() {
                   </a>
                 </div>
                 <div className="text-xs font-semibold text-indigo-600 dark:text-indigo-400 mb-1">
-                  Tech: WordPress, Elementor Pro, Responsive Architecture, Lead Capture Pipelines, SEO, Cloudflare
+                  Tech: WordPress, Elementor Pro, Responsive Web Design, Lead Capture Pipelines, SEO, Cloudflare
                 </div>
                 <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
-                  Engineered and deployed the production portal for finance and legal consultancy firm Expertvuw. Built high-converting consultation inquiry funnels, structured service matrices, optimized Core Web Vitals for lightning-fast speeds (&lt;1.2s), and achieved top Google rankings for finance keywords.
+                  Designed and launched the production portal for finance and legal consultancy firm Expertvuw. Built high-converting consultation inquiry funnels, structured service showcases, optimized Core Web Vitals for lightning-fast speeds (&lt;1.2s), and achieved top Google rankings for finance keywords.
                 </p>
               </div>
 
@@ -196,7 +196,7 @@ export default function ResumePage() {
                   Tech: Next.js, React, TypeScript, NestJS, Node.js, LangChain, OpenAI, Gemini, Groq, PostgreSQL, Redis
                 </div>
                 <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
-                  AI chatbot platform for businesses. Engineered website-content crawling/processing, AI model integrations, authentication, database schemas, background jobs, payment pipelines, and dashboard interfaces.
+                  AI chatbot platform for businesses. Built website-content crawling/processing, AI model integrations, authentication, database schemas, background jobs, payment pipelines, and dashboard interfaces.
                 </p>
               </div>
 
@@ -233,7 +233,7 @@ export default function ResumePage() {
                   <span className="text-xs text-slate-500 font-medium">Nov 2024 – Present</span>
                 </div>
                 <ul className="list-disc ml-5 space-y-1 text-slate-600 dark:text-slate-300">
-                  <li>Engineered and deployed the corporate website for <strong>Fairease Outsourcing</strong> (<a href="https://fairease.in/" target="_blank" className="underline">fairease.in</a>) and multiple production sites for Expertvuw.</li>
+                  <li>Designed and deployed the corporate website for <strong>Fairease Outsourcing</strong> (<a href="https://fairease.in/" target="_blank" className="underline">fairease.in</a>) and multiple production sites for Expertvuw.</li>
                   <li>Implemented high-converting lead capture funnels, responsive UI layouts, and seamless user experiences.</li>
                   <li>Managed cloud hosting, domain DNS configurations, SSL certificates, backups, and security hardening.</li>
                 </ul>

@@ -64,7 +64,7 @@ export default function Privacy() {
                 Technical &amp; Usage Data
               </h4>
               <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
-                We automatically collect anonymous browser telemetry to ensure fast load times and Core Web Vitals compliance. This includes IP address, browser type, operating system, pages visited, time spent on pages, and referring URLs.
+                We automatically collect anonymous browser analytics to ensure fast load times and Core Web Vitals compliance. This includes IP address, browser type, operating system, pages visited, time spent on pages, and referring URLs.
               </p>
             </div>
           </div>
@@ -137,7 +137,7 @@ export default function Privacy() {
       content: (
         <>
           <p className="text-slate-600 dark:text-slate-300 leading-relaxed mb-4">
-            To provide robust reliability, our architecture integrates vetted industry-standard service providers:
+            To provide robust reliability, our website integrates vetted industry-standard service providers:
           </p>
           <ul className="space-y-2 text-slate-600 dark:text-slate-300 text-sm">
             <li><strong>Supabase:</strong> Managed backend database and authentication infrastructure.</li>

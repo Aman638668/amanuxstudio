@@ -77,7 +77,7 @@ export function CustomCursor() {
           width: cursorText ? 'auto' : isHovered ? 40 : 12,
           height: cursorText ? 32 : isHovered ? 40 : 12,
           borderRadius: cursorText ? 16 : 9999,
-          backgroundColor: cursorText ? '#5b5fe0' : isHovered ? 'rgba(255, 255, 255, 0.2)' : '#eeece8',
+          backgroundColor: cursorText ? '#2563eb' : isHovered ? 'rgba(255, 255, 255, 0.2)' : '#ffffff',
           backdropFilter: isHovered && !cursorText ? 'blur(2px)' : 'none',
         }}
         transition={{ type: 'spring', damping: 25, stiffness: 350 }}
