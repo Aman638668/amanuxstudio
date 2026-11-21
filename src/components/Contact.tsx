@@ -1,19 +1,39 @@
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Mail, Phone, MapPin, Send, Loader2, CheckCircle2 } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { toast } from 'sonner';
 import { studioAudio } from '@/lib/studio-audio';
 
-export default function Contact() {
+interface ContactProps {
+  initialMessage?: string;
+}
+
+export default function Contact({ initialMessage = '' }: ContactProps) {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     phone: '',
-    message: ''
+    message: initialMessage
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+
+  useEffect(() => {
+    if (initialMessage) {
+      setFormData((prev) => ({ ...prev, message: initialMessage }));
+    }
+  }, [initialMessage]);
+
+  useEffect(() => {
+    const handlePrefill = (e: any) => {
+      if (e.detail?.message) {
+        setFormData((prev) => ({ ...prev, message: e.detail.message }));
+      }
+    };
+    window.addEventListener('aman:prefill-contact', handlePrefill);
+    return () => window.removeEventListener('aman:prefill-contact', handlePrefill);
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({

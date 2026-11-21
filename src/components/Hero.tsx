@@ -1,12 +1,14 @@
 import { motion } from 'framer-motion';
-import { ArrowRight, FileDown, Sparkles } from 'lucide-react';
+import { ArrowRight, FileDown, Calculator, Sparkles } from 'lucide-react';
 import { studioAudio } from '@/lib/studio-audio';
 
 interface HeroProps {
+  onOpenEstimator?: () => void;
   onOpenCraft?: () => void;
 }
 
-export default function Hero({ onOpenCraft }: HeroProps) {
+export default function Hero({ onOpenEstimator, onOpenCraft }: HeroProps) {
+  const handleOpenTool = onOpenEstimator || onOpenCraft;
   const scrollToSection = (sectionId: string) => {
     studioAudio.playClick(850, 0.03);
     const element = document.getElementById(sectionId);
@@ -20,13 +22,13 @@ export default function Hero({ onOpenCraft }: HeroProps) {
   return (
     <section
       id="home"
-      className="min-h-screen flex flex-col justify-center bg-[#09090c] text-[#eeece8] relative overflow-hidden pt-28 pb-16 md:py-24"
+      className="min-h-screen flex flex-col bg-[#09090c] text-[#eeece8] relative overflow-hidden pt-32 pb-16 sm:pt-36 md:pt-40 md:pb-24"
     >
       {/* Subtle radial ambient mist */}
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[500px] bg-gradient-to-tr from-blue-600/15 via-indigo-600/10 to-transparent blur-[120px] rounded-full pointer-events-none" />
       <div className="absolute bottom-10 right-10 w-[400px] h-[400px] bg-emerald-500/5 blur-[140px] rounded-full pointer-events-none" />
 
-      <div className="container mx-auto px-6 max-w-7xl relative z-10">
+      <div className="container mx-auto px-6 max-w-7xl relative z-10 my-auto">
         <div>
           
           {/* Live Availability & Interactive Mode Badges */}
@@ -46,20 +48,20 @@ export default function Hero({ onOpenCraft }: HeroProps) {
               </span>
             </div>
 
-            {onOpenCraft && (
+            {handleOpenTool && (
               <button
-                onClick={onOpenCraft}
+                onClick={handleOpenTool}
                 onMouseEnter={() => studioAudio.playHover()}
-                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full border border-blue-500/30 bg-blue-500/10 text-xs font-mono uppercase tracking-wider text-blue-300 hover:bg-blue-500/20 hover:text-white transition-all group"
+                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full border border-blue-500/30 bg-blue-500/10 text-xs font-mono uppercase tracking-wider text-blue-300 hover:bg-blue-500/20 hover:text-white transition-all group shadow-sm hover:border-blue-400/50"
               >
-                <Sparkles className="w-3.5 h-3.5 text-blue-400 group-hover:rotate-12 transition-transform" />
-                <span>Interactive 2D Canvas</span>
+                <Calculator className="w-3.5 h-3.5 text-blue-400 group-hover:scale-110 transition-transform" />
+                <span>Scope &amp; Cost Estimator</span>
               </button>
             )}
           </motion.div>
 
           {/* Kinetic Editorial Heading */}
-          <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-tight text-[#eeece8] leading-[1.05] mb-8">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold tracking-tight text-[#eeece8] leading-[1.06] mb-8">
             <span className="flex flex-wrap gap-x-3 sm:gap-x-5 gap-y-1">
               {titleWords.map((word, i) => (
                 <span key={i} className="inline-block overflow-hidden py-1">
@@ -111,6 +113,17 @@ export default function Hero({ onOpenCraft }: HeroProps) {
               <span>Start a Project</span>
               <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
             </button>
+
+            {handleOpenTool && (
+              <button
+                onClick={handleOpenTool}
+                onMouseEnter={() => studioAudio.playHover()}
+                className="btn-studio-secondary flex items-center gap-2 border-blue-500/30 text-blue-300 hover:text-white hover:border-blue-400/60 bg-blue-500/5 hover:bg-blue-500/10"
+              >
+                <Calculator className="w-4 h-4 text-blue-400" />
+                <span>Estimate Scope &amp; Price</span>
+              </button>
+            )}
 
             <button
               onClick={() => scrollToSection('portfolio')}

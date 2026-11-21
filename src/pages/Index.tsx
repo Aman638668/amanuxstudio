@@ -11,11 +11,11 @@ import RecentBlogs from '@/components/RecentBlogs';
 import Contact from '@/components/Contact';
 import Footer from '@/components/Footer';
 import Seo from '@/components/Seo';
-import { CraftMode } from '@/components/studio/CraftMode';
+import { ProjectEstimatorModal } from '@/components/studio/ProjectEstimatorModal';
 import CosmicDotLoader from '@/components/CosmicDotLoader';
 
 export default function Index() {
-  const [experienceMode, setExperienceMode] = useState<'studio' | 'craft'>('studio');
+  const [isEstimatorOpen, setIsEstimatorOpen] = useState(false);
   const [showCosmicLoader, setShowCosmicLoader] = useState(true);
 
   // Disable background scrolling while cosmic loader is active
@@ -62,7 +62,7 @@ export default function Index() {
       <Navigation />
 
       {/* Hero Section */}
-      <Hero onOpenCraft={() => setExperienceMode('craft')} />
+      <Hero onOpenEstimator={() => setIsEstimatorOpen(true)} />
 
       {/* Portfolio / Client Chapters */}
       <Portfolio />
@@ -88,15 +88,18 @@ export default function Index() {
       {/* Footer */}
       <Footer />
 
-      {/* Interactive Craft Mode Story Overlay */}
-      <AnimatePresence>
-        {experienceMode === 'craft' && (
-          <CraftMode
-            onClose={() => setExperienceMode('studio')}
-            onExploreWork={handleExploreWork}
-          />
-        )}
-      </AnimatePresence>
+      {/* Interactive 30-Second Scope & Investment Estimator Modal */}
+      <ProjectEstimatorModal
+        isOpen={isEstimatorOpen}
+        onClose={() => setIsEstimatorOpen(false)}
+        onApplyScopeToContact={(scopeText) => {
+          window.dispatchEvent(
+            new CustomEvent('aman:prefill-contact', {
+              detail: { message: scopeText }
+            })
+          );
+        }}
+      />
     </div>
   );
 }
