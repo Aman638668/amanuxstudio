@@ -236,18 +236,26 @@ body,
 
 /* WebKit-based browsers (Chrome, Edge, Safari, Opera, Brave) */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 7px;
+  height: 7px;
 }
 
 ::-webkit-scrollbar-track {
   background: #09090c;
 }
 
+/* Hide all scrollbar buttons / arrows on Windows Chromium completely! */
+::-webkit-scrollbar-button,
+*::-webkit-scrollbar-button {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
 ::-webkit-scrollbar-thumb {
   background: rgba(255, 255, 255, 0.18);
   border-radius: 9999px;
-  border: 2px solid #09090c;
+  border: 1px solid #09090c;
   transition: background-color 0.2s ease;
 }
 
@@ -266,16 +274,22 @@ body,
 /* Dedicated utility class for popups, modals, cards and inner scroll containers */
 .custom-scrollbar {
   scrollbar-width: thin;
-  scrollbar-color: rgba(255, 255, 255, 0.25) transparent;
+  scrollbar-color: rgba(255, 255, 255, 0.22) transparent;
 }
 
 .custom-scrollbar::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-track {
   background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-button {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
