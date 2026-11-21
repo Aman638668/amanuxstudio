@@ -3,23 +3,33 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://amanuxstudio.vercel.app</loc>
-    <changefreq>weekly</changefreq>
+    <changefreq>daily</changefreq>
     <priority>1.0</priority>
-  </url>
-  <url>
-    <loc>https://amanuxstudio.vercel.app/about</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://amanuxstudio.vercel.app/services</loc>
     <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.9</priority>
   </url>
   <url>
     <loc>https://amanuxstudio.vercel.app/portfolio</loc>
     <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://amanuxstudio.vercel.app/about</loc>
+    <changefreq>monthly</changefreq>
     <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://amanuxstudio.vercel.app/resume</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://amanuxstudio.vercel.app/blog</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
   </url>
   <url>
     <loc>https://amanuxstudio.vercel.app/testimonials</loc>
@@ -28,173 +38,219 @@
   </url>
   <url>
     <loc>https://amanuxstudio.vercel.app/contact</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://amanuxstudio.vercel.app/blog</loc>
-    <changefreq>weekly</changefreq>
+    <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://amanuxstudio.vercel.app/privacy</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://amanuxstudio.vercel.app/terms</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://amanuxstudio.vercel.app/blog/sub-second-wordpress-speed-guide</loc>
+    <lastmod>2026-03-12T10:00:00.000Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://amanuxstudio.vercel.app/terms</loc>
+    <loc>https://amanuxstudio.vercel.app/blog/why-agency-websites-fail</loc>
+    <lastmod>2026-03-08T10:00:00.000Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://amanuxstudio.vercel.app/blog/figma-to-wordpress-workflow</loc>
+    <lastmod>2026-03-05T10:00:00.000Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://amanuxstudio.vercel.app/blog/ecommerce-conversion-rate-optimization-guide</loc>
+    <lastmod>2026-03-01T10:00:00.000Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://amanuxstudio.vercel.app/blog/saas-landing-page-ux-guide</loc>
+    <lastmod>2026-02-25T10:00:00.000Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://amanuxstudio.vercel.app/blog/agent-sessions</loc>
     <lastmod>2026-11-12T09:33:18.257Z</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://amanuxstudio.vercel.app/blog/tabletop-ai</loc>
     <lastmod>2026-11-12T09:32:38.851Z</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://amanuxstudio.vercel.app/blog/heuristic-ux</loc>
     <lastmod>2026-11-12T09:34:37.670Z</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://amanuxstudio.vercel.app/blog/mcp-architecture</loc>
     <lastmod>2026-11-12T09:35:16.829Z</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://amanuxstudio.vercel.app/blog/saas-pricing</loc>
     <lastmod>2026-11-12T09:36:40.302Z</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://amanuxstudio.vercel.app/blog/mcp-architecture-2</loc>
     <lastmod>2026-11-12T17:48:59.569Z</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://amanuxstudio.vercel.app/blog/hybrid-storage</loc>
     <lastmod>2026-11-12T22:57:20.969Z</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://amanuxstudio.vercel.app/blog/ai-ux-trust</loc>
     <lastmod>2026-11-13T08:52:20.155Z</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://amanuxstudio.vercel.app/blog/ai-trust-ux</loc>
     <lastmod>2026-11-13T17:26:00.876Z</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://amanuxstudio.vercel.app/blog/material-expressive</loc>
     <lastmod>2026-11-13T22:58:56.491Z</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://amanuxstudio.vercel.app/blog/core-web-vitals</loc>
     <lastmod>2026-11-14T08:15:39.538Z</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://amanuxstudio.vercel.app/blog/ecommerce-ux</loc>
     <lastmod>2026-11-14T16:14:03.045Z</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://amanuxstudio.vercel.app/blog/ux-flaws</loc>
     <lastmod>2026-11-14T21:47:16.655Z</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://amanuxstudio.vercel.app/blog/ghost-rovers</loc>
     <lastmod>2026-11-15T08:34:42.251Z</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://amanuxstudio.vercel.app/blog/ai-game-dev</loc>
     <lastmod>2026-11-15T16:41:07.315Z</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://amanuxstudio.vercel.app/blog/ai-asset-pipeline</loc>
     <lastmod>2026-11-15T22:12:58.464Z</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://amanuxstudio.vercel.app/blog/media-feed-ux</loc>
     <lastmod>2026-11-16T08:43:43.946Z</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://amanuxstudio.vercel.app/blog/agent-protocols</loc>
     <lastmod>2026-11-16T19:55:45.763Z</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://amanuxstudio.vercel.app/blog/bedrock-agent-iam</loc>
     <lastmod>2026-11-17T09:52:14.005Z</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://amanuxstudio.vercel.app/blog/typescript-tailwind</loc>
     <lastmod>2026-11-17T18:54:06.245Z</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://amanuxstudio.vercel.app/blog/nextjs-caching</loc>
     <lastmod>2026-11-18T09:24:30.575Z</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://amanuxstudio.vercel.app/blog/typescript-tailwind-2</loc>
     <lastmod>2026-11-18T18:30:48.419Z</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://amanuxstudio.vercel.app/blog/ux-flaws-2</loc>
     <lastmod>2026-11-19T09:37:58.045Z</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://amanuxstudio.vercel.app/blog/core-web-vitals-2</loc>
     <lastmod>2026-11-19T18:44:16.888Z</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://amanuxstudio.vercel.app/blog/spec-driven-dev</loc>
     <lastmod>2026-11-20T09:20:56.656Z</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://amanuxstudio.vercel.app/blog/ux-flaws-3</loc>
+    <lastmod>2026-11-20T18:06:02.181Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://amanuxstudio.vercel.app/category/wordpress-performance</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://amanuxstudio.vercel.app/category/ui-ux-design</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://amanuxstudio.vercel.app/category/conversion-strategy</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
   </url>
   <url>
     <loc>https://amanuxstudio.vercel.app/blog/ux-flaws-3</loc>

@@ -11,48 +11,74 @@ const SUPABASE_URL = process.env.VITE_SUPABASE_URL;
 const SUPABASE_KEY = process.env.VITE_SUPABASE_ANON_KEY;
 const SITE_URL = 'https://amanuxstudio.vercel.app';
 
-const generateSitemap = async () => {
-    console.log('Generating sitemap...');
+// Core Curated High-Intent Articles (Pillar content)
+const CURATED_SLUGS = [
+  { slug: 'sub-second-wordpress-speed-guide', lastmod: '2026-03-12T10:00:00.000Z' },
+  { slug: 'why-agency-websites-fail', lastmod: '2026-03-08T10:00:00.000Z' },
+  { slug: 'figma-to-wordpress-workflow', lastmod: '2026-03-05T10:00:00.000Z' },
+  { slug: 'ecommerce-conversion-rate-optimization-guide', lastmod: '2026-03-01T10:00:00.000Z' },
+  { slug: 'saas-landing-page-ux-guide', lastmod: '2026-02-25T10:00:00.000Z' }
+];
 
-    // 1. Static Pages
+const CURATED_CATEGORIES = [
+  'wordpress-performance',
+  'ui-ux-design',
+  'conversion-strategy'
+];
+
+const generateSitemap = async () => {
+    console.log('Generating comprehensive sitemap...');
+
+    // 1. Static Core Pages
     const staticPages = [
-        '',
-        '/about',
-        '/services',
-        '/portfolio',
-        '/testimonials',
-        '/contact',
-        '/blog',
-        '/privacy',
-        '/terms'
+        { path: '', priority: '1.0', changefreq: 'daily' },
+        { path: '/services', priority: '0.9', changefreq: 'weekly' },
+        { path: '/portfolio', priority: '0.9', changefreq: 'weekly' },
+        { path: '/about', priority: '0.8', changefreq: 'monthly' },
+        { path: '/resume', priority: '0.8', changefreq: 'monthly' },
+        { path: '/blog', priority: '0.9', changefreq: 'daily' },
+        { path: '/testimonials', priority: '0.8', changefreq: 'weekly' },
+        { path: '/contact', priority: '0.8', changefreq: 'monthly' },
+        { path: '/privacy', priority: '0.5', changefreq: 'yearly' },
+        { path: '/terms', priority: '0.5', changefreq: 'yearly' }
     ];
 
-    let posts = [];
-    let categories = [];
+    const postMap = new Map();
+    // Add curated posts first
+    CURATED_SLUGS.forEach(p => postMap.set(p.slug, p));
+
+    const categorySet = new Set(CURATED_CATEGORIES);
 
     if (SUPABASE_URL && SUPABASE_KEY) {
         try {
             const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-            // Fetch Blog Posts
+            // Fetch DB Blog Posts
             const { data: postsData } = await supabase
                 .from('posts')
                 .select('slug, created_at')
                 .eq('published', true);
 
-            if (postsData) posts = postsData;
+            if (postsData) {
+                postsData.forEach(p => {
+                    postMap.set(p.slug, {
+                        slug: p.slug,
+                        lastmod: new Date(p.created_at).toISOString()
+                    });
+                });
+            }
 
             // Fetch Categories
             const { data: categoriesData } = await supabase
                 .from('categories')
                 .select('slug');
 
-            if (categoriesData) categories = categoriesData;
+            if (categoriesData) {
+                categoriesData.forEach(c => categorySet.add(c.slug));
+            }
         } catch (err) {
             console.warn('Warning: Could not fetch dynamic content from Supabase for sitemap:', err.message);
         }
-    } else {
-        console.warn('Notice: VITE_SUPABASE_URL or VITE_SUPABASE_ANON_KEY not set. Generating sitemap with static pages only.');
     }
 
     let sitemap = `<?xml version="1.0" encoding="UTF-8"?>
@@ -63,28 +89,28 @@ const generateSitemap = async () => {
     staticPages.forEach(page => {
         sitemap += `
   <url>
-    <loc>${SITE_URL}${page}</loc>
-    <changefreq>weekly</changefreq>
-    <priority>${page === '' ? '1.0' : '0.8'}</priority>
+    <loc>${SITE_URL}${page.path}</loc>
+    <changefreq>${page.changefreq}</changefreq>
+    <priority>${page.priority}</priority>
   </url>`;
     });
 
     // Add Blog Posts
-    posts.forEach(post => {
+    Array.from(postMap.values()).forEach(post => {
         sitemap += `
   <url>
     <loc>${SITE_URL}/blog/${post.slug}</loc>
-    <lastmod>${new Date(post.created_at).toISOString()}</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <lastmod>${post.lastmod}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
   </url>`;
     });
 
     // Add Categories
-    categories.forEach(category => {
+    Array.from(categorySet).forEach(catSlug => {
         sitemap += `
   <url>
-    <loc>${SITE_URL}/category/${category.slug}</loc>
+    <loc>${SITE_URL}/category/${catSlug}</loc>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>`;
@@ -97,7 +123,6 @@ const generateSitemap = async () => {
     const __dirname = path.dirname(fileURLToPath(import.meta.url));
     const publicDir = path.resolve(__dirname, '../public');
 
-    // Ensure public dir exists
     if (!fs.existsSync(publicDir)) {
         fs.mkdirSync(publicDir, { recursive: true });
     }

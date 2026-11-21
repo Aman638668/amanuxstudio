@@ -10,6 +10,7 @@ interface SeoProps {
   publishedTime?: string;
   modifiedTime?: string;
   author?: string;
+  category?: string;
 }
 
 const Seo = ({
@@ -21,7 +22,8 @@ const Seo = ({
   keywords = "web design, ui ux designer, custom wordpress development, woocommerce speed, aman sharma, website redesign, freelance web developer new delhi",
   publishedTime,
   modifiedTime,
-  author = "Aman Sharma"
+  author = "Aman Sharma",
+  category = "Web Development & UI/UX"
 }: SeoProps) => {
   const siteTitle = "Aman UX Studio";
   const fullTitle = title.includes(siteTitle) ? title : `${title} | ${siteTitle}`;
@@ -54,9 +56,9 @@ const Seo = ({
     "priceRange": "$$",
     "areaServed": "Global",
     "sameAs": [
-      "https://github.com/sharmaaman001",
-      "https://www.linkedin.com/in/aman-sharma-ux",
-      "https://twitter.com/amanuxstudio"
+      "https://github.com/Aman638668",
+      "https://www.linkedin.com/in/aman-sharma-4b772124a/",
+      "https://x.com/amanuxstudio"
     ]
   };
 
@@ -71,12 +73,27 @@ const Seo = ({
         "name": "Home",
         "item": siteOrigin
       },
-      {
-        "@type": "ListItem",
-        "position": 2,
-        "name": title,
-        "item": fullUrl
-      }
+      ...(url.startsWith('/blog/') ? [
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Journal",
+          "item": `${siteOrigin}/blog`
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": title,
+          "item": fullUrl
+        }
+      ] : [
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": title,
+          "item": fullUrl
+        }
+      ])
     ]
   } : null;
 
@@ -105,13 +122,20 @@ const Seo = ({
       "headline": title.substring(0, 110),
       "description": description,
       "image": [fullImageUrl],
+      "inLanguage": "en-US",
+      "articleSection": category,
+      "keywords": keywords,
       "datePublished": publishedTime || "2026-03-01T00:00:00Z",
       "dateModified": modifiedTime || publishedTime || "2026-03-01T00:00:00Z",
       "author": {
         "@type": "Person",
         "name": author,
         "jobTitle": "Web Developer & UI/UX Designer",
-        "url": `${siteOrigin}/about`
+        "url": `${siteOrigin}/about`,
+        "sameAs": [
+          "https://github.com/Aman638668",
+          "https://www.linkedin.com/in/aman-sharma-4b772124a/"
+        ]
       },
       "publisher": {
         "@type": "Organization",
@@ -151,12 +175,14 @@ const Seo = ({
       {type === 'article' && publishedTime && <meta property="article:published_time" content={publishedTime} />}
       {type === 'article' && modifiedTime && <meta property="article:modified_time" content={modifiedTime} />}
       {type === 'article' && <meta property="article:author" content={author} />}
+      {type === 'article' && category && <meta property="article:section" content={category} />}
 
       {/* Twitter Card */}
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:title" content={fullTitle} />
       <meta name="twitter:description" content={description} />
       <meta name="twitter:image" content={fullImageUrl} />
+      <meta name="twitter:image:alt" content={title} />
       <meta name="twitter:creator" content="@amanuxstudio" />
 
       {/* JSON-LD Structured Data */}

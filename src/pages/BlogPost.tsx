@@ -1,36 +1,42 @@
-import Navigation from "@/components/Navigation";
-import Footer from "@/components/Footer";
-import Seo from "@/components/Seo";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
-import { supabase } from "@/lib/supabase";
-import { Post } from "@/types/supabase";
-import { CURATED_BLOG_POSTS } from "@/data/blogArticles";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { format } from "date-fns";
-import { 
-  Calendar, 
-  Clock, 
-  ListOrdered, 
-  Mail, 
-  ChevronRight, 
-  Share2, 
-  Twitter, 
-  Linkedin, 
-  Check, 
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import rehypeRaw from "rehype-raw";
+import { toast } from "sonner";
+import {
+  Calendar,
+  Clock,
+  ListOrdered,
+  ChevronRight,
+  Share2,
+  Twitter,
+  Linkedin,
+  Check,
   Copy,
   Sparkles,
   ArrowRight,
   ArrowUpRight,
-  ShieldCheck,
+  CheckCircle2,
+  Code2,
+  Layers,
+  BookOpen,
+  ArrowLeft,
+  Mail,
   Zap,
-  Code2
+  ShieldCheck,
+  UserCheck
 } from "lucide-react";
-import { toast } from "sonner";
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
-import rehypeRaw from "rehype-raw";
+
+import Navigation from "@/components/Navigation";
+import Footer from "@/components/Footer";
+import Seo from "@/components/Seo";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { supabase } from "@/lib/supabase";
+import { Post } from "@/types/supabase";
+import { CURATED_BLOG_POSTS } from "@/data/blogArticles";
 
 // Helper to strip HTML/Markdown tags for meta descriptions
 const stripHtml = (html: string) => {
@@ -39,10 +45,16 @@ const stripHtml = (html: string) => {
 
 // Calculate dynamic read time based on word count
 const getReadTime = (content: string) => {
-  if (!content) return "6 min read";
+  if (!content) return "5 min read";
   const words = content.trim().split(/\s+/).length;
   const minutes = Math.max(1, Math.ceil(words / 200));
   return `${minutes} min read`;
+};
+
+// Word counter
+const getWordCount = (content: string) => {
+  if (!content) return 0;
+  return content.trim().split(/\s+/).length;
 };
 
 interface TocItem {
@@ -66,377 +78,80 @@ const extractToc = (content: string): TocItem[] => {
       continue;
     }
 
-    const h3Match = line.match(/^###\s+(\d+[\.\)]\s*)?(.+)$/);
+    const h3Match = line.match(/^###\s+(.+)$/);
     if (h3Match) {
-      const numPrefix = h3Match[1] ? h3Match[1].trim() : '';
-      const rawTitle = h3Match[2].trim();
-      const text = numPrefix ? `${numPrefix} ${rawTitle}` : rawTitle;
-      const id = text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
-      items.push({ id, text, level: 3 });
+      const rawText = h3Match[1].trim();
+      const id = rawText.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+      items.push({ id, text: rawText, level: 3 });
     }
   }
   return items;
 };
 
-// Laptop illustration for visual UX cards
-const AnnotatedHeroIllustration = () => {
-  return (
-    <div className="relative w-full max-w-lg mx-auto select-none">
-      <div className="absolute -inset-4 bg-gradient-to-r from-blue-600/20 via-indigo-600/10 to-blue-800/20 rounded-3xl blur-2xl opacity-75" />
+// Interactive Code Block Component with Copy to Clipboard & Terminal Header
+const CodeBlock = ({ inline, className, children, ...props }: any) => {
+  const [copied, setCopied] = useState(false);
+  const match = /language-(\w+)/.exec(className || '');
+  const language = match ? match[1] : '';
+  const codeString = String(children).replace(/\n$/, '');
 
-      <div className="relative">
-        <div className="relative rounded-t-2xl bg-[#0e0e14] border-2 border-white/10 p-2 shadow-2xl">
-          <div className="rounded-xl bg-[#09090c] p-4 aspect-[16/10] flex flex-col justify-between relative overflow-hidden border border-white/5">
-            <div className="flex items-center justify-between pb-2.5 border-b border-white/5">
-              <div className="flex items-center gap-1.5">
-                <div className="w-2.5 h-2.5 rounded-full bg-blue-500" />
-                <div className="w-12 h-1.5 bg-white/20 rounded" />
-              </div>
-              <div className="flex gap-2">
-                <div className="w-8 h-1 bg-white/10 rounded" />
-                <div className="w-8 h-1 bg-white/10 rounded" />
-                <div className="w-8 h-1 bg-white/10 rounded" />
-              </div>
-            </div>
+  const handleCopy = () => {
+    navigator.clipboard.writeText(codeString);
+    setCopied(true);
+    toast.success("Code copied to clipboard!");
+    setTimeout(() => setCopied(false), 2000);
+  };
 
-            <div className="grid grid-cols-2 gap-3.5 my-auto items-center">
-              <div className="space-y-2">
-                <div className="w-12 h-1.5 bg-blue-400 rounded" />
-                <div className="w-28 h-3 bg-white/90 rounded" />
-                <div className="w-24 h-2 bg-white/50 rounded" />
-                <div className="w-20 h-1.5 bg-white/30 rounded" />
-                <div className="w-16 h-4 bg-blue-600 rounded-md mt-2.5 flex items-center justify-center shadow-sm">
-                  <div className="w-8 h-1.5 bg-white rounded" />
-                </div>
-              </div>
-              <div className="w-full h-24 bg-[#14141e] rounded-xl border border-white/10 p-2 flex flex-col justify-between">
-                <div className="w-full h-12 bg-white/5 rounded-lg flex items-center justify-center">
-                  <div className="w-14 h-6 border border-dashed border-white/20 rounded flex items-center justify-center text-[#94a3b8] text-[9px] font-mono">
-                    Preview
-                  </div>
-                </div>
-                <div className="space-y-1">
-                  <div className="w-full h-1 bg-white/10 rounded" />
-                  <div className="w-2/3 h-1 bg-white/10 rounded" />
-                </div>
-              </div>
-            </div>
-
-            <div className="flex justify-between items-center pt-2 border-t border-white/5 text-[9px] text-[#64748b] font-mono">
-              <span>amanuxstudio.vercel.app</span>
-              <div className="w-10 h-1 bg-white/10 rounded" />
-            </div>
-          </div>
-        </div>
-
-        <div className="h-3.5 bg-[#14141e] rounded-b-xl border-x-2 border-b-2 border-white/10 shadow-xl relative">
-          <div className="w-20 h-1 bg-white/20 rounded-full mx-auto mt-0.5" />
-        </div>
-
-        <div className="absolute -top-4 right-8 flex flex-col items-center pointer-events-none drop-shadow-md">
-          <div className="bg-[#14141e] text-blue-300 text-[11px] font-mono font-bold px-3 py-1 rounded-xl shadow-xl border border-blue-500/30">
-            Unfocused Navigation
-          </div>
-        </div>
-
-        <div className="absolute top-20 -left-6 flex flex-col items-end pointer-events-none drop-shadow-md">
-          <div className="bg-[#14141e] text-rose-300 text-[11px] font-mono font-bold px-3 py-1 rounded-xl shadow-xl border border-rose-500/30">
-            Vague Value Prop
-          </div>
-        </div>
-
-        <div className="absolute top-28 -right-6 flex flex-col items-start pointer-events-none drop-shadow-md">
-          <div className="bg-[#14141e] text-emerald-300 text-[11px] font-mono font-bold px-3 py-1 rounded-xl shadow-xl border border-emerald-500/30">
-            Clear Conversion Path
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-// Sleek Browser Mockup for Tech & Code Articles
-const TechBrowserMockup = ({ coverImage, title }: { coverImage?: string; title: string }) => {
-  return (
-    <div className="relative w-full max-w-lg mx-auto group">
-      <div className="absolute -inset-2 bg-gradient-to-r from-blue-600/20 via-indigo-600/10 to-blue-800/20 rounded-3xl blur-2xl opacity-75 group-hover:opacity-95 transition-opacity duration-700" />
-
-      <div className="relative rounded-2xl bg-[#0e0e14] border border-white/10 shadow-2xl overflow-hidden backdrop-blur-xl">
-        <div className="flex items-center justify-between px-4 py-3 bg-[#09090c] border-b border-white/10">
-          <div className="flex items-center gap-2">
-            <div className="w-3 h-3 rounded-full bg-rose-500/80" />
-            <div className="w-3 h-3 rounded-full bg-amber-500/80" />
-            <div className="w-3 h-3 rounded-full bg-emerald-500/80" />
-          </div>
-          <div className="px-3 py-0.5 rounded-md bg-white/5 text-[11px] font-mono text-[#94a3b8] border border-white/10 truncate max-w-[200px]">
-            amanuxstudio.vercel.app
-          </div>
-          <div className="w-4" />
-        </div>
-
-        <div className="relative aspect-[16/10] overflow-hidden bg-[#09090c]">
-          {coverImage ? (
-            <img
-              src={coverImage}
-              alt={title}
-              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-            />
-          ) : (
-            <div className="w-full h-full p-6 flex flex-col justify-center items-center text-center">
-              <Code2 className="w-12 h-12 text-blue-400 mb-3" />
-              <p className="text-white font-bold text-sm">Full-Stack Solution</p>
-              <p className="text-[#94a3b8] text-xs mt-1">High-Performance Production Stack</p>
-            </div>
-          )}
-
-          <div className="absolute bottom-3 left-3 bg-black/80 backdrop-blur-md border border-white/10 text-white text-[11px] font-mono px-2.5 py-1 rounded-lg flex items-center gap-1.5 shadow-lg">
-            <Zap className="w-3.5 h-3.5 text-amber-400" />
-            <span>Sub-150ms TTFB</span>
-          </div>
-          <div className="absolute top-3 right-3 bg-black/80 backdrop-blur-md border border-white/10 text-emerald-300 text-[11px] font-mono px-2.5 py-1 rounded-lg flex items-center gap-1.5 shadow-lg">
-            <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
-            <span>Production Verified</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-// Side-by-Side Wireframe Comparison graphic
-const WireframeComparison = () => {
-  return (
-    <div className="w-full lg:w-72 bg-[#12121c] p-4 rounded-2xl border border-white/10 flex items-center justify-center gap-3 flex-shrink-0 select-none">
-      <div className="relative w-28 h-24 bg-[#09090c] rounded-xl border border-white/10 p-2.5 flex flex-col justify-between shadow-xs">
-        <div className="absolute -top-2.5 -right-2.5 w-6 h-6 rounded-full bg-rose-500 text-white flex items-center justify-center text-xs font-bold shadow-md ring-2 ring-[#09090c]">
-          ✕
-        </div>
-        <div className="space-y-1.5">
-          <div className="w-12 h-1.5 bg-white/10 rounded" />
-          <div className="w-20 h-2 bg-white/20 rounded" />
-          <div className="w-16 h-1.5 bg-white/10 rounded" />
-        </div>
-        <div className="flex gap-1 justify-center pt-1 border-t border-white/5">
-          <div className="w-7 h-2 bg-white/10 rounded" />
-          <div className="w-7 h-2 bg-white/10 rounded" />
-        </div>
-      </div>
-
-      <ArrowRight className="w-4 h-4 text-blue-400 flex-shrink-0" />
-
-      <div className="relative w-28 h-24 bg-[#09090c] rounded-xl border border-blue-500/40 p-2.5 flex flex-col justify-between shadow-xs ring-1 ring-blue-500/30">
-        <div className="absolute -top-2.5 -right-2.5 w-6 h-6 rounded-full bg-emerald-500 text-white flex items-center justify-center text-xs font-bold shadow-md ring-2 ring-[#09090c]">
-          ✓
-        </div>
-        <div className="space-y-1.5">
-          <div className="w-16 h-2 bg-blue-500 rounded" />
-          <div className="w-20 h-1.5 bg-white/20 rounded" />
-          <div className="w-14 h-1.5 bg-white/10 rounded" />
-        </div>
-        <div className="w-full h-3 bg-blue-600 rounded flex items-center justify-center shadow-xs">
-          <div className="w-8 h-1 bg-white/90 rounded" />
-        </div>
-      </div>
-    </div>
-  );
-};
-
-// Architectural Blueprint Card for Development & Technical Articles
-const TechBlueprintCard = ({ number }: { number: string }) => {
-  return (
-    <div className="w-full lg:w-72 bg-[#12121c] p-4 rounded-2xl border border-white/10 text-[#eeece8] flex flex-col justify-between flex-shrink-0 shadow-sm font-mono text-xs select-none">
-      <div className="flex items-center justify-between pb-2 border-b border-white/10">
-        <span className="text-[10px] text-blue-400 font-bold uppercase tracking-wider">Pillar {number}</span>
-        <span className="inline-flex items-center gap-1 text-[10px] text-emerald-400">
-          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-          Optimized
-        </span>
-      </div>
-
-      <div className="py-3 space-y-2">
-        <div className="flex justify-between text-[11px]">
-          <span className="text-[#94a3b8]">Edge Cache:</span>
-          <span className="text-blue-300 font-semibold">HIT (99.4%)</span>
-        </div>
-        <div className="flex justify-between text-[11px]">
-          <span className="text-[#94a3b8]">Response TTFB:</span>
-          <span className="text-emerald-400 font-semibold">&lt; 150ms</span>
-        </div>
-        <div className="flex justify-between text-[11px]">
-          <span className="text-[#94a3b8]">Query Cost:</span>
-          <span className="text-blue-300 font-semibold">0.02s</span>
-        </div>
-      </div>
-
-      <div className="pt-2 border-t border-white/10 text-[10px] text-[#94a3b8] flex items-center justify-between">
-        <span>Verified Performance</span>
-        <Check className="w-3.5 h-3.5 text-emerald-400" />
-      </div>
-    </div>
-  );
-};
-
-// Rich Structured Card for Each Key Point / Flaw
-interface StructuredCardProps {
-  number: string;
-  title: string;
-  description: string;
-  actionTitle: string;
-  fixes: string[];
-  isDesignArticle: boolean;
-}
-
-const StructuredPointCard = ({
-  number,
-  title,
-  description,
-  actionTitle,
-  fixes,
-  isDesignArticle
-}: StructuredCardProps) => {
-  const id = `${number}-${title}`.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
-
-  return (
-    <div id={id} className="scroll-mt-28 bg-[#0e0e14] border border-white/10 rounded-3xl p-6 sm:p-8 my-8 shadow-sm hover:border-blue-500/30 transition-all">
-      <div className="flex flex-col lg:flex-row gap-6 items-start lg:items-center justify-between">
-        <div className="flex-1 space-y-3.5">
-          <div className="flex items-center gap-3">
-            <span className="w-8 h-8 rounded-xl bg-blue-600/20 text-blue-400 font-mono font-bold text-sm flex items-center justify-center flex-shrink-0 border border-blue-500/30 shadow-xs">
-              {number}
-            </span>
-            <h3 className="text-xl sm:text-2xl font-bold text-[#eeece8] leading-tight">
-              {title}
-            </h3>
-          </div>
-
-          {description && (
-            <p className="text-[#94a3b8] text-base leading-relaxed font-normal">
-              {description}
-            </p>
-          )}
-
-          {fixes.length > 0 && (
-            <div className="pt-2">
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-300 border border-emerald-500/30 text-xs font-mono font-bold mb-3">
-                <Check className="w-3.5 h-3.5 text-emerald-400 flex-shrink-0" />
-                <span>{actionTitle || "How to implement it:"}</span>
-              </div>
-
-              <ul className="space-y-2.5 text-sm sm:text-base text-[#eeece8] pl-1">
-                {fixes.map((fix, idx) => (
-                  <li key={idx} className="flex items-start">
-                    <span className="w-1.5 h-1.5 rounded-full bg-blue-500 mt-2 mr-3 flex-shrink-0" />
-                    <span className="leading-relaxed text-[#cbd5e1]">{fix}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-        </div>
-
-        {isDesignArticle ? (
-          <WireframeComparison />
-        ) : (
-          <TechBlueprintCard number={number} />
-        )}
-      </div>
-    </div>
-  );
-};
-
-interface ParsedSection {
-  title: string;
-  id: string;
-  intro: string;
-  quote: { title: string; text: string } | null;
-  cards: {
-    number: string;
-    title: string;
-    description: string;
-    actionTitle: string;
-    fixes: string[];
-  }[];
-}
-
-function parseMarkdownArticle(content: string) {
-  if (!content) return { intro: '', sections: [] as ParsedSection[] };
-
-  const rawSections = content.split(/\n(?=##\s+)/);
-  const intro = rawSections[0].replace(/^##\s+.*$/m, '').trim();
-  const sections: ParsedSection[] = [];
-
-  for (let i = 0; i < rawSections.length; i++) {
-    const raw = rawSections[i].trim();
-    if (!raw.startsWith('## ')) continue;
-
-    const lines = raw.split('\n');
-    const title = lines[0].replace(/^##\s+/, '').trim();
-    const id = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
-    const body = lines.slice(1).join('\n').trim();
-
-    let quote: { title: string; text: string } | null = null;
-    const quoteMatch = body.match(/>\s*###?\s*([^\n]+)\n>\s*([^\n]+(\n>[^\n]+)*)/);
-    if (quoteMatch) {
-      quote = {
-        title: quoteMatch[1].trim(),
-        text: quoteMatch[2].replace(/^>\s*/gm, '').trim()
-      };
-    }
-
-    const rawCards = body.split(/\n(?=###\s+)/);
-    const sectionIntro = rawCards[0].replace(/>\s*###?[\s\S]*?(?=\n\n|$)/, '').trim();
-
-    const cards: ParsedSection['cards'] = [];
-
-    for (let c = 1; c < rawCards.length; c++) {
-      const cardRaw = rawCards[c].trim();
-      const cardLines = cardRaw.split('\n');
-      const h3TitleLine = cardLines[0].replace(/^###\s+/, '').trim();
-
-      const numMatch = h3TitleLine.match(/^(\d{1,2})[\.\)]\s*(.+)/);
-      const number = numMatch ? numMatch[1].padStart(2, '0') : String(c).padStart(2, '0');
-      const cardTitle = numMatch ? numMatch[2].trim() : h3TitleLine;
-      const cardBody = cardLines.slice(1).join('\n').trim();
-
-      const fixHeaderMatch = cardBody.match(/\*\*(How to [^:*]+):\*\*/i);
-      const actionTitle = fixHeaderMatch ? fixHeaderMatch[1] : 'How to implement it:';
-
-      const bullets: string[] = [];
-      const bulletMatches = cardBody.match(/^[-*]\s+(.+)$/gm);
-      if (bulletMatches) {
-        bulletMatches.forEach(b => bullets.push(b.replace(/^[-*]\s+/, '').trim()));
-      }
-
-      const desc = cardBody.split(/\*\*How to/i)[0].replace(/^[-*]\s+.+$/gm, '').trim();
-
-      cards.push({
-        number,
-        title: cardTitle,
-        description: desc,
-        actionTitle,
-        fixes: bullets
-      });
-    }
-
-    sections.push({
-      title,
-      id,
-      intro: sectionIntro,
-      quote,
-      cards
-    });
+  if (inline) {
+    return (
+      <code className="text-blue-300 bg-blue-950/40 border border-blue-500/25 px-1.5 py-0.5 rounded text-[13px] font-mono font-medium" {...props}>
+        {children}
+      </code>
+    );
   }
 
-  return { intro, sections };
-}
+  return (
+    <div className="relative my-8 rounded-2xl bg-[#07080c] border border-white/10 overflow-hidden shadow-2xl group">
+      {/* Terminal Title Bar */}
+      <div className="flex items-center justify-between px-4 py-2.5 bg-[#0e0e14] border-b border-white/10 text-xs font-mono text-[#94a3b8]">
+        <div className="flex items-center gap-2">
+          <div className="w-2.5 h-2.5 rounded-full bg-rose-500/80" />
+          <div className="w-2.5 h-2.5 rounded-full bg-amber-500/80" />
+          <div className="w-2.5 h-2.5 rounded-full bg-emerald-500/80" />
+          <span className="ml-2 text-[11px] text-[#64748b] uppercase tracking-wider">{language || "terminal"}</span>
+        </div>
+        <button
+          onClick={handleCopy}
+          className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/5 hover:bg-white/10 text-[#94a3b8] hover:text-white transition-all text-[11px] font-mono border border-white/5"
+          title="Copy code"
+        >
+          {copied ? (
+            <>
+              <Check className="w-3 h-3 text-emerald-400" />
+              <span className="text-emerald-400">Copied</span>
+            </>
+          ) : (
+            <>
+              <Copy className="w-3 h-3" />
+              <span>Copy</span>
+            </>
+          )}
+        </button>
+      </div>
 
-type RecentPost = Pick<Post, "title" | "slug" | "created_at" | "cover_image" | "content">;
+      {/* Code Text Area */}
+      <pre className="p-5 overflow-x-auto text-xs sm:text-sm font-mono text-[#e2e8f0] leading-relaxed scrollbar-thin">
+        <code>{children}</code>
+      </pre>
+    </div>
+  );
+};
 
-const BlogPost = () => {
+export default function BlogPost() {
   const { slug } = useParams();
   const navigate = useNavigate();
   const [post, setPost] = useState<Post | null>(null);
-  const [recentPosts, setRecentPosts] = useState<RecentPost[]>([]);
+  const [recentPosts, setRecentPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeHeadingId, setActiveHeadingId] = useState<string>('');
   const [copiedLink, setCopiedLink] = useState(false);
@@ -465,16 +180,12 @@ const BlogPost = () => {
     window.scrollTo(0, 0);
   }, [slug]);
 
-  useEffect(() => {
-    fetchRecentPosts();
-  }, [slug]);
-
-  // Active heading observer for ToC scrollspy
+  // Active heading observer for ToC scroll-spy
   useEffect(() => {
     if (!post?.content) return;
 
     const timeout = setTimeout(() => {
-      const headings = document.querySelectorAll('h2[id], div[id]');
+      const headings = document.querySelectorAll('article h2[id], article h3[id]');
       if (headings.length === 0) return;
 
       const observer = new IntersectionObserver(
@@ -485,27 +196,29 @@ const BlogPost = () => {
             }
           });
         },
-        { rootMargin: '-80px 0px -60% 0px' }
+        { rootMargin: '-100px 0px -65% 0px' }
       );
 
       headings.forEach((h) => observer.observe(h));
       return () => observer.disconnect();
-    }, 400);
+    }, 300);
 
     return () => clearTimeout(timeout);
   }, [post?.content]);
 
   const fetchPost = async () => {
     try {
-      // Check curated articles first
+      // 1. Check curated high-value articles first
       const curatedMatch = CURATED_BLOG_POSTS.find((p) => p.slug === slug);
       if (curatedMatch) {
         setPost(curatedMatch);
+        // Find other curated articles for related list
+        setRecentPosts(CURATED_BLOG_POSTS.filter(p => p.slug !== slug).slice(0, 3));
         setLoading(false);
         return;
       }
 
-      // Query Supabase
+      // 2. Query Supabase
       const { data, error } = await supabase
         .from("posts")
         .select("*, categories(id, name, slug)")
@@ -513,13 +226,14 @@ const BlogPost = () => {
         .single();
 
       if (error || !data) {
-        // Fallback to first curated post if slug not found
-        console.warn("Post not found in database, redirecting or using fallback.");
+        console.warn("Post not found in database, navigating to /blog");
         navigate("/blog");
         return;
       }
 
       setPost(data);
+      // Related posts
+      setRecentPosts(CURATED_BLOG_POSTS.slice(0, 3));
     } catch (error) {
       console.error("Error fetching post:", error);
       navigate("/blog");
@@ -528,25 +242,19 @@ const BlogPost = () => {
     }
   };
 
-  const fetchRecentPosts = async () => {
-    // Collect related posts from curated and DB
-    const otherCurated = CURATED_BLOG_POSTS.filter((p) => p.slug !== slug).slice(0, 3);
-    setRecentPosts(otherCurated);
-  };
-
   const handleShare = (platform: 'twitter' | 'linkedin' | 'copy') => {
     if (!post) return;
     const url = window.location.href;
-    const text = `Check out this article: ${post.title}`;
+    const text = `${post.title} — by Aman Sharma (@amanuxstudio)`;
 
     if (platform === 'twitter') {
-      window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`, '_blank');
+      window.open(`https://x.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`, '_blank');
     } else if (platform === 'linkedin') {
       window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`, '_blank');
     } else if (platform === 'copy') {
       navigator.clipboard.writeText(url);
       setCopiedLink(true);
-      toast.success("Link copied to clipboard!");
+      toast.success("Article link copied to clipboard!");
       setTimeout(() => setCopiedLink(false), 2500);
     }
   };
@@ -554,7 +262,7 @@ const BlogPost = () => {
   const handleNewsletterSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newsletterEmail || !newsletterEmail.includes('@')) {
-      toast.error('Please enter a valid email address');
+      toast.error('Please enter a valid work email address');
       return;
     }
 
@@ -566,11 +274,11 @@ const BlogPost = () => {
         body: JSON.stringify({
           name: 'Journal Subscriber',
           email: newsletterEmail,
-          message: `Subscribed from article: ${post?.title}`,
+          message: `Subscribed from: ${post?.title}`,
           title: '📰 New Journal Subscriber'
         })
       });
-      toast.success("You're subscribed! We'll share actionable web craft & conversion tips.");
+      toast.success("Thank you! You're subscribed to technical breakdowns and web performance insights.");
       setNewsletterEmail('');
     } catch (err) {
       toast.error('Could not subscribe. Please try again.');
@@ -587,11 +295,21 @@ const BlogPost = () => {
     }
   };
 
+  const tocItems = useMemo(() => {
+    return post?.content ? extractToc(post.content) : [];
+  }, [post?.content]);
+
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#09090c] text-white flex flex-col justify-center items-center font-sans">
-        <div className="w-10 h-10 border-2 border-blue-500 border-t-transparent rounded-full animate-spin mb-4" />
-        <p className="text-[#94a3b8] font-mono text-xs">Opening Journal...</p>
+      <div className="min-h-screen bg-[#09090c] text-white flex flex-col justify-between font-sans">
+        <Navigation />
+        <div className="flex-grow flex items-center justify-center py-32">
+          <div className="flex flex-col items-center gap-4">
+            <div className="w-8 h-8 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
+            <p className="text-xs font-mono tracking-widest text-[#94a3b8] uppercase">Loading Article...</p>
+          </div>
+        </div>
+        <Footer />
       </div>
     );
   }
@@ -601,18 +319,15 @@ const BlogPost = () => {
   const metaDescription = post.meta_description || post.excerpt || stripHtml(post.content).substring(0, 160) + "...";
   const metaTitle = post.meta_title || post.title;
   const readTime = getReadTime(post.content);
-  const formattedDate = format(new Date(post.created_at), "MMM d, yyyy");
-  const tocItems = extractToc(post.content);
-  const categoryName = post.categories?.name || "Web Development & UX";
-  const isDesignArticle = categoryName.toLowerCase().includes("design") || post.slug.includes("ux");
-
-  const { intro, sections } = parseMarkdownArticle(post.content);
+  const wordCount = getWordCount(post.content);
+  const formattedDate = format(new Date(post.created_at), "MMMM d, yyyy");
+  const categoryName = post.categories?.name || "Web Engineering & UI/UX";
 
   return (
-    <div className="min-h-screen bg-[#09090c] font-sans flex flex-col text-[#eeece8] selection:bg-blue-600/30 selection:text-white">
-      {/* Sticky Top Reading Progress Bar */}
-      <div 
-        className="fixed top-0 left-0 h-[2px] bg-gradient-to-r from-blue-600 via-indigo-500 to-emerald-400 z-[100] transition-all duration-75"
+    <div className="min-h-screen bg-[#09090c] font-sans flex flex-col text-[#eeece8] selection:bg-blue-600/30 selection:text-white relative">
+      {/* Sticky Reading Progress Bar */}
+      <div
+        className="fixed top-0 left-0 h-[2.5px] bg-gradient-to-r from-blue-600 via-cyan-400 to-emerald-400 z-[120] transition-all duration-100 ease-out"
         style={{ width: `${scrollProgress}%` }}
       />
 
@@ -625,283 +340,285 @@ const BlogPost = () => {
         keywords={post.meta_keywords}
         publishedTime={post.created_at}
         author="Aman Sharma"
+        category={categoryName}
       />
 
+      <div className="ambient-grain" aria-hidden="true" />
       <Navigation />
 
       {/* =========================================================================
-          HERO SECTION: Sleek Editorial Dark Header
+          HERO SECTION: High-Craft Editorial Publication Masthead
          ========================================================================= */}
-      <header className="relative bg-[#09090c] text-[#eeece8] pt-28 pb-14 lg:py-24 border-b border-white/10 overflow-hidden">
-        {/* Ambient Subtle Glow */}
-        <div className="absolute top-0 right-1/4 w-[450px] h-[450px] bg-blue-600/10 rounded-full blur-[140px] pointer-events-none" />
-        <div className="absolute -bottom-10 left-10 w-[350px] h-[350px] bg-indigo-600/10 rounded-full blur-[120px] pointer-events-none" />
+      <header className="relative pt-32 pb-14 lg:pt-36 lg:pb-16 border-b border-white/10 bg-[#09090c] overflow-hidden">
+        {/* Ambient atmospheric gradients */}
+        <div className="absolute top-1/4 right-1/4 w-[500px] h-[400px] bg-blue-600/10 blur-[140px] rounded-full pointer-events-none" />
+        <div className="absolute bottom-0 left-10 w-[350px] h-[300px] bg-emerald-500/5 blur-[120px] rounded-full pointer-events-none" />
 
         <div className="container mx-auto px-6 max-w-7xl relative z-10">
-          {/* Breadcrumb Navigation */}
-          <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs font-mono text-[#94a3b8] mb-6 flex-wrap">
+          
+          {/* Breadcrumb Path */}
+          <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs font-mono text-[#94a3b8] mb-8 flex-wrap">
             <Link to="/" className="hover:text-white transition-colors">Home</Link>
-            <ChevronRight className="w-3.5 h-3.5 text-[#64748b]" />
-            <Link to="/blog" className="hover:text-white transition-colors">Journal</Link>
-            <ChevronRight className="w-3.5 h-3.5 text-[#64748b]" />
-            <span className="text-[#eeece8] truncate max-w-[240px] sm:max-w-md">{post.title}</span>
+            <ChevronRight className="w-3.5 h-3.5 text-[#475569]" />
+            <Link to="/blog" className="hover:text-white transition-colors">Engineering Journal</Link>
+            <ChevronRight className="w-3.5 h-3.5 text-[#475569]" />
+            <span className="text-blue-400">{categoryName}</span>
           </nav>
 
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
-            {/* Left Column: Post Title, Excerpt & Author Info */}
-            <div className="lg:col-span-7">
-              {/* Category Pill Badge */}
-              <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-mono uppercase tracking-wider font-semibold bg-blue-500/10 text-blue-300 border border-blue-500/30 mb-5">
-                <Sparkles className="w-3 h-3 text-blue-400" />
-                {categoryName}
-              </div>
-
-              {/* Main Headline */}
-              <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#eeece8] tracking-tight leading-[1.15] mb-5">
-                {post.title}
-              </h1>
-
-              {/* Subheading / Excerpt */}
-              {post.excerpt && (
-                <p className="text-[#94a3b8] text-base sm:text-lg leading-relaxed mb-8 max-w-2xl font-normal">
-                  {post.excerpt}
-                </p>
-              )}
-
-              {/* Author & Meta Row */}
-              <div className="flex flex-wrap items-center gap-6 pt-4 border-t border-white/10 text-xs font-mono text-[#94a3b8]">
-                {/* Author Avatar & Info */}
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-blue-600/20 border border-blue-500/40 flex items-center justify-center font-bold text-blue-400 text-sm">
-                    AS
-                  </div>
-                  <div>
-                    <span className="block font-bold text-[#eeece8] leading-tight">Aman Sharma</span>
-                    <span className="block text-[11px] text-[#64748b]">Web Developer & UI/UX</span>
-                  </div>
-                </div>
-
-                <div className="h-6 w-px bg-white/10 hidden sm:block" />
-
-                {/* Read Time */}
-                <div className="flex items-center gap-1.5 text-[#cbd5e1]">
-                  <Clock className="w-3.5 h-3.5 text-blue-400" />
-                  <span>{readTime}</span>
-                </div>
-
-                {/* Published Date */}
-                <div className="flex items-center gap-1.5 text-[#cbd5e1]">
-                  <Calendar className="w-3.5 h-3.5 text-blue-400" />
-                  <span>{formattedDate}</span>
-                </div>
-              </div>
+          {/* Category Badge & Meta Metrics */}
+          <div className="flex flex-wrap items-center gap-3 mb-6">
+            <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-mono uppercase tracking-wider font-semibold bg-blue-500/10 text-blue-300 border border-blue-500/30">
+              <Sparkles className="w-3 h-3 text-blue-400" />
+              <span>{categoryName}</span>
             </div>
 
-            {/* Right Column: Hero Graphic Showcase */}
-            <div className="lg:col-span-5 hidden lg:block">
-              {post.slug.includes("ux-flaws") ? (
-                <AnnotatedHeroIllustration />
-              ) : (
-                <TechBrowserMockup coverImage={post.cover_image || undefined} title={post.title} />
-              )}
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/[0.03] border border-white/10 text-xs font-mono text-[#94a3b8]">
+              <Clock className="w-3 h-3 text-blue-400" />
+              <span>{readTime}</span>
+              <span className="text-white/20">•</span>
+              <span>{wordCount.toLocaleString()} words</span>
+            </div>
+
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/[0.03] border border-white/10 text-xs font-mono text-[#94a3b8]">
+              <Calendar className="w-3 h-3 text-blue-400" />
+              <span>{formattedDate}</span>
             </div>
           </div>
+
+          {/* Main Title */}
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-[#eeece8] leading-[1.1] mb-6 max-w-5xl">
+            {post.title}
+          </h1>
+
+          {/* Subtitle / Excerpt */}
+          {post.excerpt && (
+            <p className="text-lg sm:text-xl text-[#94a3b8] leading-relaxed max-w-4xl font-normal mb-8">
+              {post.excerpt}
+            </p>
+          )}
+
+          {/* Verified Author & Credibility Row */}
+          <div className="flex flex-wrap items-center justify-between gap-6 pt-6 border-t border-white/10">
+            <div className="flex items-center gap-3.5">
+              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-600 via-indigo-600 to-sky-500 p-0.5 shadow-lg shadow-blue-600/20">
+                <div className="w-full h-full bg-[#0e0e14] rounded-[14px] flex items-center justify-center text-white font-bold text-sm font-mono">
+                  AS
+                </div>
+              </div>
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="font-bold text-[#eeece8] text-sm">Aman Sharma</span>
+                  <span className="inline-flex items-center gap-1 text-[11px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">
+                    <UserCheck className="w-3 h-3" /> Verified Author
+                  </span>
+                </div>
+                <p className="text-xs font-mono text-[#64748b] mt-0.5">
+                  Web Developer &amp; UI/UX Designer · 50+ Production Sites
+                </p>
+              </div>
+            </div>
+
+            {/* Quick Share Buttons */}
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-mono text-[#64748b] uppercase tracking-wider mr-2 hidden sm:inline">Share:</span>
+              <button
+                onClick={() => handleShare('twitter')}
+                className="w-9 h-9 rounded-xl border border-white/10 bg-[#0e0e14] text-[#94a3b8] hover:text-white hover:border-blue-500/40 flex items-center justify-center transition-all shadow-sm"
+                title="Share on X"
+              >
+                <Twitter className="w-4 h-4" />
+              </button>
+              <button
+                onClick={() => handleShare('linkedin')}
+                className="w-9 h-9 rounded-xl border border-white/10 bg-[#0e0e14] text-[#94a3b8] hover:text-white hover:border-blue-500/40 flex items-center justify-center transition-all shadow-sm"
+                title="Share on LinkedIn"
+              >
+                <Linkedin className="w-4 h-4" />
+              </button>
+              <button
+                onClick={() => handleShare('copy')}
+                className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-white/10 bg-[#0e0e14] text-[#94a3b8] hover:text-white hover:border-blue-500/40 transition-all text-xs font-mono shadow-sm"
+                title="Copy article link"
+              >
+                {copiedLink ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                <span>{copiedLink ? "Copied!" : "Copy Link"}</span>
+              </button>
+            </div>
+          </div>
+
         </div>
       </header>
 
       {/* =========================================================================
-          MAIN BODY: Editorial 2-Column Layout
+          MAIN EDITORIAL BODY: Magazine 2-Column Split
          ========================================================================= */}
-      <main className="flex-grow py-14 lg:py-20">
+      <main className="flex-grow py-12 lg:py-20">
         <div className="container mx-auto px-6 max-w-7xl">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
 
             {/* -------------------------------------------------------------
-                LEFT COLUMN (Article Content)
+                LEFT / MAIN READING COLUMN (Article Flow)
                ------------------------------------------------------------- */}
-            <article className="lg:col-span-8 space-y-10">
-              {/* Social Sharing Bar */}
-              <div className="flex items-center justify-between pb-6 border-b border-white/10">
-                <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-[#94a3b8]">
-                  <Share2 className="w-3.5 h-3.5 text-blue-400" />
-                  <span>Share Article</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <button
-                    onClick={() => handleShare('twitter')}
-                    className="w-9 h-9 rounded-xl border border-white/10 bg-[#0e0e14] text-[#94a3b8] hover:text-white hover:border-blue-500/40 flex items-center justify-center transition-all"
-                    title="Share on X"
-                  >
-                    <Twitter className="w-4 h-4" />
-                  </button>
-                  <button
-                    onClick={() => handleShare('linkedin')}
-                    className="w-9 h-9 rounded-xl border border-white/10 bg-[#0e0e14] text-[#94a3b8] hover:text-white hover:border-blue-500/40 flex items-center justify-center transition-all"
-                    title="Share on LinkedIn"
-                  >
-                    <Linkedin className="w-4 h-4" />
-                  </button>
-                  <button
-                    onClick={() => handleShare('copy')}
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-white/10 bg-[#0e0e14] text-[#94a3b8] hover:text-white hover:border-blue-500/40 transition-all text-xs font-mono"
-                    title="Copy link"
-                  >
-                    {copiedLink ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
-                    <span>{copiedLink ? "Copied!" : "Copy"}</span>
-                  </button>
-                </div>
-              </div>
+            <article className="lg:col-span-8 max-w-[780px] w-full">
 
-              {/* -------------------------------------------------------------
-                  STRUCTURED ARTICLE RENDERING
-                 ------------------------------------------------------------- */}
-              {sections.length > 0 ? (
-                <div className="space-y-12">
-                  {/* Lead Introduction Paragraph */}
-                  {intro && (
-                    <div className="text-lg sm:text-xl text-[#cbd5e1] leading-relaxed font-normal">
-                      <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>
-                        {intro}
-                      </ReactMarkdown>
-                    </div>
-                  )}
-
-                  {/* Render Each Major Section */}
-                  {sections.map((section, sIdx) => (
-                    <div key={sIdx} className="space-y-6 pt-4">
-                      {/* Section H2 with Blue Vertical Accent Bar */}
-                      <h2
-                        id={section.id}
-                        className="text-2xl sm:text-3xl font-extrabold text-[#eeece8] scroll-mt-28 flex items-center leading-tight tracking-tight pt-2"
-                      >
-                        <span className="w-1.5 h-7 bg-blue-600 rounded-full mr-3.5 inline-block flex-shrink-0" />
-                        <span>{section.title}</span>
-                      </h2>
-
-                      {/* Section Intro Text */}
-                      {section.intro && (
-                        <div className="text-base sm:text-lg text-[#94a3b8] leading-[1.85] font-normal">
-                          <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>
-                            {section.intro}
-                          </ReactMarkdown>
-                        </div>
-                      )}
-
-                      {/* Callout Quote Box */}
-                      {section.quote && (
-                        <div className="rounded-2xl bg-[#0e0e14] border border-blue-500/30 p-6 sm:p-7 flex items-start gap-4 my-8 shadow-sm">
-                          <div className="w-10 h-10 rounded-xl bg-blue-600/20 text-blue-400 flex items-center justify-center flex-shrink-0 text-xl border border-blue-500/30">
-                            🎯
-                          </div>
-                          <div>
-                            <h4 className="font-bold text-[#eeece8] text-base sm:text-lg mb-1 leading-snug">
-                              {section.quote.title}
-                            </h4>
-                            <p className="text-[#94a3b8] text-sm sm:text-base leading-relaxed">
-                              {section.quote.text}
-                            </p>
-                          </div>
-                        </div>
-                      )}
-
-                      {/* Structured Points / Flaw Cards */}
-                      {section.cards.length > 0 && (
-                        <div className="space-y-6 my-8">
-                          {section.cards.map((card, cIdx) => (
-                            <StructuredPointCard
-                              key={cIdx}
-                              number={card.number}
-                              title={card.title}
-                              description={card.description}
-                              actionTitle={card.actionTitle}
-                              fixes={card.fixes}
-                              isDesignArticle={isDesignArticle}
-                            />
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                /* Fallback to enhanced ReactMarkdown for legacy content */
-                <div className="blog-content-body max-w-none space-y-6">
-                  <ReactMarkdown
-                    remarkPlugins={[remarkGfm]}
-                    rehypePlugins={[rehypeRaw]}
-                    components={{
-                      h2: ({ node, ...props }) => {
-                        const headingText = String(props.children);
-                        const id = headingText.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
-                        return (
-                          <div className="pt-10 mb-6">
-                            <h2 id={id} className="text-2xl sm:text-3xl font-extrabold text-[#eeece8] scroll-mt-28 flex items-center leading-tight tracking-tight">
-                              <span className="w-1.5 h-7 bg-blue-600 rounded-full mr-3.5 inline-block flex-shrink-0" />
-                              <span>{props.children}</span>
-                            </h2>
-                          </div>
-                        );
-                      },
-                      h3: ({ node, ...props }) => (
-                        <h3 className="text-xl sm:text-2xl font-bold text-[#eeece8] mt-8 mb-4">
-                          {props.children}
-                        </h3>
-                      ),
-                      p: ({ node, ...props }) => (
-                        <p className="text-base sm:text-lg text-[#94a3b8] leading-[1.85] mb-6 font-normal">
-                          {props.children}
-                        </p>
-                      ),
-                      blockquote: ({ node, ...props }) => (
-                        <div className="rounded-2xl bg-[#0e0e14] border border-blue-500/30 p-6 sm:p-7 flex items-start gap-4 my-8 shadow-sm">
-                          <div className="w-10 h-10 rounded-xl bg-blue-600/20 text-blue-400 flex items-center justify-center flex-shrink-0 text-xl border border-blue-500/30">
-                            🎯
-                          </div>
-                          <div className="text-[#cbd5e1] text-base leading-relaxed font-medium not-italic">
-                            {props.children}
-                          </div>
-                        </div>
-                      ),
-                      ul: ({ node, ...props }) => (
-                        <ul className="space-y-3 my-6 pl-1">{props.children}</ul>
-                      ),
-                      li: ({ node, ...props }) => (
-                        <li className="flex items-start text-base text-[#cbd5e1] leading-relaxed">
-                          <span className="w-1.5 h-1.5 rounded-full bg-blue-500 mt-2 mr-3 flex-shrink-0" />
-                          <span className="flex-1">{props.children}</span>
-                        </li>
-                      ),
-                      strong: ({ node, ...props }) => (
-                        <strong className="font-bold text-[#eeece8]">{props.children}</strong>
-                      ),
-                      a: ({ node, ...props }) => (
-                        <a
-                          {...props}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-blue-400 underline underline-offset-4 hover:text-blue-300 transition-colors"
-                        />
-                      ),
-                      pre: ({ node, ...props }) => (
-                        <pre className="bg-[#050508] text-[#eeece8] p-5 rounded-2xl overflow-x-auto my-8 border border-white/10 text-xs font-mono shadow-lg leading-relaxed" {...props} />
-                      ),
-                      code: ({ node, ...props }) => (
-                        <code className="text-blue-300 bg-blue-950/40 border border-blue-500/20 px-1.5 py-0.5 rounded text-xs font-mono font-medium" {...props} />
-                      )
-                    }}
-                  >
-                    {post.content}
-                  </ReactMarkdown>
+              {/* Framed Editorial Cover Image */}
+              {post.cover_image && (
+                <div className="mb-12 rounded-3xl overflow-hidden border border-white/10 bg-[#0e0e14] shadow-2xl relative group">
+                  <div className="relative aspect-[16/9] w-full overflow-hidden bg-[#09090c]">
+                    <img
+                      src={post.cover_image}
+                      alt={post.title}
+                      className="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-700 ease-out"
+                      loading="eager"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#09090c] via-transparent to-transparent opacity-40" />
+                  </div>
+                  <div className="p-4 bg-[#0e0e14] border-t border-white/5 flex items-center justify-between text-xs font-mono text-[#64748b]">
+                    <span>Cover Architecture // {categoryName}</span>
+                    <span className="text-blue-400 font-semibold">Aman UX Studio Research</span>
+                  </div>
                 </div>
               )}
 
-              {/* Tags / Keywords */}
+              {/* Executive Summary / TL;DR Box */}
+              <div className="mb-12 p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-blue-950/20 via-[#0e0e14] to-[#09090c] border border-blue-500/30 shadow-xl relative overflow-hidden">
+                <div className="flex items-center gap-2.5 text-xs font-mono uppercase tracking-widest text-blue-400 mb-3">
+                  <Zap className="w-4 h-4 text-amber-400" />
+                  <span>EXECUTIVE SUMMARY // CORE TAKEAWAYS</span>
+                </div>
+                <h3 className="text-xl sm:text-2xl font-bold text-[#eeece8] mb-3 leading-snug">
+                  What You Will Learn in This Technical Breakdown
+                </h3>
+                <ul className="space-y-2.5 text-sm sm:text-base text-[#cbd5e1] font-normal">
+                  <li className="flex items-start gap-2.5">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-1" />
+                    <span>How architectural performance choices directly impact conversion rates and organic search indexing.</span>
+                  </li>
+                  <li className="flex items-start gap-2.5">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-1" />
+                    <span>Actionable step-by-step code and server configurations tested across 50+ production deployments.</span>
+                  </li>
+                  <li className="flex items-start gap-2.5">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-1" />
+                    <span>Real-world case study benchmarks from active client platforms (Fairease, Ireshh, Expert VUW).</span>
+                  </li>
+                </ul>
+              </div>
+
+              {/* Enhanced ReactMarkdown Body */}
+              <div className="blog-article-content space-y-6 text-base sm:text-lg leading-[1.85] text-[#cbd5e1] font-normal">
+                <ReactMarkdown
+                  remarkPlugins={[remarkGfm]}
+                  rehypePlugins={[rehypeRaw]}
+                  components={{
+                    h2: ({ node, ...props }) => {
+                      const headingText = String(props.children);
+                      const id = headingText.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+                      return (
+                        <div className="pt-12 mb-6">
+                          <h2
+                            id={id}
+                            className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#eeece8] tracking-tight scroll-mt-28 flex items-center leading-tight border-b border-white/10 pb-4"
+                          >
+                            <span className="w-2 h-7 bg-blue-500 rounded-full mr-3.5 inline-block shrink-0 shadow-md shadow-blue-500/40" />
+                            <span>{props.children}</span>
+                          </h2>
+                        </div>
+                      );
+                    },
+                    h3: ({ node, ...props }) => {
+                      const headingText = String(props.children);
+                      const id = headingText.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+                      return (
+                        <div className="pt-8 mb-4">
+                          <h3
+                            id={id}
+                            className="text-xl sm:text-2xl font-bold text-[#eeece8] tracking-tight scroll-mt-28 flex items-center leading-snug"
+                          >
+                            <span className="w-1.5 h-5 bg-cyan-400 rounded-full mr-3 inline-block shrink-0" />
+                            <span>{props.children}</span>
+                          </h3>
+                        </div>
+                      );
+                    },
+                    p: ({ node, ...props }) => (
+                      <p className="text-base sm:text-[18px] text-[#cbd5e1] leading-[1.85] mb-6 font-normal">
+                        {props.children}
+                      </p>
+                    ),
+                    blockquote: ({ node, ...props }) => (
+                      <div className="my-8 rounded-2xl bg-gradient-to-r from-blue-950/30 via-[#0e0e14] to-transparent border-l-4 border-blue-500 p-6 sm:p-7 shadow-lg">
+                        <div className="flex items-start gap-4">
+                          <span className="text-3xl text-blue-400 font-serif leading-none select-none">“</span>
+                          <div className="text-base sm:text-lg text-[#e2e8f0] font-medium leading-relaxed not-italic">
+                            {props.children}
+                          </div>
+                        </div>
+                      </div>
+                    ),
+                    ul: ({ node, ...props }) => (
+                      <ul className="space-y-3 my-6 pl-2">{props.children}</ul>
+                    ),
+                    ol: ({ node, ...props }) => (
+                      <ol className="space-y-3 my-6 pl-2 list-decimal list-inside">{props.children}</ol>
+                    ),
+                    li: ({ node, ...props }) => (
+                      <li className="flex items-start text-base sm:text-[17px] text-[#cbd5e1] leading-relaxed">
+                        <span className="w-1.5 h-1.5 rounded-full bg-blue-400 mt-2.5 mr-3 shrink-0" />
+                        <span className="flex-1">{props.children}</span>
+                      </li>
+                    ),
+                    strong: ({ node, ...props }) => (
+                      <strong className="font-bold text-white">{props.children}</strong>
+                    ),
+                    em: ({ node, ...props }) => (
+                      <em className="text-white/90 italic">{props.children}</em>
+                    ),
+                    a: ({ node, ...props }) => (
+                      <a
+                        {...props}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-blue-400 font-medium underline underline-offset-4 hover:text-blue-300 transition-colors inline-flex items-center gap-0.5"
+                      />
+                    ),
+                    table: ({ node, ...props }) => (
+                      <div className="overflow-x-auto my-8 rounded-2xl border border-white/10 bg-[#0e0e14] shadow-xl">
+                        <table className="w-full text-left text-sm text-[#cbd5e1]" {...props} />
+                      </div>
+                    ),
+                    thead: ({ node, ...props }) => (
+                      <thead className="bg-[#14141e] text-xs font-mono uppercase tracking-wider text-[#94a3b8] border-b border-white/10" {...props} />
+                    ),
+                    th: ({ node, ...props }) => (
+                      <th className="px-5 py-3.5 font-bold" {...props} />
+                    ),
+                    td: ({ node, ...props }) => (
+                      <td className="px-5 py-3.5 border-b border-white/5 font-normal" {...props} />
+                    ),
+                    code: CodeBlock,
+                    hr: () => (
+                      <hr className="my-12 border-0 h-px bg-gradient-to-r from-transparent via-white/15 to-transparent" />
+                    )
+                  }}
+                >
+                  {post.content}
+                </ReactMarkdown>
+              </div>
+
+              {/* Topic Tag Pills */}
               {post.meta_keywords && (
-                <div className="pt-8 border-t border-white/10">
-                  <p className="text-xs font-mono uppercase tracking-wider text-[#64748b] mb-3">Topic Keywords:</p>
+                <div className="mt-14 pt-8 border-t border-white/10">
+                  <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-[#64748b] mb-4">
+                    <Layers className="w-3.5 h-3.5 text-blue-400" />
+                    <span>Indexed Topic Keywords</span>
+                  </div>
                   <div className="flex flex-wrap gap-2">
                     {post.meta_keywords.split(',').map((tag, i) => (
-                      <span key={i} className="text-xs font-mono bg-[#0e0e14] text-[#94a3b8] px-3 py-1.5 rounded-lg border border-white/10">
+                      <span
+                        key={i}
+                        className="text-xs font-mono bg-[#0e0e14] text-[#94a3b8] px-3.5 py-1.5 rounded-xl border border-white/10 hover:border-blue-500/30 hover:text-white transition-all"
+                      >
                         #{tag.trim()}
                       </span>
                     ))}
@@ -909,45 +626,80 @@ const BlogPost = () => {
                 </div>
               )}
 
-              {/* Bottom Project Inquiry CTA Box */}
-              <div className="mt-14 p-8 sm:p-10 rounded-3xl bg-gradient-to-br from-[#0e0e14] via-[#12121c] to-[#09090c] border border-white/10 text-white shadow-xl relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
-                
-                <div className="relative z-10 max-w-2xl">
-                  <span className="text-blue-400 font-mono text-xs tracking-wider uppercase mb-2 block">
-                    Need Help Scaling Your Web Presence?
-                  </span>
-                  <h3 className="text-2xl sm:text-3xl font-extrabold text-[#eeece8] mb-3 leading-snug">
-                    Turn Design & Performance Into High-Converting Revenue
-                  </h3>
-                  <p className="text-[#94a3b8] text-sm sm:text-base leading-relaxed mb-6">
-                    Whether launching a custom WordPress platform, speeding up a WooCommerce store, or building an intuitive UI/UX system — let's build something iconic.
+              {/* Author Bio Box */}
+              <div className="mt-14 p-8 rounded-3xl bg-[#0e0e14] border border-white/10 shadow-2xl flex flex-col sm:flex-row items-start sm:items-center gap-6">
+                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center text-white font-mono font-bold text-lg shadow-xl shrink-0">
+                  AS
+                </div>
+                <div className="space-y-2 flex-grow">
+                  <div className="flex items-center justify-between flex-wrap gap-2">
+                    <h4 className="text-lg font-bold text-white">Written by Aman Sharma</h4>
+                    <Link
+                      to="/resume"
+                      className="text-xs font-mono text-blue-400 hover:text-blue-300 inline-flex items-center gap-1"
+                    >
+                      View Executive Resume <ArrowUpRight className="w-3.5 h-3.5" />
+                    </Link>
+                  </div>
+                  <p className="text-xs sm:text-sm text-[#94a3b8] leading-relaxed">
+                    Lead developer &amp; designer at Aman UX Studio. Specializing in high-converting custom WordPress development, sub-second WooCommerce performance, and frictionless UI/UX systems.
                   </p>
-                  <Link to="/contact">
-                    <button className="btn-studio-primary px-6 py-3.5 text-xs font-mono inline-flex items-center gap-2">
-                      Start a Project Consultation <ArrowRight className="w-4 h-4" />
-                    </button>
-                  </Link>
                 </div>
               </div>
+
+              {/* High-Intent Lead Magnet: Free 5-Minute Video Teardown */}
+              <div className="mt-14 p-8 sm:p-10 rounded-3xl bg-gradient-to-br from-[#10101c] via-[#0e0e14] to-[#09090c] border border-blue-500/30 text-white shadow-2xl relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-96 h-96 bg-blue-600/10 rounded-full blur-[100px] pointer-events-none" />
+
+                <div className="relative z-10 max-w-2xl space-y-4">
+                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/30 text-xs font-mono uppercase tracking-widest text-blue-400">
+                    <Zap className="w-3.5 h-3.5 text-amber-400" />
+                    <span>Free Video Teardown for Founders</span>
+                  </div>
+
+                  <h3 className="text-2xl sm:text-3xl font-extrabold text-[#eeece8] leading-tight">
+                    Is Your Website Leaking Sales or Loading Too Slowly?
+                  </h3>
+
+                  <p className="text-[#94a3b8] text-sm sm:text-base leading-relaxed">
+                    Send me your website URL. I'll personally record a free 5-minute video teardown uncovering hidden performance bottlenecks, mobile friction, and conversion leaks.
+                  </p>
+
+                  <div className="pt-2 flex flex-wrap items-center gap-4">
+                    <Link to="/contact">
+                      <button className="btn-studio-primary px-6 py-3.5 text-xs font-mono inline-flex items-center gap-2">
+                        <span>Claim Your Free Website Teardown</span>
+                        <ArrowRight className="w-4 h-4" />
+                      </button>
+                    </Link>
+                    <Link to="/portfolio" className="text-xs font-mono text-[#94a3b8] hover:text-white underline underline-offset-4">
+                      Explore Case Studies &rarr;
+                    </Link>
+                  </div>
+                </div>
+              </div>
+
             </article>
 
             {/* -------------------------------------------------------------
-                RIGHT COLUMN (Sticky Sidebar)
+                RIGHT COLUMN: Sticky Editorial Utilities & Lead Captures
                ------------------------------------------------------------- */}
             <aside className="lg:col-span-4 space-y-8 lg:sticky lg:top-24">
 
               {/* 1. TABLE OF CONTENTS */}
               {tocItems.length > 0 && (
-                <div className="bg-[#0e0e14] rounded-2xl border border-white/10 p-6 shadow-sm">
-                  <div className="flex items-center gap-2 mb-4 pb-3 border-b border-white/10">
-                    <ListOrdered className="w-4 h-4 text-blue-400" />
-                    <h3 className="font-bold text-[#eeece8] text-sm uppercase font-mono tracking-wider">
-                      Contents
-                    </h3>
+                <div className="bg-[#0e0e14] rounded-3xl border border-white/10 p-6 shadow-xl backdrop-blur-md">
+                  <div className="flex items-center justify-between pb-3 mb-4 border-b border-white/10">
+                    <div className="flex items-center gap-2">
+                      <ListOrdered className="w-4 h-4 text-blue-400" />
+                      <h3 className="font-bold text-[#eeece8] text-xs font-mono uppercase tracking-wider">
+                        Table of Contents
+                      </h3>
+                    </div>
+                    <span className="text-[10px] font-mono text-[#64748b]">{tocItems.length} Sections</span>
                   </div>
 
-                  <nav className="space-y-1.5 text-xs font-mono">
+                  <nav className="space-y-1.5 text-xs font-mono max-h-[380px] overflow-y-auto pr-1 scrollbar-thin">
                     {tocItems.map((item) => {
                       const isActive = activeHeadingId === item.id;
                       return (
@@ -960,7 +712,7 @@ const BlogPost = () => {
                               : "text-[#94a3b8] hover:text-white hover:bg-white/5"
                           } ${item.level === 3 ? "pl-5" : ""}`}
                         >
-                          <span className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${isActive ? "bg-blue-400 ring-2 ring-blue-300/40" : "bg-white/20"}`} />
+                          <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${isActive ? "bg-blue-400 ring-2 ring-blue-300/40" : "bg-white/20"}`} />
                           <span className="truncate">{item.text}</span>
                         </button>
                       );
@@ -969,52 +721,69 @@ const BlogPost = () => {
                 </div>
               )}
 
-              {/* 2. NEWSLETTER / LEAD CAPTURE */}
-              <div className="rounded-2xl bg-[#0e0e14] text-white p-6 sm:p-7 shadow-xl border border-white/10 relative overflow-hidden">
-                <div className="w-10 h-10 rounded-xl bg-blue-600/20 text-blue-400 flex items-center justify-center mb-4 border border-blue-500/30">
-                  <Mail className="w-5 h-5" />
+              {/* 2. DIRECT CONSULTATION CARD */}
+              <div className="rounded-3xl bg-[#0e0e14] border border-white/10 p-6 shadow-xl relative overflow-hidden">
+                <div className="flex items-center gap-2 text-xs font-mono text-blue-400 uppercase tracking-wider mb-2">
+                  <ShieldCheck className="w-4 h-4 text-emerald-400" />
+                  <span>Work Directly With Aman</span>
                 </div>
 
-                <h3 className="text-lg font-bold text-[#eeece8] mb-2 leading-tight">
-                  Studio Insights in Your Inbox
-                </h3>
-                <p className="text-[#94a3b8] text-xs leading-relaxed mb-5">
-                  Actionable WordPress performance breakdowns, CRO experiments, and design tokens. No spam.
+                <h4 className="text-base font-bold text-white mb-2 leading-snug">
+                  Need a Custom High-Performance Website?
+                </h4>
+
+                <p className="text-xs text-[#94a3b8] leading-relaxed mb-5">
+                  Direct developer collaboration. Sub-second load times, bespoke designs, and zero agency overhead.
                 </p>
 
-                <form onSubmit={handleNewsletterSubmit} className="space-y-3">
-                  <div className="flex items-center gap-2">
-                    <Input
-                      type="email"
-                      placeholder="Enter work email"
-                      value={newsletterEmail}
-                      onChange={(e) => setNewsletterEmail(e.target.value)}
-                      required
-                      className="bg-[#09090c] border-white/10 text-white placeholder:text-[#64748b] text-xs font-mono h-10 rounded-xl focus:border-blue-500"
-                    />
-                    <Button
-                      type="submit"
-                      disabled={isSubscribing}
-                      className="h-10 px-3.5 bg-blue-600 hover:bg-blue-500 text-white rounded-xl shadow-md flex-shrink-0 transition-colors"
-                      title="Subscribe"
-                    >
-                      {isSubscribing ? (
-                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                      ) : (
-                        <ArrowUpRight className="w-4 h-4" />
-                      )}
-                    </Button>
-                  </div>
+                <Link to="/contact">
+                  <button className="w-full btn-studio-primary py-2.5 text-xs font-mono inline-flex items-center justify-center gap-1.5">
+                    <span>Book Studio Consultation</span>
+                    <ArrowUpRight className="w-3.5 h-3.5" />
+                  </button>
+                </Link>
+              </div>
+
+              {/* 3. NEWSLETTER / DISCORD DISPATCH */}
+              <div className="rounded-3xl bg-[#0e0e14] text-white p-6 shadow-xl border border-white/10 relative overflow-hidden">
+                <div className="w-9 h-9 rounded-xl bg-blue-600/20 text-blue-400 flex items-center justify-center mb-3 border border-blue-500/30">
+                  <Mail className="w-4 h-4" />
+                </div>
+
+                <h4 className="text-base font-bold text-[#eeece8] mb-1.5">
+                  Studio Engineering Dispatches
+                </h4>
+
+                <p className="text-xs text-[#94a3b8] leading-relaxed mb-4">
+                  Actionable WordPress speed breakdowns, Figma-to-code workflows, and conversion blueprints.
+                </p>
+
+                <form onSubmit={handleNewsletterSubmit} className="space-y-2.5">
+                  <Input
+                    type="email"
+                    placeholder="Enter work email"
+                    value={newsletterEmail}
+                    onChange={(e) => setNewsletterEmail(e.target.value)}
+                    required
+                    className="bg-[#09090c] border-white/10 text-white placeholder:text-[#64748b] text-xs font-mono h-10 rounded-xl focus:border-blue-500"
+                  />
+                  <Button
+                    type="submit"
+                    disabled={isSubscribing}
+                    className="w-full h-10 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-mono font-semibold transition-all"
+                  >
+                    {isSubscribing ? "Subscribing..." : "Subscribe to Journal"}
+                  </Button>
                 </form>
               </div>
 
-              {/* 3. RELATED ARTICLES */}
+              {/* 4. RELATED ARTICLES */}
               {recentPosts.length > 0 && (
-                <div className="bg-[#0e0e14] rounded-2xl border border-white/10 p-6 shadow-sm">
-                  <div className="flex items-center mb-4 pb-3 border-b border-white/10">
-                    <span className="w-1 h-4 bg-blue-600 rounded-full mr-2.5 flex-shrink-0" />
-                    <h3 className="font-bold text-[#eeece8] text-sm uppercase font-mono tracking-wider">
-                      Related Articles
+                <div className="bg-[#0e0e14] rounded-3xl border border-white/10 p-6 shadow-xl">
+                  <div className="flex items-center gap-2 pb-3 mb-4 border-b border-white/10">
+                    <BookOpen className="w-4 h-4 text-blue-400" />
+                    <h3 className="font-bold text-[#eeece8] text-xs uppercase font-mono tracking-wider">
+                      Recommended Reading
                     </h3>
                   </div>
 
@@ -1023,10 +792,10 @@ const BlogPost = () => {
                       <Link
                         key={recent.slug}
                         to={`/blog/${recent.slug}`}
-                        className="group flex gap-3.5 p-2 -mx-2 rounded-xl hover:bg-white/5 transition-colors"
+                        className="group flex gap-3.5 p-2 -mx-2 rounded-2xl hover:bg-white/5 transition-all"
                       >
                         {recent.cover_image ? (
-                          <div className="w-16 h-16 flex-shrink-0 rounded-xl overflow-hidden bg-[#14141e] border border-white/10">
+                          <div className="w-16 h-16 shrink-0 rounded-xl overflow-hidden bg-[#14141e] border border-white/10">
                             <img
                               src={recent.cover_image}
                               alt={recent.title}
@@ -1034,8 +803,8 @@ const BlogPost = () => {
                             />
                           </div>
                         ) : (
-                          <div className="w-16 h-16 flex-shrink-0 rounded-xl bg-blue-600/10 text-blue-400 flex items-center justify-center font-bold text-xs border border-blue-500/20">
-                            UX
+                          <div className="w-16 h-16 shrink-0 rounded-xl bg-blue-600/10 text-blue-400 flex items-center justify-center font-bold text-xs border border-blue-500/20">
+                            <Code2 className="w-6 h-6" />
                           </div>
                         )}
 
@@ -1043,7 +812,7 @@ const BlogPost = () => {
                           <h4 className="font-bold text-[#eeece8] group-hover:text-blue-300 transition-colors line-clamp-2 text-xs leading-snug mb-1">
                             {recent.title}
                           </h4>
-                          <div className="flex items-center gap-1 text-[11px] font-mono text-[#64748b]">
+                          <div className="flex items-center gap-1.5 text-[11px] font-mono text-[#64748b]">
                             <Clock className="w-3 h-3 text-blue-400" />
                             <span>{getReadTime(recent.content)}</span>
                           </div>
@@ -1060,9 +829,28 @@ const BlogPost = () => {
         </div>
       </main>
 
+      {/* Back to All Articles Floating Strip */}
+      <section className="py-8 border-t border-white/10 bg-[#07080c]">
+        <div className="container mx-auto px-6 max-w-7xl flex items-center justify-between">
+          <Link
+            to="/blog"
+            className="inline-flex items-center gap-2 text-xs font-mono text-[#94a3b8] hover:text-white transition-colors"
+          >
+            <ArrowLeft className="w-4 h-4 text-blue-400" />
+            <span>Return to All Journal Articles</span>
+          </Link>
+
+          <Link
+            to="/contact"
+            className="text-xs font-mono text-blue-400 hover:text-blue-300 inline-flex items-center gap-1 font-semibold"
+          >
+            <span>Have a project? Get in touch</span>
+            <ArrowUpRight className="w-3.5 h-3.5" />
+          </Link>
+        </div>
+      </section>
+
       <Footer />
     </div>
   );
-};
-
-export default BlogPost;
+}
