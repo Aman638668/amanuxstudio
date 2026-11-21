@@ -13,7 +13,11 @@ import {
   CheckCircle2, 
   Coins,
   ExternalLink,
-  Layers
+  Layers,
+  ShoppingBag,
+  Globe,
+  ShoppingCart,
+  Code2
 } from 'lucide-react';
 import { studioAudio } from '@/lib/studio-audio';
 import { toast } from 'sonner';
@@ -32,6 +36,7 @@ interface ProjectType {
   basePriceUSD: number;
   basePriceINR: number;
   baseDays: number;
+  badge?: string;
   icon: string;
 }
 
@@ -47,43 +52,55 @@ interface FeatureAddon {
 
 const PROJECT_TYPES: ProjectType[] = [
   {
-    id: 'corporate',
-    name: 'Corporate & B2B Website',
-    category: 'Custom WordPress',
-    description: 'Bespoke corporate platform with service showcases, lead funnels, and sub-second speed.',
-    basePriceUSD: 850,
-    basePriceINR: 32000,
-    baseDays: 8,
-    icon: '🏢'
+    id: 'wordpress',
+    name: 'Custom WordPress Website',
+    category: 'Business & Corporate Platform',
+    description: 'Clean bespoke WordPress build with responsive layout, custom theme blocks, sub-second speed & Google on-page SEO.',
+    basePriceUSD: 350,
+    basePriceINR: 22000,
+    baseDays: 7,
+    badge: 'Most Popular',
+    icon: '🌐'
   },
   {
-    id: 'ecommerce',
-    name: 'WooCommerce E-Commerce Store',
-    category: '0-to-1 Store Build',
-    description: 'Complete online storefront, product catalog, payment gateways (Cards/UPI), and friction-free checkout.',
-    basePriceUSD: 1350,
-    basePriceINR: 48000,
-    baseDays: 14,
+    id: 'shopify',
+    name: 'Shopify E-Commerce Store',
+    category: 'D2C Brands & Online Stores',
+    description: 'Complete 0-to-1 Shopify store build, theme customization, product catalog, payment checkout & conversion-focused UX.',
+    basePriceUSD: 420,
+    basePriceINR: 26000,
+    baseDays: 9,
+    badge: 'High Conversion',
     icon: '🛍️'
+  },
+  {
+    id: 'woocommerce',
+    name: 'WooCommerce Online Store',
+    category: 'WordPress E-Commerce',
+    description: 'Full WooCommerce shop with product variations, cart flow, Indian payment gateways (Razorpay/UPI) & inventory management.',
+    basePriceUSD: 450,
+    basePriceINR: 28000,
+    baseDays: 10,
+    icon: '🛒'
   },
   {
     id: 'landing',
     name: 'High-Converting Landing Page',
-    category: 'CRO & Speed Redesign',
-    description: 'Single-page high-intent sales page engineered for maximum customer acquisition.',
-    basePriceUSD: 550,
-    basePriceINR: 20000,
-    baseDays: 5,
+    category: 'Lead Funnel & CRO Redesign',
+    description: 'Fast, single-page sales funnel engineered for Google/Meta ads to convert visitors into direct paying leads.',
+    basePriceUSD: 220,
+    basePriceINR: 14000,
+    baseDays: 4,
     icon: '⚡'
   },
   {
     id: 'webapp',
-    name: 'Full-Stack Web App / SaaS MVP',
-    category: 'Next.js & Supabase',
-    description: 'Custom web application with database schemas, auth, APIs, and modern UI dashboard.',
-    basePriceUSD: 1950,
-    basePriceINR: 72000,
-    baseDays: 20,
+    name: 'Custom Web Application / MVP',
+    category: 'React / Next.js / Dashboard',
+    description: 'Custom portal or SaaS MVP with database schemas, secure authentication, API workflows, and dashboard UI.',
+    basePriceUSD: 680,
+    basePriceINR: 42000,
+    baseDays: 16,
     icon: '🚀'
   }
 ];
@@ -92,51 +109,52 @@ const FEATURE_ADDONS: FeatureAddon[] = [
   {
     id: 'speed',
     name: 'Sub-Second Speed Tuning (< 1.2s TTFB)',
-    desc: 'Database pruning, Redis cache drop-in, and asset optimization for 90+ PageSpeed.',
-    priceUSD: 200,
-    priceINR: 7500,
+    desc: 'Database pruning, asset minification, WebP image compression, and caching for 90+ PageSpeed.',
+    priceUSD: 50,
+    priceINR: 3000,
+    days: 1,
+    popular: true
+  },
+  {
+    id: 'payment',
+    name: 'Payment Gateway Integration (Razorpay / UPI / Cards / Stripe)',
+    desc: 'Instant checkout setup with QR codes, UPI, Credit/Debit cards, NetBanking & auto-invoicing.',
+    priceUSD: 60,
+    priceINR: 3500,
     days: 2,
+    popular: true
+  },
+  {
+    id: 'seo',
+    name: 'Technical On-Page SEO & Google Schema (JSON-LD)',
+    desc: 'Clean XML sitemaps, canonical tags, OpenGraph social cards, and Google rich snippet structure.',
+    priceUSD: 50,
+    priceINR: 3000,
+    days: 2
+  },
+  {
+    id: 'whatsapp',
+    name: 'Instant WhatsApp & Email Inquiry Alert Automation',
+    desc: 'Receive immediate notifications straight to your phone the instant a lead fills a form.',
+    priceUSD: 35,
+    priceINR: 2000,
+    days: 1,
     popular: true
   },
   {
     id: 'figma',
     name: 'Figma to Pixel-Perfect Code Conversion',
-    desc: 'Strict fidelity to your existing Figma designs with clean semantic Tailwind CSS.',
-    priceUSD: 250,
-    priceINR: 9500,
-    days: 3
-  },
-  {
-    id: 'payment',
-    name: 'Payment Gateway Integration (Stripe / Razorpay)',
-    desc: 'Secure checkout pipeline with UPI, Cards, NetBanking, and automated receipts.',
-    priceUSD: 300,
-    priceINR: 11000,
-    days: 3,
-    popular: true
-  },
-  {
-    id: 'seo',
-    name: 'Technical SEO & JSON-LD Schema Architecture',
-    desc: 'Structured sitemaps, open-graph protocols, canonicalization, and meta tags.',
-    priceUSD: 180,
-    priceINR: 6500,
+    desc: 'Strict visual fidelity from your existing Figma designs into clean, responsive HTML/Tailwind.',
+    priceUSD: 75,
+    priceINR: 4500,
     days: 2
   },
   {
-    id: 'whatsapp',
-    name: 'Instant WhatsApp & Email Lead Alert Automation',
-    desc: 'Immediate notifications sent to your phone the second a visitor submits an inquiry.',
-    priceUSD: 120,
-    priceINR: 4500,
-    days: 1
-  },
-  {
     id: 'cms-training',
-    name: 'Video Training & Handover Documentation',
-    desc: 'Custom Loom walkthrough videos teaching your team how to edit pages without code.',
-    priceUSD: 100,
-    priceINR: 3500,
+    name: 'Client CMS Video Training & Handover Guide',
+    desc: 'Step-by-step Loom video guide showing you and your team how to update banners, text & products.',
+    priceUSD: 25,
+    priceINR: 1500,
     days: 1
   }
 ];
@@ -146,9 +164,10 @@ export function ProjectEstimatorModal({
   onClose,
   onApplyScopeToContact
 }: ProjectEstimatorModalProps) {
-  const [selectedType, setSelectedType] = useState<string>('corporate');
-  const [selectedFeatures, setSelectedFeatures] = useState<string[]>(['speed', 'seo']);
-  const [currency, setCurrency] = useState<'USD' | 'INR'>('USD');
+  // Default to WordPress and India (INR) as requested
+  const [selectedType, setSelectedType] = useState<string>('wordpress');
+  const [selectedFeatures, setSelectedFeatures] = useState<string[]>(['speed', 'whatsapp']);
+  const [currency, setCurrency] = useState<'USD' | 'INR'>('INR');
   const [timelineSpeed, setTimelineSpeed] = useState<'standard' | 'rush'>('standard');
 
   const activeProject = useMemo(() => {
@@ -162,7 +181,7 @@ export function ProjectEstimatorModal({
     );
   };
 
-  // Calculate pricing & delivery timeline
+  // Calculate pricing & delivery timeline with clean rounded figures
   const calculation = useMemo(() => {
     let priceUSD = activeProject.basePriceUSD;
     let priceINR = activeProject.basePriceINR;
@@ -180,14 +199,19 @@ export function ProjectEstimatorModal({
     if (timelineSpeed === 'rush') {
       priceUSD = Math.round(priceUSD * 1.25);
       priceINR = Math.round(priceINR * 1.25);
-      days = Math.max(4, Math.round(days * 0.65));
+      days = Math.max(3, Math.round(days * 0.65));
     }
 
-    const minPriceUSD = Math.round(priceUSD * 0.95);
-    const maxPriceUSD = Math.round(priceUSD * 1.15);
+    // Round cleanly to avoid weird figures like ₹52,725
+    const rawMinUSD = Math.round(priceUSD * 0.95);
+    const rawMaxUSD = Math.round(priceUSD * 1.15);
+    const minPriceUSD = Math.round(rawMinUSD / 10) * 10;
+    const maxPriceUSD = Math.round(rawMaxUSD / 10) * 10;
 
-    const minPriceINR = Math.round(priceINR * 0.95);
-    const maxPriceINR = Math.round(priceINR * 1.15);
+    const rawMinINR = Math.round(priceINR * 0.95);
+    const rawMaxINR = Math.round(priceINR * 1.15);
+    const minPriceINR = Math.round(rawMinINR / 500) * 500;
+    const maxPriceINR = Math.round(rawMaxINR / 500) * 500;
 
     return {
       priceUSD,
@@ -200,7 +224,7 @@ export function ProjectEstimatorModal({
     };
   }, [activeProject, selectedFeatures, timelineSpeed]);
 
-  // Construct formatted scope text
+  // Construct formatted scope text for email or contact form
   const generateScopeSummary = () => {
     const selectedFeatureNames = selectedFeatures
       .map((fid) => FEATURE_ADDONS.find((f) => f.id === fid)?.name)
@@ -214,8 +238,8 @@ export function ProjectEstimatorModal({
     return `### Project Scope Estimate (Configured via Aman UX Studio Estimator)
 - **Project Foundation:** ${activeProject.name} (${activeProject.category})
 - **Estimated Investment:** ${priceString}
-- **Estimated Timeline:** ~${calculation.days} business days (${timelineSpeed === 'rush' ? 'Fast-Track Rush' : 'Standard Delivery'})
-- **Selected Requirements:**
+- **Estimated Timeline:** ~${calculation.days} business days (${timelineSpeed === 'rush' ? 'Fast-Track Rush (+25%)' : 'Standard Delivery'})
+- **Selected Requirements & Deliverables:**
 ${selectedFeatureNames.map((name) => `  * ${name}`).join('\n')}
 
 I would like to discuss this project with Aman Sharma.`;
@@ -226,7 +250,7 @@ I would like to discuss this project with Aman Sharma.`;
     const summary = generateScopeSummary();
     onApplyScopeToContact(summary);
     onClose();
-    toast.success('Your project scope has been populated into the contact form below!');
+    toast.success('Your custom project scope has been populated into the contact form below!');
     const el = document.getElementById('contact');
     if (el) el.scrollIntoView({ behavior: 'smooth' });
   };
@@ -234,7 +258,7 @@ I would like to discuss this project with Aman Sharma.`;
   const handleSendWhatsApp = () => {
     studioAudio.playClick(900);
     const summary = generateScopeSummary();
-    const encoded = encodeURIComponent(`Hi Aman! I used the Project Estimator on your website and would like to discuss this scope:\n\n${summary}`);
+    const encoded = encodeURIComponent(`Hi Aman! I used the Project Scope Estimator on your website and would like to discuss this project:\n\n${summary}`);
     window.open(`https://wa.me/919211104514?text=${encoded}`, '_blank');
   };
 
@@ -246,55 +270,55 @@ I would like to discuss this project with Aman Sharma.`;
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 z-[150] bg-black/80 backdrop-blur-xl flex items-center justify-center p-4 sm:p-6 overflow-y-auto"
+        className="fixed inset-0 z-[150] bg-black/85 backdrop-blur-xl flex items-center justify-center p-3 sm:p-6 overflow-y-auto custom-scrollbar"
       >
         <motion.div
-          initial={{ scale: 0.95, opacity: 0, y: 20 }}
+          initial={{ scale: 0.96, opacity: 0, y: 15 }}
           animate={{ scale: 1, opacity: 1, y: 0 }}
-          exit={{ scale: 0.95, opacity: 0, y: 20 }}
-          transition={{ duration: 0.3, ease: [0.19, 1, 0.22, 1] }}
-          className="relative w-full max-w-4xl bg-[#09090c] border border-white/15 rounded-3xl shadow-2xl text-[#eeece8] overflow-hidden my-auto font-sans"
+          exit={{ scale: 0.96, opacity: 0, y: 15 }}
+          transition={{ duration: 0.25, ease: [0.19, 1, 0.22, 1] }}
+          className="relative w-full max-w-4xl bg-[#09090c] border border-white/15 rounded-3xl shadow-2xl text-[#eeece8] overflow-hidden my-auto font-sans flex flex-col max-h-[92vh]"
         >
           {/* Header Bar */}
-          <div className="flex items-center justify-between px-6 sm:px-8 py-5 border-b border-white/10 bg-[#0e0e14]">
+          <div className="flex items-center justify-between px-5 sm:px-8 py-4 sm:py-5 border-b border-white/10 bg-[#0e0e14] shrink-0">
             <div className="flex items-center gap-2.5">
               <div className="w-9 h-9 rounded-xl bg-blue-600/20 text-blue-400 border border-blue-500/30 flex items-center justify-center">
                 <Calculator className="w-4 h-4" />
               </div>
               <div>
                 <h3 className="text-sm sm:text-base font-bold text-white leading-tight">
-                  30-Second Project Scope &amp; Investment Estimator
+                  30-Second Scope &amp; Investment Estimator
                 </h3>
                 <p className="text-xs font-mono text-[#94a3b8]">
-                  Transparent estimations · Direct developer pricing · Zero agency fluff
+                  Transparent India &amp; Global Rates · Direct Developer Collaboration · Zero Agency Markup
                 </p>
               </div>
             </div>
 
             <div className="flex items-center gap-3">
               {/* Currency Toggle */}
-              <div className="flex items-center bg-black/50 p-1 rounded-full border border-white/10 text-xs font-mono">
-                <button
-                  onClick={() => {
-                    studioAudio.playClick(700);
-                    setCurrency('USD');
-                  }}
-                  className={`px-2.5 py-1 rounded-full transition-all ${
-                    currency === 'USD' ? 'bg-blue-600 text-white font-bold shadow' : 'text-[#94a3b8] hover:text-white'
-                  }`}
-                >
-                  USD ($)
-                </button>
+              <div className="flex items-center bg-black/60 p-1 rounded-full border border-white/10 text-xs font-mono">
                 <button
                   onClick={() => {
                     studioAudio.playClick(700);
                     setCurrency('INR');
                   }}
-                  className={`px-2.5 py-1 rounded-full transition-all ${
+                  className={`px-3 py-1 rounded-full transition-all ${
                     currency === 'INR' ? 'bg-blue-600 text-white font-bold shadow' : 'text-[#94a3b8] hover:text-white'
                   }`}
                 >
                   INR (₹)
+                </button>
+                <button
+                  onClick={() => {
+                    studioAudio.playClick(700);
+                    setCurrency('USD');
+                  }}
+                  className={`px-3 py-1 rounded-full transition-all ${
+                    currency === 'USD' ? 'bg-blue-600 text-white font-bold shadow' : 'text-[#94a3b8] hover:text-white'
+                  }`}
+                >
+                  USD ($)
                 </button>
               </div>
 
@@ -311,8 +335,8 @@ I would like to discuss this project with Aman Sharma.`;
             </div>
           </div>
 
-          {/* Modal Body */}
-          <div className="p-6 sm:p-8 space-y-8 max-h-[75vh] overflow-y-auto scrollbar-thin">
+          {/* Modal Scrollable Body */}
+          <div className="p-5 sm:p-8 space-y-7 flex-1 overflow-y-auto custom-scrollbar">
             
             {/* Step 1: Project Foundation */}
             <div>
@@ -320,10 +344,10 @@ I would like to discuss this project with Aman Sharma.`;
                 <label className="text-xs font-mono uppercase tracking-widest text-blue-400 font-semibold flex items-center gap-2">
                   <span>01 // Select Project Foundation</span>
                 </label>
-                <span className="text-[11px] font-mono text-[#64748b]">Select 1 core platform</span>
+                <span className="text-[11px] font-mono text-[#64748b]">Choose 1 core platform</span>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                 {PROJECT_TYPES.map((pt) => {
                   const isSelected = selectedType === pt.id;
                   return (
@@ -333,27 +357,36 @@ I would like to discuss this project with Aman Sharma.`;
                         studioAudio.playClick(850);
                         setSelectedType(pt.id);
                       }}
-                      className={`p-4 rounded-2xl border transition-all cursor-pointer relative ${
+                      className={`p-4 rounded-2xl border transition-all cursor-pointer relative flex flex-col justify-between ${
                         isSelected
-                          ? 'bg-blue-600/15 border-blue-500 shadow-lg shadow-blue-950/50'
+                          ? 'bg-blue-600/15 border-blue-500 shadow-lg shadow-blue-950/50 ring-1 ring-blue-500/50'
                           : 'bg-[#0e0e14] border-white/10 hover:border-white/20 hover:bg-white/[0.03]'
                       }`}
                     >
-                      <div className="flex items-start justify-between gap-2 mb-2">
-                        <div className="flex items-center gap-2">
-                          <span className="text-xl">{pt.icon}</span>
-                          <div>
-                            <h4 className="text-sm font-bold text-white">{pt.name}</h4>
-                            <span className="text-[11px] font-mono text-blue-300">{pt.category}</span>
+                      <div>
+                        <div className="flex items-start justify-between gap-2 mb-2">
+                          <div className="flex items-center gap-2">
+                            <span className="text-xl">{pt.icon}</span>
+                            <div>
+                              <h4 className="text-sm font-bold text-white leading-tight">{pt.name}</h4>
+                              <span className="text-[11px] font-mono text-blue-300">{pt.category}</span>
+                            </div>
                           </div>
+                          {isSelected && (
+                            <div className="w-5 h-5 rounded-full bg-blue-500 text-white flex items-center justify-center shrink-0">
+                              <Check className="w-3 h-3" />
+                            </div>
+                          )}
                         </div>
-                        {isSelected && (
-                          <div className="w-5 h-5 rounded-full bg-blue-500 text-white flex items-center justify-center shrink-0">
-                            <Check className="w-3 h-3" />
-                          </div>
-                        )}
+                        <p className="text-xs text-[#94a3b8] leading-relaxed font-normal mb-3">{pt.description}</p>
                       </div>
-                      <p className="text-xs text-[#94a3b8] leading-relaxed font-normal">{pt.description}</p>
+
+                      <div className="pt-2.5 border-t border-white/5 flex items-center justify-between text-xs font-mono">
+                        <span className="text-[#64748b] text-[11px]">Starting from</span>
+                        <span className="text-white font-bold">
+                          {currency === 'USD' ? `$${pt.basePriceUSD}` : `₹${pt.basePriceINR.toLocaleString()}`}
+                        </span>
+                      </div>
                     </div>
                   );
                 })}
@@ -364,9 +397,9 @@ I would like to discuss this project with Aman Sharma.`;
             <div>
               <div className="flex items-center justify-between mb-3.5">
                 <label className="text-xs font-mono uppercase tracking-widest text-blue-400 font-semibold flex items-center gap-2">
-                  <span>02 // Core Engineering Deliverables</span>
+                  <span>02 // Core Engineering &amp; Add-Ons</span>
                 </label>
-                <span className="text-[11px] font-mono text-[#64748b]">Choose all that apply</span>
+                <span className="text-[11px] font-mono text-[#64748b]">Select requirements</span>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -378,30 +411,33 @@ I would like to discuss this project with Aman Sharma.`;
                       onClick={() => toggleFeature(feat.id)}
                       className={`p-3.5 rounded-xl border transition-all cursor-pointer flex items-start gap-3 ${
                         isChecked
-                          ? 'bg-white/[0.06] border-blue-400/60 shadow-sm'
-                          : 'bg-[#0e0e14] border-white/5 hover:border-white/15'
+                          ? 'bg-blue-600/10 border-blue-500/80 text-white'
+                          : 'bg-[#0e0e14]/80 border-white/10 hover:border-white/20 hover:bg-white/[0.02]'
                       }`}
                     >
                       <div
-                        className={`w-5 h-5 rounded-md border mt-0.5 flex items-center justify-center shrink-0 transition-colors ${
-                          isChecked
-                            ? 'bg-blue-600 border-blue-500 text-white'
-                            : 'border-white/20 bg-white/5'
+                        className={`w-4 h-4 rounded mt-0.5 flex items-center justify-center shrink-0 transition-colors ${
+                          isChecked ? 'bg-blue-600 text-white' : 'border border-white/30 bg-transparent'
                         }`}
                       >
                         {isChecked && <Check className="w-3 h-3" />}
                       </div>
 
-                      <div className="flex-grow min-w-0">
-                        <div className="flex items-center justify-between gap-1 mb-0.5">
-                          <span className="text-xs font-bold text-[#eeece8] truncate">{feat.name}</span>
-                          {feat.popular && (
-                            <span className="text-[9px] font-mono uppercase tracking-wider text-amber-300 bg-amber-500/10 px-1.5 py-0.5 rounded border border-amber-500/20 shrink-0">
-                              Essential
-                            </span>
-                          )}
+                      <div className="flex-1">
+                        <div className="flex items-center justify-between gap-2 mb-1">
+                          <h5 className="text-xs font-bold text-white flex items-center gap-1.5">
+                            <span>{feat.name}</span>
+                            {feat.popular && (
+                              <span className="px-1.5 py-0.5 rounded text-[9px] font-mono uppercase bg-blue-500/20 text-blue-300 border border-blue-500/30">
+                                Recommended
+                              </span>
+                            )}
+                          </h5>
+                          <span className="text-xs font-mono font-semibold text-emerald-400 shrink-0">
+                            +{currency === 'USD' ? `$${feat.priceUSD}` : `₹${feat.priceINR.toLocaleString()}`}
+                          </span>
                         </div>
-                        <p className="text-[11px] text-[#94a3b8] leading-snug">{feat.desc}</p>
+                        <p className="text-[11px] text-[#94a3b8] leading-normal">{feat.desc}</p>
                       </div>
                     </div>
                   );
@@ -409,14 +445,14 @@ I would like to discuss this project with Aman Sharma.`;
               </div>
             </div>
 
-            {/* Step 3: Speed of Delivery */}
-            <div className="p-4 rounded-2xl bg-[#0e0e14] border border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            {/* Step 3: Turnaround Velocity */}
+            <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div>
-                <span className="text-xs font-mono uppercase tracking-wider text-blue-400 block mb-0.5">
+                <span className="text-xs font-mono uppercase tracking-widest text-blue-400 font-semibold block mb-1">
                   03 // Delivery Velocity
                 </span>
                 <p className="text-xs text-[#94a3b8]">
-                  Standard allows iterative reviews; Fast-Track dedicates immediate sprint resources.
+                  Standard milestone reviews or accelerated sprint for critical launches.
                 </p>
               </div>
 
@@ -450,7 +486,7 @@ I would like to discuss this project with Aman Sharma.`;
           </div>
 
           {/* Bottom Live Calculation & Action Strip */}
-          <div className="p-6 sm:p-8 bg-[#0e0e14] border-t border-white/10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+          <div className="p-5 sm:px-8 sm:py-6 bg-[#0e0e14] border-t border-white/10 flex flex-col md:flex-row md:items-center justify-between gap-5 shrink-0">
             
             {/* Live Pricing Breakdown */}
             <div className="space-y-1">
@@ -472,7 +508,7 @@ I would like to discuss this project with Aman Sharma.`;
 
               <p className="text-[11px] text-emerald-400 font-mono flex items-center gap-1">
                 <CheckCircle2 className="w-3 h-3 shrink-0" />
-                <span>Includes 1-on-1 developer collaboration &amp; 30-day post-launch warranty</span>
+                <span>Transparent developer direct pricing · 30-day post-launch warranty included</span>
               </p>
             </div>
 
