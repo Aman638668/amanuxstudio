@@ -268,6 +268,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://amanuxstudio.vercel.app/blog/biometric-ux</loc>
+    <lastmod>2026-11-22T22:56:01.878Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://amanuxstudio.vercel.app/category/wordpress-performance</loc>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
