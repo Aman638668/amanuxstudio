@@ -12,7 +12,7 @@ export default function ResumePage() {
     <div className="min-h-screen bg-[#09090c] text-[#eeece8] flex flex-col font-sans selection:bg-blue-600 selection:text-white">
       <Seo
         title="Resume & Experience - Aman Sharma"
-        description="Web Developer & UI/UX Designer with 2+ years of production experience building high-converting platforms like Fairease, Ireshh, and Expert VUW."
+        description="Web Developer & UI/UX Designer with 2+ years of production experience building high-converting platforms like Fairease, Ireshh, Ticketdev Travels, and Expertvuw Management Pvt Ltd."
         url="/resume"
       />
       <div className="ambient-grain print:hidden" aria-hidden="true" />
@@ -92,7 +92,7 @@ export default function ResumePage() {
               About Me
             </h2>
             <p className="text-sm leading-relaxed text-[#cbd5e1] print:text-gray-800 text-justify font-normal">
-              Web Developer with 2+ years of hands-on experience in building and deploying responsive production websites and full-stack web applications. Proficient in modern JavaScript/TypeScript (React, Next.js), WordPress, WooCommerce, Elementor Pro, API integrations, and databases (PostgreSQL, Supabase). Proven experience configuring production websites from 0 to 1, including <strong className="text-white print:text-black">Fairease Outsourcing</strong>, <strong className="text-white print:text-black">Ireshh Clothing</strong>, and <strong className="text-white print:text-black">Expertvuw</strong>. Currently pursuing a BCA through Online Manipal University.
+              Web Developer with 2+ years of hands-on experience in building and deploying responsive production websites and full-stack web applications. Proficient in modern JavaScript/TypeScript (React, Next.js), WordPress, WooCommerce, Elementor Pro, API integrations, and databases (PostgreSQL, Supabase). Proven experience configuring production websites from 0 to 1, including <strong className="text-white print:text-black">Fairease Outsourcing</strong>, <strong className="text-white print:text-black">Ireshh</strong>, <strong className="text-white print:text-black">Ticketdev Travels</strong>, and <strong className="text-white print:text-black">Expertvuw Management Pvt Ltd</strong>. Currently pursuing a BCA through Online Manipal University.
             </p>
           </section>
 
@@ -176,7 +176,7 @@ export default function ResumePage() {
               <div className="border-l-2 border-sky-500 pl-4 py-1">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-1">
                   <h3 className="font-bold text-base text-white print:text-black">
-                    Expertvuw — Finance &amp; Legal Consulting Portal
+                    Expertvuw Management Pvt Ltd — Corporate Portal
                   </h3>
                   <a href="https://expertvuw.in/" target="_blank" rel="noopener noreferrer" className="text-xs text-sky-400 print:text-sky-700 hover:underline inline-flex items-center gap-1 font-mono font-medium">
                     expertvuw.in <ExternalLink className="h-3 w-3" />
@@ -234,7 +234,7 @@ export default function ResumePage() {
               <div>
                 <div className="flex flex-col sm:flex-row justify-between sm:items-baseline gap-1 mb-1.5">
                   <h3 className="font-bold text-white print:text-black text-sm sm:text-base">
-                    Freelance Web Developer — Fairease Outsourcing &amp; Expertvuw
+                    Freelance Web Developer — Fairease Outsourcing &amp; Expertvuw Management Pvt Ltd
                   </h3>
                   <span className="text-xs font-mono text-[#94a3b8] print:text-gray-600">Nov 2024 – Present</span>
                 </div>

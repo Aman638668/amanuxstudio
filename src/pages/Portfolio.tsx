@@ -21,7 +21,7 @@ export default function PortfolioPage() {
     <div className="min-h-screen bg-[#09090c] text-[#eeece8] flex flex-col font-sans selection:bg-blue-600 selection:text-white">
       <Seo
         title="Client Portfolio & Case Studies"
-        description="Explore live production case studies by Aman UX Studio including Fairease Outsourcing, Ireshh Clothing, TicketDev Travel, and Expert VUW."
+        description="Explore live production case studies by Aman UX Studio including Fairease Outsourcing, Ireshh, Ticketdev Travels, and Expertvuw Management Pvt Ltd."
         url="/portfolio"
       />
       <div className="ambient-grain" aria-hidden="true" />

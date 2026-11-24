@@ -167,13 +167,13 @@ export default function Footer() {
               </li>
               <li>
                 <a href="https://ireshh.com/" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors flex items-center gap-1 group">
-                  <span>Ireshh Clothing Store</span>
+                  <span>Ireshh</span>
                   <ArrowUpRight className="w-3 h-3 text-white/30 group-hover:text-blue-400" />
                 </a>
               </li>
               <li>
                 <a href="https://ticketdevtravels.com/" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors flex items-center gap-1 group">
-                  <span>TicketDev Travel</span>
+                  <span>Ticketdev Travels</span>
                   <ArrowUpRight className="w-3 h-3 text-white/30 group-hover:text-blue-400" />
                 </a>
               </li>
@@ -185,7 +185,7 @@ export default function Footer() {
               </li>
               <li>
                 <a href="https://expertvuw.in/" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors flex items-center gap-1 group">
-                  <span>Expert VUW Consulting</span>
+                  <span>Expertvuw Management Pvt Ltd</span>
                   <ArrowUpRight className="w-3 h-3 text-white/30 group-hover:text-blue-400" />
                 </a>
               </li>

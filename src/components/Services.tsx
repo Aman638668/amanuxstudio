@@ -14,7 +14,7 @@ export const services = [
     id: "wordpress",
     icon: Layers,
     title: "WordPress & Elementor Development",
-    description: "Custom corporate websites like Fairease and Expert VUW with clean design, zero plugin bloat, and easy client editing.",
+    description: "Custom corporate websites like Fairease and Expertvuw Management Pvt Ltd with clean design, zero plugin bloat, and easy client editing.",
     features: ["Custom Elementor Pro Layouts", "Speed Hardened & Zero Bloat", "Quote & Lead Capture Forms", "Built-In Security & SSL"]
   },
   {

@@ -20,8 +20,8 @@ export const projects = [
   },
   {
     num: "02",
-    title: "Ireshh — Clothing Brand",
-    client: "Ireshh Apparel",
+    title: "Ireshh",
+    client: "Ireshh",
     category: "E-Commerce",
     tagline: "0-to-1 Full Scale E-Commerce Store",
     description: "Built the complete online fashion brand storefront from scratch (0 to 1) and managing end-to-end site operations. Handled full store design, product variations, payment gateways (Cards/UPI), automated shipping, and frictionless checkout.",
@@ -33,8 +33,8 @@ export const projects = [
   },
   {
     num: "03",
-    title: "TicketDev Travel",
-    client: "TicketDev Tours & Holidays",
+    title: "Ticketdev Travels",
+    client: "Ticketdev Travels",
     category: "Travel & Booking",
     tagline: "Modern Tour Booking & Itinerary Website",
     description: "Designed and developed an ultra-clean, mobile-friendly travel booking website featuring holiday packages, easy itinerary inquiries, and automated WhatsApp direct booking.",
@@ -59,8 +59,8 @@ export const projects = [
   },
   {
     num: "05",
-    title: "Expert VUW",
-    client: "Expert VUW Consulting",
+    title: "Expertvuw Management Pvt Ltd",
+    client: "Expertvuw Management Pvt Ltd",
     category: "Finance & Legal",
     tagline: "Consulting & Financial Advisory Website",
     description: "Designed a clean, professional website for legal and finance advisors. Features consultation inquiry forms, service breakdowns, and SEO-optimized pages that rank high on Google.",

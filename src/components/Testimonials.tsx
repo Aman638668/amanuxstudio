@@ -16,7 +16,7 @@ export const testimonials = [
   {
     name: "Founder",
     position: "D2C Brand Owner",
-    company: "Ireshh Apparel",
+    company: "Ireshh",
     category: "E-Commerce (WooCommerce)",
     content: "Aman built our fashion e-commerce storefront from 0 to 1 and manages our entire site operations. He integrated seamless UPI/Card payments, product variations, automated order tracking, and mobile-first checkout. The store handles traffic surges effortlessly.",
     rating: 5,
@@ -28,7 +28,7 @@ export const testimonials = [
   {
     name: "Operations Lead",
     position: "Director of Bookings",
-    company: "TicketDev Tours & Holidays",
+    company: "Ticketdev Travels",
     category: "Travel & Booking",
     content: "We needed an ultra-clean, mobile-first travel website with instant WhatsApp itinerary booking. Aman delivered ahead of schedule. Direct holiday bookings are up 300% and travelers love the fast, frictionless itinerary navigation.",
     rating: 5,
@@ -40,7 +40,7 @@ export const testimonials = [
   {
     name: "Senior Partner",
     position: "Managing Partner",
-    company: "Expert VUW Consulting",
+    company: "Expertvuw Management Pvt Ltd",
     category: "Finance & Legal",
     content: "Finding a developer who understands corporate branding and technical on-page Google SEO is rare. Aman structured our advisory services into clean, authoritative pages that rank on Google. Enterprise consultation inquiries have doubled.",
     rating: 5,

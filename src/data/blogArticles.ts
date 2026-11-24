@@ -177,7 +177,7 @@ Overwriting the browser's native momentum scrolling with custom inertial frictio
 Showcasing pretty screenshots without contextual problem-solving turns case studies into flat galleries. Decision makers hire you for commercial growth, not just colors.
 
 **How to implement it:**
-- Frame every project around the client's commercial challenge, your strategic intervention, and verifiable post-launch metrics (like our work on [Fairease Outsourcing](/portfolio) and [Ireshh Clothing](/portfolio)).
+- Frame every project around the client's commercial challenge, your strategic intervention, and verifiable post-launch metrics (like our work on [Fairease Outsourcing](/portfolio) and [Ireshh](/portfolio)).
 - Highlight quantitative metrics prominently: *"+42% inquiry rate"*, *"< 800ms page load"*, or *"Zero downtime migration"*.
 - Include genuine client quotes with full names, professional titles, and verified company domains.
 

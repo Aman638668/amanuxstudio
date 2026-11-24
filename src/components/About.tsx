@@ -24,7 +24,7 @@ export default function About() {
               Bridging Creative UI/UX Design with Modern Web Development.
             </h3>
             <p className="text-sm sm:text-base text-white/70 leading-relaxed font-normal">
-              At Aman UX Studio, we eliminate the agency fluff. Whether building custom corporate websites like <strong className="text-white">Fairease Outsourcing</strong> and <strong className="text-white">Expert VUW</strong>, e-commerce stores like <strong className="text-white">Ireshh</strong>, or responsive web applications, every project is crafted with clean design, speed, and real business results in mind.
+              At Aman UX Studio, we eliminate the agency fluff. Whether building custom corporate websites like <strong className="text-white">Fairease Outsourcing</strong> and <strong className="text-white">Expertvuw Management Pvt Ltd</strong>, travel platforms like <strong className="text-white">Ticketdev Travels</strong>, or e-commerce stores like <strong className="text-white">Ireshh</strong>, every project is crafted with clean design, speed, and real business results in mind.
             </p>
             
             <div className="space-y-3 pt-2">

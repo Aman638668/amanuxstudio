@@ -40,7 +40,7 @@ const servicesList = [
     icon: Layers,
     title: "WordPress & Elementor Development",
     tagline: "Corporate websites built for easy content management, fast speeds, and zero headaches.",
-    description: "WordPress powers over 40% of the web, but poorly built sites crash and load slowly. We design and build custom WordPress and Elementor websites—like our work on Fairease and Expert VUW—ensuring fast load times and clean, reliable design.",
+    description: "WordPress powers over 40% of the web, but poorly built sites crash and load slowly. We design and build custom WordPress and Elementor websites—like our work on Fairease and Expertvuw Management Pvt Ltd—ensuring fast load times and clean, reliable design.",
     deliverables: [
       "Pixel-perfect custom Elementor Pro & block layouts",
       "Bespoke PHP hooks, custom post types & taxonomies",

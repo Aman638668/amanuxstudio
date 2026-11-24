@@ -57,3 +57,16 @@ pnpm run dev
 ```shell
 pnpm run build
 ```
+
+---
+
+## 📌 Canonical Production Clients & Verified Case Studies
+
+Always use these exact client names across all components, testimonials, blogs, and meta descriptions:
+
+1. **Fairease Outsourcing Pvt. Ltd.** (`fairease.in`) — Corporate Website & Lead Funnel
+2. **Ireshh** (`ireshh.com`) — 0-to-1 E-Commerce Store & Operations *(Note: Always "Ireshh", never "Ireshh Apparel")*
+3. **Ticketdev Travels** (`ticketdevtravels.com`) — Tour Booking & WhatsApp Automation *(Note: Always "Ticketdev Travels", never "TicketDev Tours & Holidays")*
+4. **Friends Group** (`friendsgroup.co.in`) — Multi-Business Corporate Website
+5. **Expertvuw Management Pvt Ltd** (`expertvuw.in`) — Finance & Legal Advisory Portal *(Note: Always "Expertvuw Management Pvt Ltd", never "Expert VUW Consulting")*
+

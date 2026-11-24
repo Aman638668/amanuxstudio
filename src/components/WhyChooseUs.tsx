@@ -27,7 +27,7 @@ const studioPillars = [
     icon: CheckCircle2,
     iconColor: "text-sky-400 bg-sky-500/10 border-sky-500/20",
     title: "Proven Production Track Record",
-    desc: "We bring hands-on experience building, launching, and maintaining live production platforms—including Fairease Outsourcing, Ireshh Clothing, and Expert VUW Consulting.",
+    desc: "We bring hands-on experience building, launching, and maintaining live production platforms—including Fairease Outsourcing, Ireshh, Ticketdev Travels, and Expertvuw Management Pvt Ltd.",
     typicalAgency: "Theoretical case studies and generic cookie-cutter templates.",
     studioStandard: "50+ production websites delivered across e-commerce, corporate, and finance.",
     highlight: "Battle-Tested Experience"

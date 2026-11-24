@@ -406,7 +406,7 @@ Prospective clients want to know exactly what is included in your scope. Don't h
 - Add clear "Schedule Discovery Call" buttons on each service card.
 
 ### 03. Prominent Proof of Execution
-Showcase real client platforms (like our work on **Fairease Outsourcing**, **Ireshh Clothing**, and **Expertvuw**) with live URLs and measurable results.
+Showcase real client platforms (like our work on **Fairease Outsourcing**, **Ireshh**, **Ticketdev Travels**, and **Expertvuw Management Pvt Ltd**) with live URLs and measurable results.
 
 **How to implement it:**
 - Include verified client logos directly beneath the hero banner.
@@ -576,7 +576,7 @@ Include 3 to 4 high-volume search queries formatted as:
 Important rules:
 - Start directly with '---METADATA---'. Do not output conversational preamble.
 - STRICT SLUG REQUIREMENT: The slug must be short (2 to 3 words max, e.g. 'tabletop-ai', 'web-cache', 'react-router'). Do not output long sentences in slug!
-- Do not invent fictional client names other than Fairease Outsourcing, Ireshh Clothing, or Expertvuw.
+- Do not invent fictional client names other than Fairease Outsourcing, Ireshh, Ticketdev Travels, or Expertvuw Management Pvt Ltd.
 - Ensure the tone is authoritative, practical, crystal clear, and universally understandable.`;
 
   const modelsToTry = [
