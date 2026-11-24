@@ -88,7 +88,7 @@ export default function Contact({ initialMessage = '' }: ContactProps) {
       <div className="container mx-auto px-6 max-w-7xl">
         <div className="text-center mb-16">
           <div className="flex items-center justify-center gap-2 text-xs font-mono uppercase tracking-widest text-blue-400 mb-3">
-            <span>[ 07 / START A CONVERSATION ]</span>
+            <span>[ 08 / START A CONVERSATION ]</span>
           </div>
           <h2 className="text-3xl sm:text-5xl md:text-6xl font-bold tracking-tight text-[#eeece8] mt-2 mb-4">
             Let's Build Something Great Together.

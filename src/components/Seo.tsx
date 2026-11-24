@@ -38,30 +38,58 @@ const Seo = ({
   const fullUrl = url ? `${siteOrigin}${url.startsWith('/') ? url : `/${url}`}` : siteOrigin;
   const fullImageUrl = image.startsWith('http') ? image : `${siteOrigin}${image.startsWith('/') ? image : `/${image}`}`;
 
-  // Organization Schema (Studio Profile)
+  // Organization & Local Business Schema (Studio Profile)
   const organizationSchema = {
     "@context": "https://schema.org",
     "@type": "ProfessionalService",
     "@id": `${siteOrigin}/#organization`,
     "name": "Aman UX Studio",
+    "alternateName": "Aman Sharma Web Development Studio",
     "url": siteOrigin,
     "logo": `${siteOrigin}/aman-ux-studio.png`,
     "image": fullImageUrl,
-    "description": "Digital studio specializing in high-converting custom WordPress development, speed tuning, and UI/UX design.",
+    "description": "Digital studio specializing in high-converting custom WordPress development, Shopify e-commerce, speed tuning, and UI/UX design.",
+    "telephone": "+919211104514",
+    "email": "1704amansharma@gmail.com",
+    "currenciesAccepted": "INR, USD",
+    "paymentAccepted": "UPI, Credit Card, Debit Card, NetBanking, Stripe, Razorpay",
     "founder": {
       "@type": "Person",
       "name": "Aman Sharma",
       "jobTitle": "Web Developer & UI/UX Designer",
-      "url": `${siteOrigin}/about`
+      "url": `${siteOrigin}/about`,
+      "sameAs": [
+        "https://github.com/Aman638668",
+        "https://www.linkedin.com/in/aman-sharma-4b772124a/"
+      ]
     },
     "address": {
       "@type": "PostalAddress",
       "addressLocality": "New Delhi",
-      "addressRegion": "DL",
+      "addressRegion": "Delhi",
+      "postalCode": "110001",
       "addressCountry": "IN"
     },
-    "priceRange": "$$",
-    "areaServed": "Global",
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": 28.6139,
+      "longitude": 77.2090
+    },
+    "priceRange": "₹15,000 - ₹60,000 / $220 - $800",
+    "areaServed": [
+      { "@type": "Country", "name": "India" },
+      { "@type": "Country", "name": "United States" },
+      { "@type": "Country", "name": "United Kingdom" },
+      { "@type": "Country", "name": "United Arab Emirates" }
+    ],
+    "knowsAbout": [
+      "Custom WordPress Development",
+      "WooCommerce E-Commerce",
+      "Shopify Store Design",
+      "UI/UX Design in Figma",
+      "Google Core Web Vitals Speed Optimization",
+      "Conversion Rate Optimization"
+    ],
     "sameAs": [
       "https://github.com/Aman638668",
       "https://www.linkedin.com/in/aman-sharma-4b772124a/",

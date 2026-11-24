@@ -41,7 +41,7 @@ const RecentBlogs = () => {
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-16 pb-8 border-b border-white/10 gap-6">
           <div>
             <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-widest text-blue-400 mb-3">
-              <span>[ 06 / INSIGHTS &amp; WRITING ]</span>
+              <span>[ 07 / INSIGHTS &amp; WRITING ]</span>
             </div>
             <h2 className="text-3xl sm:text-5xl font-bold text-[#eeece8] tracking-tight">
               Articles &amp; Web Insights

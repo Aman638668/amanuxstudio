@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { ArrowRight, FileDown, Calculator, Sparkles } from 'lucide-react';
+import { ArrowRight, ArrowDown, Calculator, Sparkles } from 'lucide-react';
 import { studioAudio } from '@/lib/studio-audio';
 
 interface HeroProps {
@@ -31,33 +31,27 @@ export default function Hero({ onOpenEstimator, onOpenCraft }: HeroProps) {
       <div className="container mx-auto px-6 max-w-7xl relative z-10 my-auto">
         <div>
           
-          {/* Live Availability & Interactive Mode Badges */}
+          {/* Section 01 / Live Availability Badge */}
           <motion.div
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: [0.19, 1, 0.22, 1] }}
             className="flex flex-wrap items-center gap-3 mb-8"
           >
-            <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full border border-white/10 bg-white/[0.04] backdrop-blur-md">
+            <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-widest text-blue-400">
+              <Sparkles className="w-3.5 h-3.5" />
+              <span>[ 01 / DIGITAL STUDIO &amp; CRO ]</span>
+            </div>
+
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/10 bg-white/[0.04] backdrop-blur-md">
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#3ddc84] opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-[#3ddc84]"></span>
               </span>
-              <span className="text-xs font-mono tracking-wider uppercase text-white/80">
-                Available for New Projects · Web Developer &amp; UI/UX
+              <span className="text-[11px] font-mono tracking-wider uppercase text-white/80">
+                Available for New Projects · Aman Sharma
               </span>
             </div>
-
-            {handleOpenTool && (
-              <button
-                onClick={handleOpenTool}
-                onMouseEnter={() => studioAudio.playHover()}
-                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full border border-blue-500/30 bg-blue-500/10 text-xs font-mono uppercase tracking-wider text-blue-300 hover:bg-blue-500/20 hover:text-white transition-all group shadow-sm hover:border-blue-400/50"
-              >
-                <Calculator className="w-3.5 h-3.5 text-blue-400 group-hover:scale-110 transition-transform" />
-                <span>Scope &amp; Cost Estimator</span>
-              </button>
-            )}
           </motion.div>
 
           {/* Kinetic Editorial Heading */}
@@ -98,7 +92,7 @@ export default function Hero({ onOpenEstimator, onOpenCraft }: HeroProps) {
             Aman UX Studio is a digital studio led by web developer Aman Sharma. We design and build clean, high-converting websites, custom WordPress solutions, and intuitive UI/UX for growing brands.
           </motion.p>
 
-          {/* Action Row */}
+          {/* Action Row: Streamlined High-Conversion CTAs */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -118,7 +112,7 @@ export default function Hero({ onOpenEstimator, onOpenCraft }: HeroProps) {
               <button
                 onClick={handleOpenTool}
                 onMouseEnter={() => studioAudio.playHover()}
-                className="btn-studio-secondary flex items-center gap-2 border-blue-500/30 text-blue-300 hover:text-white hover:border-blue-400/60 bg-blue-500/5 hover:bg-blue-500/10"
+                className="btn-studio-secondary flex items-center gap-2 border-blue-500/30 text-blue-300 hover:text-white hover:border-blue-400/60 bg-blue-500/5 hover:bg-blue-500/10 shadow-lg shadow-blue-950/30"
               >
                 <Calculator className="w-4 h-4 text-blue-400" />
                 <span>Estimate Scope &amp; Price</span>
@@ -128,21 +122,11 @@ export default function Hero({ onOpenEstimator, onOpenCraft }: HeroProps) {
             <button
               onClick={() => scrollToSection('portfolio')}
               onMouseEnter={() => studioAudio.playHover()}
-              className="btn-studio-secondary"
+              className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-mono text-white/60 hover:text-white transition-colors py-2.5 px-3 group"
             >
-              <span>View Our Work</span>
+              <span>Explore Selected Work</span>
+              <ArrowDown className="w-3.5 h-3.5 text-blue-400 transition-transform group-hover:translate-y-0.5" />
             </button>
-
-            <a
-              href="/Aman_Sharma_Resume.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
-              onMouseEnter={() => studioAudio.playHover()}
-              className="btn-studio-secondary text-white/75 hover:text-white"
-            >
-              <FileDown className="w-4 h-4 text-white/60" />
-              <span>Resume PDF</span>
-            </a>
           </motion.div>
 
           {/* Studio Metrics Strip */}

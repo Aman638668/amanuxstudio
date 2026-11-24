@@ -62,7 +62,7 @@ export default function WhyChooseUs() {
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16 pb-8 border-b border-white/10">
           <div>
             <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-widest text-blue-400 mb-3">
-              <span>[ 04 / WHY WORK WITH US ]</span>
+              <span>[ 05 / WHY WORK WITH US ]</span>
             </div>
             <h2 className="text-3xl sm:text-5xl md:text-6xl font-bold tracking-tight text-[#eeece8]">
               The Studio Standard.

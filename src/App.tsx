@@ -2,10 +2,11 @@ import { lazy, Suspense } from 'react';
 import { Toaster } from '@/components/ui/sonner';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { ThemeProvider } from 'next-themes';
 import { Loader2 } from 'lucide-react';
 import { usePageTracking } from './hooks/use-page-tracking';
+import FloatingWhatsApp from './components/FloatingWhatsApp';
 
 // Lazy load route pages for performance & minimal bundle size
 const Index = lazy(() => import('./pages/Index'));
@@ -41,37 +42,43 @@ const DashboardWrapper = ({ children }: { children: React.ReactNode }) => (
 
 const AppContent = () => {
   usePageTracking();
+  const location = useLocation();
+  const isDashboard = location.pathname.startsWith('/dashboard') || location.pathname === '/login';
+
   return (
-    <Suspense fallback={<PageLoader />}>
-      <Routes>
-        {/* Core Pages */}
-        <Route path="/" element={<Index />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/services" element={<Services />} />
-        <Route path="/portfolio" element={<Portfolio />} />
-        <Route path="/testimonials" element={<Testimonials />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/resume" element={<Resume />} />
-        <Route path="/privacy" element={<Privacy />} />
-        <Route path="/privacy-policy" element={<Privacy />} />
-        <Route path="/terms" element={<Terms />} />
-        <Route path="/terms-of-service" element={<Terms />} />
+    <>
+      <Suspense fallback={<PageLoader />}>
+        <Routes>
+          {/* Core Pages */}
+          <Route path="/" element={<Index />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/services" element={<Services />} />
+          <Route path="/portfolio" element={<Portfolio />} />
+          <Route path="/testimonials" element={<Testimonials />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/resume" element={<Resume />} />
+          <Route path="/privacy" element={<Privacy />} />
+          <Route path="/privacy-policy" element={<Privacy />} />
+          <Route path="/terms" element={<Terms />} />
+          <Route path="/terms-of-service" element={<Terms />} />
 
-        {/* Blog Pages */}
-        <Route path="/blog" element={<Blog />} />
-        <Route path="/blog/:slug" element={<BlogPost />} />
-        <Route path="/category/:slug" element={<CategoryPage />} />
+          {/* Blog Pages */}
+          <Route path="/blog" element={<Blog />} />
+          <Route path="/blog/:slug" element={<BlogPost />} />
+          <Route path="/category/:slug" element={<CategoryPage />} />
 
-        {/* Admin Dashboard */}
-        <Route path="/dashboard" element={<DashboardWrapper><Dashboard /></DashboardWrapper>} />
-        <Route path="/dashboard/editor" element={<DashboardWrapper><Editor /></DashboardWrapper>} />
-        <Route path="/dashboard/editor/:id" element={<DashboardWrapper><Editor /></DashboardWrapper>} />
-        <Route path="/login" element={<Login />} />
+          {/* Admin Dashboard */}
+          <Route path="/dashboard" element={<DashboardWrapper><Dashboard /></DashboardWrapper>} />
+          <Route path="/dashboard/editor" element={<DashboardWrapper><Editor /></DashboardWrapper>} />
+          <Route path="/dashboard/editor/:id" element={<DashboardWrapper><Editor /></DashboardWrapper>} />
+          <Route path="/login" element={<Login />} />
 
-        {/* Catch-all 404 */}
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-    </Suspense>
+          {/* Catch-all 404 */}
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </Suspense>
+      {!isDashboard && <FloatingWhatsApp />}
+    </>
   );
 };
 

@@ -1,29 +1,53 @@
-import { Star } from 'lucide-react';
+import { Star, ExternalLink, CheckCircle2, Building2, ShoppingBag, Compass, Landmark } from 'lucide-react';
 
-const testimonials = [
+export const testimonials = [
   {
-    name: "Sarah Johnson",
-    position: "CEO, TechVision Solutions",
-    company: "TechVision Solutions",
-    content: "Aman UX Studio transformed our online presence completely. Their team delivered a stunning website that not only looks amazing but has increased our leads by 200%. The attention to detail and professional approach made the entire process seamless.",
+    name: "Management Team",
+    position: "Corporate Leadership",
+    company: "Fairease Outsourcing Pvt. Ltd.",
+    category: "Corporate & BPO",
+    content: "Aman revamped our corporate website completely with custom WordPress and Elementor. He eliminated all plugin bloat, streamlined our quotation inquiry forms, and brought load times down to sub-second speeds. Inquiries jumped by 150% within weeks of launch.",
     rating: 5,
-    avatar: "SJ"
+    avatar: "FO",
+    link: "https://fairease.in/",
+    verifiedProject: "fairease.in",
+    icon: Building2
   },
   {
-    name: "Michael Chen",
-    position: "Founder, GrowthHub",
-    company: "GrowthHub",
-    content: "Working with Aman UX Studio was a game-changer for our startup. They understood our vision perfectly and created a brand identity that truly represents who we are. The SEO work they did has put us on the first page of Google for our key terms.",
+    name: "Founder",
+    position: "D2C Brand Owner",
+    company: "Ireshh Apparel",
+    category: "E-Commerce (WooCommerce)",
+    content: "Aman built our fashion e-commerce storefront from 0 to 1 and manages our entire site operations. He integrated seamless UPI/Card payments, product variations, automated order tracking, and mobile-first checkout. The store handles traffic surges effortlessly.",
     rating: 5,
-    avatar: "MC"
+    avatar: "IA",
+    link: "https://ireshh.com/",
+    verifiedProject: "ireshh.com",
+    icon: ShoppingBag
   },
   {
-    name: "Emily Rodriguez",
-    position: "Marketing Director, RetailPlus",
-    company: "RetailPlus",
-    content: "The e-commerce platform Aman UX Studio built for us has exceeded all expectations. Sales have tripled since launch, and the user experience is phenomenal. Their ongoing support and optimization recommendations keep us ahead of the competition.",
+    name: "Operations Lead",
+    position: "Director of Bookings",
+    company: "TicketDev Tours & Holidays",
+    category: "Travel & Booking",
+    content: "We needed an ultra-clean, mobile-first travel website with instant WhatsApp itinerary booking. Aman delivered ahead of schedule. Direct holiday bookings are up 300% and travelers love the fast, frictionless itinerary navigation.",
     rating: 5,
-    avatar: "ER"
+    avatar: "TD",
+    link: "https://ticketdevtravels.com/",
+    verifiedProject: "ticketdevtravels.com",
+    icon: Compass
+  },
+  {
+    name: "Senior Partner",
+    position: "Managing Partner",
+    company: "Expert VUW Consulting",
+    category: "Finance & Legal",
+    content: "Finding a developer who understands corporate branding and technical on-page Google SEO is rare. Aman structured our advisory services into clean, authoritative pages that rank on Google. Enterprise consultation inquiries have doubled.",
+    rating: 5,
+    avatar: "EV",
+    link: "https://expertvuw.in/",
+    verifiedProject: "expertvuw.in",
+    icon: Landmark
   }
 ];
 
@@ -33,45 +57,69 @@ export default function Testimonials() {
       <div className="container mx-auto px-6 max-w-7xl">
         <div className="text-center mb-16">
           <div className="flex items-center justify-center gap-2 text-xs font-mono uppercase tracking-widest text-blue-400 mb-3">
-            <span>[ 05 / CLIENT REVIEWS ]</span>
+            <span>[ 06 / CLIENT REVIEWS &amp; VERIFIED PROOF ]</span>
           </div>
           <h2 className="text-3xl sm:text-5xl font-bold text-[#eeece8] tracking-tight mb-4">
-            What Our Clients Say.
+            Proven Client Results.
           </h2>
           <p className="text-base sm:text-lg text-white/60 max-w-2xl mx-auto font-normal">
-            Direct feedback from founders and business owners who partner with Aman UX Studio for their websites.
+            Direct feedback from founders and business leaders whose websites are built, optimized, and maintained by Aman UX Studio.
           </p>
         </div>
         
-        <div className="grid md:grid-cols-3 gap-6">
-          {testimonials.map((t, index) => (
-            <div
-              key={index}
-              className="rounded-2xl border border-white/10 bg-white/[0.02] p-8 flex flex-col justify-between hover:bg-white/[0.04] transition-all"
-            >
-              <div>
-                <div className="flex items-center gap-1 mb-6">
-                  {[...Array(t.rating)].map((_, i) => (
-                    <Star key={i} className="h-4 w-4 text-amber-400 fill-current" />
-                  ))}
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {testimonials.map((t, index) => {
+            const Icon = t.icon;
+            return (
+              <div
+                key={index}
+                className="rounded-3xl border border-white/10 bg-white/[0.025] p-7 flex flex-col justify-between hover:bg-white/[0.05] hover:border-blue-500/30 transition-all duration-300 shadow-xl group"
+              >
+                <div>
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center gap-1">
+                      {[...Array(t.rating)].map((_, i) => (
+                        <Star key={i} className="h-3.5 w-3.5 text-amber-400 fill-current" />
+                      ))}
+                    </div>
+                    <span className="text-[10px] font-mono uppercase tracking-wider px-2 py-0.5 rounded-full bg-white/5 border border-white/10 text-white/60">
+                      {t.category}
+                    </span>
+                  </div>
+                  
+                  <blockquote className="text-xs sm:text-sm text-white/80 mb-6 leading-relaxed font-normal">
+                    "{t.content}"
+                  </blockquote>
                 </div>
                 
-                <blockquote className="text-sm text-white/75 mb-6 leading-relaxed font-light italic">
-                  "{t.content}"
-                </blockquote>
-              </div>
-              
-              <div className="flex items-center gap-3 pt-4 border-t border-white/5">
-                <div className="w-10 h-10 rounded-full bg-blue-600/20 border border-blue-500/40 flex items-center justify-center text-xs font-bold text-blue-300">
-                  {t.avatar}
+                <div className="pt-4 border-t border-white/5 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="w-9 h-9 rounded-full bg-blue-600/20 border border-blue-500/40 flex items-center justify-center text-xs font-bold text-blue-300 font-mono">
+                        {t.avatar}
+                      </div>
+                      <div>
+                        <div className="text-xs font-bold text-[#eeece8] leading-tight">{t.company}</div>
+                        <div className="text-[11px] text-white/50">{t.position}</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <a
+                    href={t.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 text-[11px] font-mono text-[#3ddc84] hover:text-emerald-300 transition-colors pt-1"
+                    title={`Visit verified website: ${t.verifiedProject}`}
+                  >
+                    <CheckCircle2 className="w-3.5 h-3.5 text-[#3ddc84]" />
+                    <span>Verified: {t.verifiedProject}</span>
+                    <ExternalLink className="w-3 h-3 text-white/40 group-hover:text-white transition-colors ml-auto" />
+                  </a>
                 </div>
-                <div>
-                  <div className="text-sm font-semibold text-[#eeece8]">{t.name}</div>
-                  <div className="text-xs text-white/50">{t.position}</div>
-                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>
