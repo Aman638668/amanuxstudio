@@ -292,6 +292,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://amanuxstudio.vercel.app/blog/play-anywhere-ux</loc>
+    <lastmod>2026-11-24T23:19:03.384Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://amanuxstudio.vercel.app/category/wordpress-performance</loc>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
