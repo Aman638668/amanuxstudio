@@ -1,5 +1,10 @@
 import { Helmet } from 'react-helmet-async';
 
+export interface FaqItem {
+  question: string;
+  answer: string;
+}
+
 interface SeoProps {
   title: string;
   description?: string;
@@ -11,6 +16,7 @@ interface SeoProps {
   modifiedTime?: string;
   author?: string;
   category?: string;
+  faqItems?: FaqItem[];
 }
 
 const Seo = ({
@@ -23,7 +29,8 @@ const Seo = ({
   publishedTime,
   modifiedTime,
   author = "Aman Sharma",
-  category = "Web Development & UI/UX"
+  category = "Web Development & UI/UX",
+  faqItems
 }: SeoProps) => {
   const siteTitle = "Aman UX Studio";
   const fullTitle = title.includes(siteTitle) ? title : `${title} | ${siteTitle}`;
@@ -95,6 +102,20 @@ const Seo = ({
         }
       ])
     ]
+  } : null;
+
+  // FAQ Schema (for Google Rich Snippets & AI Citations)
+  const faqSchema = faqItems && faqItems.length > 0 ? {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": faqItems.map((item) => ({
+      "@type": "Question",
+      "name": item.question,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": item.answer
+      }
+    }))
   } : null;
 
   // Article / WebSite Schema
@@ -195,6 +216,11 @@ const Seo = ({
       {breadcrumbSchema && (
         <script type="application/ld+json">
           {JSON.stringify(breadcrumbSchema)}
+        </script>
+      )}
+      {faqSchema && (
+        <script type="application/ld+json">
+          {JSON.stringify(faqSchema)}
         </script>
       )}
     </Helmet>

@@ -26,7 +26,8 @@ import {
   Mail,
   Zap,
   ShieldCheck,
-  UserCheck
+  UserCheck,
+  HelpCircle
 } from "lucide-react";
 
 import Navigation from "@/components/Navigation";
@@ -86,6 +87,82 @@ const extractToc = (content: string): TocItem[] => {
     }
   }
   return items;
+};
+
+interface ParsedArticle {
+  cleanContent: string;
+  quickAnswer: string | null;
+  faqs: { question: string; answer: string }[];
+  keyTopics: string[];
+}
+
+// Parses raw article markdown to extract structured AEO Quick Answers, FAQs, and real section topics
+const parseArticleContent = (content: string, excerpt?: string): ParsedArticle => {
+  if (!content) return { cleanContent: '', quickAnswer: excerpt || null, faqs: [], keyTopics: [] };
+
+  const faqs: { question: string; answer: string }[] = [];
+  const keyTopics: string[] = [];
+  let quickAnswer: string | null = null;
+
+  // 1. Extract Quick Answer from blockquote or excerpt
+  const blockquoteMatch = content.match(/>\s*###?\s*([^\n]+)\n((?:>\s*[^\n]+\n*)+)/);
+  if (blockquoteMatch) {
+    const title = blockquoteMatch[1].trim();
+    const body = blockquoteMatch[2].replace(/>\s*/g, ' ').replace(/\s+/g, ' ').trim();
+    quickAnswer = `${title}: ${body}`;
+  } else if (excerpt) {
+    quickAnswer = excerpt;
+  }
+
+  // 2. Extract structured FAQ questions & answers
+  const faqSectionMatch = content.match(/##\s*(?:Frequently Asked Questions|FAQs|Common Questions)([\s\S]*?)(?:(?=\n##\s)|$)/i);
+  let cleanContent = content;
+
+  if (faqSectionMatch) {
+    const faqBody = faqSectionMatch[1];
+    const qMatches = [...faqBody.matchAll(/###\s*(?:Q:?\s*)?([^\n\?]+\??)\n+([\s\S]*?)(?=\n###|\n##|$)/g)];
+    for (const match of qMatches) {
+      const q = match[1].replace(/^\d+[\.\)]\s*/, '').trim();
+      const a = match[2].trim().replace(/^A:?\s*/i, '').replace(/\n+/g, ' ');
+      if (q && a && q.length > 5 && a.length > 5) {
+        faqs.push({ question: q, answer: a });
+      }
+    }
+    // Remove the raw FAQ block from markdown body so it renders cleanly in dedicated interactive FAQ cards
+    cleanContent = content.replace(faqSectionMatch[0], '').trim();
+  }
+
+  // 3. Extract dynamic key topics from H2 and H3 headings
+  const lines = content.split('\n');
+  for (const line of lines) {
+    const h2Match = line.match(/^##\s+(.+)$/);
+    if (h2Match) {
+      const raw = h2Match[1].trim();
+      const lower = raw.toLowerCase();
+      if (!lower.includes('faq') && 
+          !lower.includes('frequently') && 
+          !lower.includes('conclusion') &&
+          !lower.includes('upgrade') &&
+          !lower.includes('turn your store') &&
+          !lower.includes('build your')) {
+        keyTopics.push(raw);
+      }
+    }
+    const h3Match = line.match(/^###\s+(?:0?\d+[\.\)]\s+)?(.+)$/);
+    if (h3Match && keyTopics.length < 6) {
+      const raw3 = h3Match[1].trim();
+      if (!raw3.startsWith('Q:') && !raw3.includes('?') && !raw3.toLowerCase().includes('how to implement')) {
+        keyTopics.push(raw3);
+      }
+    }
+  }
+
+  return {
+    cleanContent,
+    quickAnswer,
+    faqs,
+    keyTopics: Array.from(new Set(keyTopics)).slice(0, 4)
+  };
 };
 
 // Interactive Code Block Component with Copy to Clipboard & Terminal Header
@@ -295,9 +372,18 @@ export default function BlogPost() {
     }
   };
 
+  const parsedArticle = useMemo(() => {
+    return post ? parseArticleContent(post.content, post.excerpt) : { cleanContent: '', quickAnswer: null, faqs: [], keyTopics: [] };
+  }, [post?.content, post?.excerpt]);
+
   const tocItems = useMemo(() => {
-    return post?.content ? extractToc(post.content) : [];
-  }, [post?.content]);
+    if (!post?.content) return [];
+    const baseItems = extractToc(parsedArticle.cleanContent);
+    if (parsedArticle.faqs.length > 0 && !baseItems.some(i => i.id === 'faqs')) {
+      baseItems.push({ id: 'faqs', text: 'Frequently Asked Questions', level: 2 });
+    }
+    return baseItems;
+  }, [post?.content, parsedArticle.cleanContent, parsedArticle.faqs]);
 
   if (loading) {
     return (
@@ -341,6 +427,7 @@ export default function BlogPost() {
         publishedTime={post.created_at}
         author="Aman Sharma"
         category={categoryName}
+        faqItems={parsedArticle.faqs}
       />
 
       <div className="ambient-grain" aria-hidden="true" />
@@ -480,29 +567,34 @@ export default function BlogPost() {
                 </div>
               )}
 
-              {/* Executive Summary / TL;DR Box */}
-              <div className="mb-12 p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-blue-950/20 via-[#0e0e14] to-[#09090c] border border-blue-500/30 shadow-xl relative overflow-hidden">
+              {/* Dynamic Executive Summary & Quick Answer Capsule */}
+              <div className="mb-12 p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-blue-950/25 via-[#0e0e14] to-[#09090c] border border-blue-500/30 shadow-2xl relative overflow-hidden">
                 <div className="flex items-center gap-2.5 text-xs font-mono uppercase tracking-widest text-blue-400 mb-3">
                   <Zap className="w-4 h-4 text-amber-400" />
-                  <span>EXECUTIVE SUMMARY // CORE TAKEAWAYS</span>
+                  <span>EXECUTIVE SUMMARY // CORE TAKEAWAY</span>
                 </div>
-                <h3 className="text-xl sm:text-2xl font-bold text-[#eeece8] mb-3 leading-snug">
-                  What You Will Learn in This Technical Breakdown
-                </h3>
-                <ul className="space-y-2.5 text-sm sm:text-base text-[#cbd5e1] font-normal">
-                  <li className="flex items-start gap-2.5">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-1" />
-                    <span>How architectural performance choices directly impact conversion rates and organic search indexing.</span>
-                  </li>
-                  <li className="flex items-start gap-2.5">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-1" />
-                    <span>Actionable step-by-step code and server configurations tested across 50+ production deployments.</span>
-                  </li>
-                  <li className="flex items-start gap-2.5">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-1" />
-                    <span>Real-world case study benchmarks from active client platforms (Fairease, Ireshh, Expert VUW).</span>
-                  </li>
-                </ul>
+
+                {parsedArticle.quickAnswer && (
+                  <div className="mb-6 p-4 sm:p-5 rounded-2xl bg-blue-500/10 border border-blue-500/20 text-sm sm:text-base text-blue-100 font-medium leading-relaxed">
+                    {parsedArticle.quickAnswer}
+                  </div>
+                )}
+
+                {parsedArticle.keyTopics.length > 0 && (
+                  <div>
+                    <h4 className="text-xs font-mono uppercase tracking-wider text-[#94a3b8] mb-3">
+                      Key Pillars Covered in This Guide:
+                    </h4>
+                    <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-sm text-[#cbd5e1]">
+                      {parsedArticle.keyTopics.map((topic, i) => (
+                        <li key={i} className="flex items-start gap-2 bg-white/[0.02] p-2.5 rounded-xl border border-white/5">
+                          <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                          <span className="font-medium text-white/90">{topic}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
               </div>
 
               {/* Enhanced ReactMarkdown Body */}
@@ -602,9 +694,41 @@ export default function BlogPost() {
                     )
                   }}
                 >
-                  {post.content}
+                  {parsedArticle.cleanContent}
                 </ReactMarkdown>
               </div>
+
+              {/* Interactive FAQ Section (Google Rich-Snippet & AI-Citation Ready) */}
+              {parsedArticle.faqs.length > 0 && (
+                <div id="faqs" className="mt-14 pt-10 border-t border-white/10 scroll-mt-28">
+                  <div className="flex items-center gap-2 text-xs font-mono uppercase tracking-widest text-blue-400 mb-2">
+                    <HelpCircle className="w-4 h-4 text-cyan-400" />
+                    <span>Frequently Asked Questions // Direct Answers</span>
+                  </div>
+                  <h3 className="text-2xl sm:text-3xl font-extrabold text-[#eeece8] tracking-tight mb-6">
+                    Common Questions &amp; Direct Answers
+                  </h3>
+
+                  <div className="space-y-4">
+                    {parsedArticle.faqs.map((faq, idx) => (
+                      <div
+                        key={idx}
+                        className="p-5 sm:p-6 rounded-2xl bg-[#0e0e14] border border-white/10 hover:border-blue-500/30 transition-all shadow-lg"
+                      >
+                        <h4 className="text-base sm:text-lg font-bold text-white mb-2.5 flex items-start gap-3 leading-snug">
+                          <span className="w-6 h-6 rounded-lg bg-blue-600/20 text-blue-400 border border-blue-500/30 flex items-center justify-center text-xs font-mono shrink-0 mt-0.5">
+                            Q
+                          </span>
+                          <span>{faq.question}</span>
+                        </h4>
+                        <p className="text-sm sm:text-base text-[#cbd5e1] leading-relaxed pl-9 font-normal">
+                          {faq.answer}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
 
               {/* Topic Tag Pills */}
               {post.meta_keywords && (
