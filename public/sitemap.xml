@@ -298,6 +298,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://amanuxstudio.vercel.app/blog/postgres-replication</loc>
+    <lastmod>2026-11-25T10:39:13.535Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://amanuxstudio.vercel.app/category/wordpress-performance</loc>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
