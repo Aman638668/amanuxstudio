@@ -304,6 +304,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://amanuxstudio.vercel.app/blog/ux-flaws-4</loc>
+    <lastmod>2026-11-25T22:53:15.721Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://amanuxstudio.vercel.app/category/wordpress-performance</loc>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
