@@ -316,6 +316,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://amanuxstudio.vercel.app/blog/heuristic-ux-2</loc>
+    <lastmod>2026-11-26T22:42:58.252Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://amanuxstudio.vercel.app/category/wordpress-performance</loc>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
